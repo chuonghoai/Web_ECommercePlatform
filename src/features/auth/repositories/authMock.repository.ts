@@ -9,18 +9,17 @@ import type { AuthRepository } from "./auth.repository";
 export class AuthMockRepository implements AuthRepository {
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         const { email, password } = data;
-        console.log("Mock login:", data);
 
         if (email === "111" && password === "111") {
             return {
                 success: true,
-                message: "Login success",
+                message: "Đăng nhập thành công",
                 data: {
                     accessToken: "mock_token_123",
                 },
             };
         }
 
-        throw new UnauthorizedException("Invalid email or password");
+        throw new UnauthorizedException("Sai email hoặc mật khẩu");
     }
 }

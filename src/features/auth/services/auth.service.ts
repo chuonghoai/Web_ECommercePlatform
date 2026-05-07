@@ -13,8 +13,8 @@ export class AuthService {
     async login(data: LoginRequest) {
         const result = await this.authRepository.login(data);
 
-        tokenService.saveAccessToken(result.accessToken);
+        tokenService.saveAccessToken(result.data.accessToken);
 
-        return result;
+        return true;
     }
 }
