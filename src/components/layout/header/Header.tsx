@@ -1,17 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userStorageService } from "../../../features/user/services/userStorage.service";
 import type { User } from "../../../features/user/models/user.model";
 import { useCart } from "../../../features/cart/contexts/CartProvider";
+import { useToast } from "../../toast/toast";
+import { AuthService } from "../../../features/auth/services/auth.service";
+
+const authService = new AuthService();
 
 export const Header = () => {
   const [user, setUser] = useState<User | null>(null);
   const { cartCount } = useCart();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentUser = userStorageService.getUser();
     setUser(currentUser);
   }, []);
+
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+    toast("Đăng xuất thành công", "info");
+    navigate("/");
+  };
 
   return (
     <header className="bg-white border-b border-[#E7E5E4] sticky top-0 z-50">
@@ -60,7 +73,7 @@ export const Header = () => {
 
             {/* User info || login button */}
             {user ? (
-              <div className="flex items-center gap-3 cursor-pointer group">
+              <div className="relative group flex items-center gap-3 cursor-pointer py-2">
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
@@ -68,13 +81,27 @@ export const Header = () => {
                     className="w-9 h-9 rounded-full object-cover border-[1.5px] border-[#D6D3D1] group-hover:border-market-primary transition-colors"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-market-secondary flex items-center justify-center text-white font-bold text-[14px] border-[1.5px] border-transparent group-hover:border-market-primary transition-colors">
+                  <div className="w-9 h-9 rounded-full bg-market-secondary flex items-center justify-center text-white font-bold text-[14px]">
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <span className="text-[14px] font-semibold text-[#1C1917] group-hover:text-market-primary transition-colors">
                   {user.fullName}
                 </span>
+
+                <div className="absolute top-full right-0 mt-1 w-[200px] bg-white border border-[#D6D3D1] rounded-[4px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-100 shadow-[0_8px_24px_rgba(28,25,23,0.1)]">
+                  <div className="flex flex-col py-1">
+                    <Link to="/profile" className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors">
+                      Thông tin cá nhân
+                    </Link>
+                    <Link to="/settings" className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors border-t border-[#E7E5E4]">
+                      Cài đặt
+                    </Link>
+                    <button onClick={handleLogout} className="flex items-center w-full h-[48px] px-4 text-[14px] font-semibold text-market-error hover:bg-market-background transition-colors border-t border-[#E7E5E4] text-left">
+                      Đăng xuất
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
               <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-[4px] hover:bg-market-background transition-colors">

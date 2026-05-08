@@ -74,4 +74,20 @@ export class AuthService {
             data: null
         };
     }
+
+    /**
+     * Delete all data token and user info in local storage
+     * Request: null
+     * Response: null
+     */
+    async logout(): Promise<ApiResponse<void>> {
+        tokenService.clear();
+        userStorageService.removeUser();
+
+        return {
+            success: true,
+            message: "Đăng xuất thành công",
+            data: null
+        };
+    }
 }
