@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { userStorageService } from "../../features/user/services/userStorage.service";
-import type { User } from "../../features/user/models/user.model";
-import { useCart } from "../../features/cart/contexts/CartProvider";
+import { userStorageService } from "../../../features/user/services/userStorage.service";
+import type { User } from "../../../features/user/models/user.model";
+import { useCart } from "../../../features/cart/contexts/CartProvider";
 
 export const Header = () => {
   const [user, setUser] = useState<User | null>(null);
