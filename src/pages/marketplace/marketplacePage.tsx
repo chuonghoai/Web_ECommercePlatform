@@ -1,6 +1,7 @@
 import { useMarketplaceController } from "./marketplace.controller";
 import { ProductCard } from "./components/productCard";
 import { MarketplaceFilter } from "./components/filter/marketplaceFilter";
+import { EmptyProductState } from "./components/emptyProductState";
 
 function MarketplacePage() {
     const {
@@ -41,7 +42,9 @@ function MarketplacePage() {
                         </div>
                     )}
 
-                    {isLoading ? (
+                    {!isLoading && products.length === 0 ? (
+                        <EmptyProductState />
+                    ) : isLoading ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                             {[...Array(10)].map((_, index) => (
                                 <div key={index} className="bg-white border border-[#E7E5E4] rounded-[8px] h-[360px] animate-pulse">
