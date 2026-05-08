@@ -163,7 +163,7 @@ export class ProductService {
         const product = {
             id: id,
             name: "Bình gốm mộc nung củi men tro",
-            imageUrl: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+            imageUrl: "https://www.tita.art/wp-content/uploads/2021/12/30.png",
             price: 450000,
             originalPrice: 500000,
             discountPercentage: 10,
@@ -174,9 +174,9 @@ export class ProductService {
             soldCount: 125,
             images: [
                 "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+                "https://www.tita.art/wp-content/uploads/2021/12/30.png",
                 "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
-                "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
-                "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+                "https://www.tita.art/wp-content/uploads/2021/12/30.png",
                 "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
                 "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
                 "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
