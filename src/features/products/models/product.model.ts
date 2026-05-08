@@ -15,4 +15,7 @@ export interface ProductItem {
     discountPercentage?: number;
 
     rating?: number;
+    categoryId?: string;
+    createdAt?: string;
+    soldCount?: number;
 }

@@ -1,4 +1,5 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
+import { EFilterState, type FilterState } from "../../../pages/marketplace/components/filter/filter.type";
 import type { ProductItem } from "../models/product.model";
 
 export class ProductService {
@@ -12,6 +13,9 @@ export class ProductService {
             originalPrice: 500000,
             discountPercentage: 10,
             rating: 4.8,
+            categoryId: "1",
+            createdAt: "2026-05-08T10:00:00Z",
+            soldCount: 125
         },
         {
             id: "2",
@@ -21,6 +25,9 @@ export class ProductService {
             originalPrice: 400000,
             discountPercentage: 20,
             rating: 4.9,
+            categoryId: "2",
+            createdAt: "2026-05-05T08:30:00Z",
+            soldCount: 340
         },
         {
             id: "3",
@@ -30,6 +37,9 @@ export class ProductService {
             originalPrice: 150000,
             discountPercentage: 0,
             rating: 4.7,
+            categoryId: "1",
+            createdAt: "2026-05-01T15:20:00Z",
+            soldCount: 89
         },
         {
             id: "4",
@@ -39,6 +49,9 @@ export class ProductService {
             originalPrice: 1000000,
             discountPercentage: 0,
             rating: 5.0,
+            categoryId: "4",
+            createdAt: "2026-05-07T09:15:00Z",
+            soldCount: 412
         },
         {
             id: "5",
@@ -48,6 +61,9 @@ export class ProductService {
             originalPrice: 250000,
             discountPercentage: 5,
             rating: 4.6,
+            categoryId: "3",
+            createdAt: "2026-04-20T11:00:00Z",
+            soldCount: 56
         },
         {
             id: "6",
@@ -57,6 +73,9 @@ export class ProductService {
             originalPrice: 1200000,
             discountPercentage: 0,
             rating: 4.9,
+            categoryId: "5",
+            createdAt: "2026-05-02T14:45:00Z",
+            soldCount: 12
         }
     ];
 
@@ -66,14 +85,62 @@ export class ProductService {
      * @param pageSize Total item per page (default = 30)
      * Response: ProductItem[] with pagination
      */
-    async getAllProducts(page: number = 1, pageSize: number = 30): Promise<ApiResponse<ProductItem[]>> {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const totalItems = this.mockProducts.length;
+    async getAllProducts(
+        page: number = 1,
+        pageSize: number = 30,
+        filters?: FilterState
+    ): Promise<ApiResponse<ProductItem[]>> {
+        let filteredItems = [...this.mockProducts];
+
+        if (filters) {
+            // 1. Lọc theo danh mục (Checkbox)
+            if (filters.categories && filters.categories.length > 0) {
+                filteredItems = filteredItems.filter(p => p.categoryId && filters.categories.includes(p.categoryId));
+            }
+
+            // 2. Lọc theo khoảng giá
+            if (filters.minPrice) {
+                const min = parseInt(filters.minPrice, 10);
+                if (!isNaN(min)) {
+                    filteredItems = filteredItems.filter(p => p.price >= min);
+                }
+            }
+            if (filters.maxPrice) {
+                const max = parseInt(filters.maxPrice, 10);
+                if (!isNaN(max)) {
+                    filteredItems = filteredItems.filter(p => p.price <= max);
+                }
+            }
+
+            // 3. Sắp xếp (Sort)
+            switch (filters.sortBy) {
+                case EFilterState.PRICE_LOW_TO_HIGH:
+                    filteredItems.sort((a, b) => a.price - b.price);
+                    break;
+                case EFilterState.PRICE_HIGH_TO_LOW:
+                    filteredItems.sort((a, b) => b.price - a.price);
+                    break;
+                case EFilterState.POPULARITY:
+                    filteredItems.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
+                    break;
+                case EFilterState.NEWEST:
+                default:
+                    // Sắp xếp ngày mới nhất lên đầu
+                    filteredItems.sort((a, b) => {
+                        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                        return dateB - dateA;
+                    });
+                    break;
+            }
+        }
+
+        const totalItems = filteredItems.length;
         const totalPages = Math.ceil(totalItems / pageSize);
         const currentPage = Math.max(1, Math.min(page, totalPages || 1));
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
-        const paginatedItems = this.mockProducts.slice(startIndex, endIndex);
+        const paginatedItems = filteredItems.slice(startIndex, endIndex);
 
         return {
             success: true,

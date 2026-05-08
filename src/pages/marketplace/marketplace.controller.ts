@@ -24,7 +24,7 @@ export const useMarketplaceController = () => {
     const fetchProducts = async (page: number = 1, currentFilters: FilterState = filters) => {
         setIsLoading(true);
         try {
-            const response = await productService.getAllProducts(page, 30);
+            const response = await productService.getAllProducts(page, 30, currentFilters);
             if (response.success) {
                 setProducts(response.data);
                 setPagination(response.pagination);
