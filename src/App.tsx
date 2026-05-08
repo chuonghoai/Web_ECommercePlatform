@@ -1,10 +1,13 @@
 import { ToastProvider } from "./components/toast/toast";
+import { CartProvider } from "./features/cart/contexts/CartProvider";
 import AppRoutes from "./routes";
 
 function App() {
   return (
     <ToastProvider>
-      <AppRoutes />
+      <CartProvider>
+        <AppRoutes />
+      </CartProvider>
     </ToastProvider>
   );
 }

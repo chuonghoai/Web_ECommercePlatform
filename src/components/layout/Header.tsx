@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userStorageService } from "../../features/user/services/userStorage.service";
 import type { User } from "../../features/user/models/user.model";
+import { useCart } from "../../features/cart/contexts/CartProvider";
 
 export const Header = () => {
   const [user, setUser] = useState<User | null>(null);
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const currentUser = userStorageService.getUser();
-    console.log(currentUser);
     setUser(currentUser);
   }, []);
 
@@ -45,12 +46,17 @@ export const Header = () => {
 
           <div className="flex items-center gap-5 border-l border-[#E7E5E4] pl-6">
             {/* Cart button */}
-            <button className="relative text-[#57534E] hover:text-market-primary transition-colors">
+            <Link to="/cart" className="relative text-[#57534E] hover:text-market-primary transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span className="absolute -top-1.5 -right-2 bg-market-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
-            </button>
+
+              {cartCount > 0 && (
+                <span className="absolute -top-1.5 -right-2 bg-market-primary text-white text-[10px] font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </Link>
 
             {/* User info || login button */}
             {user ? (
