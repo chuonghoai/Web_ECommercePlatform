@@ -5,6 +5,18 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
+    const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
+
+    let discountBadgeContent = null;
+    if (isSale) {
+        if (product.discountPercentage && product.discountPercentage > 0) {
+            discountBadgeContent = `-${product.discountPercentage}%`;
+        } else {
+            const discountAmount = product.originalPrice! - product.price;
+            discountBadgeContent = `-${discountAmount.toLocaleString('vi-VN')}đ`;
+        }
+    }
+
     return (
         <div className="group bg-white border border-[#E7E5E4] rounded-[8px] overflow-hidden transition-all duration-200 hover:border-[#D6D3D1] flex flex-col h-full">
             <div className="aspect-square w-full overflow-hidden bg-[#F5F5F4] relative">
@@ -13,9 +25,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                {product.discountPercentage && (
+                {discountBadgeContent && (
                     <div className="absolute top-3 left-3 bg-market-primary text-white text-[11px] font-bold px-2 py-1 rounded-[4px] uppercase tracking-wider">
-                        -{product.discountPercentage}%
+                        {discountBadgeContent}
                     </div>
                 )}
             </div>
@@ -29,9 +41,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     <span className="text-[16px] font-bold text-[#1C1917]">
                         {product.price.toLocaleString('vi-VN')}đ
                     </span>
-                    {product.originalPrice && (
+
+                    {isSale && (
                         <span className="text-[13px] text-[#A8A29E] line-through font-normal">
-                            {product.originalPrice.toLocaleString('vi-VN')}đ
+                            {product.originalPrice!.toLocaleString('vi-VN')}đ
                         </span>
                     )}
                 </div>
