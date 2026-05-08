@@ -1,6 +1,17 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { userStorageService } from "../../features/user/services/userStorage.service";
+import type { User } from "../../features/user/models/user.model";
 
 export const Header = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const currentUser = userStorageService.getUser();
+    console.log(currentUser);
+    setUser(currentUser);
+  }, []);
+
   return (
     <header className="bg-white border-b border-[#E7E5E4] sticky top-0 z-50">
       <div className="max-w-[1200px] mx-auto px-4 md:px-6 h-[72px] flex items-center justify-between">
@@ -41,10 +52,29 @@ export const Header = () => {
               <span className="absolute -top-1.5 -right-2 bg-market-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
             </button>
 
-            {/* Login button */}
-            <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-[4px] hover:bg-market-background transition-colors">
-              Đăng nhập
-            </Link>
+            {/* User info || login button */}
+            {user ? (
+              <div className="flex items-center gap-3 cursor-pointer group">
+                {user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.fullName}
+                    className="w-9 h-9 rounded-full object-cover border-[1.5px] border-[#D6D3D1] group-hover:border-market-primary transition-colors"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-market-secondary flex items-center justify-center text-white font-bold text-[14px] border-[1.5px] border-transparent group-hover:border-market-primary transition-colors">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-[14px] font-semibold text-[#1C1917] group-hover:text-market-primary transition-colors">
+                  {user.fullName}
+                </span>
+              </div>
+            ) : (
+              <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-[4px] hover:bg-market-background transition-colors">
+                Đăng nhập
+              </Link>
+            )}
           </div>
         </div>
 

@@ -9,4 +9,5 @@ export class User {
     email: string;
     fullName: string;
     role: UserRole;
+    avatarUrl?: string;
 }

@@ -1,5 +1,6 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
 import { tokenService } from "../../../core/auth/token.service";
+import { userStorageService } from "../../user/services/userStorage.service";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
 import type { OtpPurpose } from "../enums/otpPurpose.enum";
@@ -25,7 +26,7 @@ export class AuthService {
         const result = await this.authRepository.login(data);
 
         tokenService.saveAccessToken(result.data.accessToken);
-        // TODO: save user to userStorageService
+        userStorageService.setUser(result.data.user);
 
         return result;
     }
@@ -55,8 +56,18 @@ export class AuthService {
             message: "Đăng ký thành công",
             data: {
                 accessToken: "mock_token_123",
+                user: {
+                    id: 1,
+                    email: "manggia098@gmail.com",
+                    fullName: "manggia",
+                    role: "USER",
+                    avatarUrl: ""
+                }
             },
         }
+        tokenService.saveAccessToken(result.data.accessToken);
+        userStorageService.setUser(result.data.user);
+
         return {
             success: result.success,
             message: result.message,
