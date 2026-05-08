@@ -7,8 +7,6 @@ function MarketplacePage() {
         products,
         isLoading,
         pagination,
-        filters,
-        applyFilters,
         handlePageChange,
         currentPage,
     } = useMarketplaceController();
@@ -30,10 +28,7 @@ function MarketplacePage() {
 
                 {/* Filter sidebar */}
                 <aside className="w-full md:w-[280px] shrink-0">
-                    <MarketplaceFilter
-                        initialFilters={filters}
-                        onApply={applyFilters}
-                    />
+                    <MarketplaceFilter onApply={() => { }} />
                 </aside>
 
                 {/* Grid products */}

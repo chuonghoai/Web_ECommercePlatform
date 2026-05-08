@@ -25,7 +25,6 @@ export class AuthService {
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         const result = await this.authRepository.login(data);
 
-        tokenService.saveAccessToken(result.data.accessToken);
         userStorageService.setUser(result.data.user);
 
         return result;
@@ -65,7 +64,6 @@ export class AuthService {
                 }
             },
         }
-        tokenService.saveAccessToken(result.data.accessToken);
         userStorageService.setUser(result.data.user);
 
         return {

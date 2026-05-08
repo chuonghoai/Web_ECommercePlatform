@@ -28,7 +28,7 @@ export const Header = () => {
 
   return (
     <header className="bg-white border-b border-[#E7E5E4] sticky top-0 z-50">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
 
         {/* Logo */}
         <Link to="/" className="font-['Lora',serif] text-[24px] font-bold text-[#1C1917] flex items-center gap-2 hover:opacity-80 transition-opacity">
