@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
-import type { RegisterFormInputs } from "../../../features/auth/dto/register.type";
+import type { RegisterRequest } from "../../../features/auth/dto/register.type";
+import { AuthService } from "../../../features/auth/services/auth.service";
+
+const authService = new AuthService();
 
 export const useRegisterController = () => {
     const {
@@ -10,7 +13,7 @@ export const useRegisterController = () => {
         clearErrors,
         watch,
         formState: { errors, isSubmitting },
-    } = useForm<RegisterFormInputs>({
+    } = useForm<RegisterRequest>({
         defaultValues: {
             email: "",
             otp: "",
@@ -32,17 +35,20 @@ export const useRegisterController = () => {
         alert(`Mã OTP đã được yêu cầu gửi đến email: ${email}`);
     };
 
-    const onRegister = async (data: RegisterFormInputs) => {
+    const onRegister = async (data: RegisterRequest) => {
         try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const result = await authService.register(data);
 
-            console.log("Thông tin đăng ký:", data);
-            alert("Đăng ký thành công! Chuyển hướng đến trang đăng nhập...");
-
-        } catch (error) {
+            if (result.success) {
+                alert("Đăng ký thành công! Chuyển hướng đến trang chủ...");
+                // TODO: Navigate to home page
+            } else {
+                alert(result.message);
+            }
+        } catch (error: unknown) {
             setError("root", {
                 type: "server",
-                message: "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",
+                message: error instanceof Error ? error.message : "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",
             });
         }
     };

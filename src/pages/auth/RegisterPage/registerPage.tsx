@@ -32,7 +32,7 @@ function RegisterPage() {
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
             </svg>
 
-            {/* Frame Register Input (Stacked Paper Effect) */}
+            {/* Frame Register Input */}
             <div className="relative w-full max-w-[1024px] min-h-[600px] z-10 flex">
                 <div className="absolute inset-0 bg-market-surface border border-[#E7E5E4] rounded-[12px] rotate-2 scale-[0.98] transition-transform duration-500 hover:rotate-3"></div>
                 <div className="absolute inset-0 bg-market-background border border-[#E7E5E4] rounded-[12px] -rotate-1 scale-[0.99] transition-transform duration-500 hover:-rotate-2"></div>
@@ -179,7 +179,6 @@ function RegisterPage() {
                                     {isSubmitting ? "Đang xử lý..." : "Đăng ký tài khoản"}
                                 </button>
 
-                                {/* Phân cách */}
                                 <div className="relative flex items-center justify-center mb-6">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-[#E7E5E4]"></div>

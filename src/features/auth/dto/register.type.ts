@@ -1,4 +1,4 @@
-export interface RegisterFormInputs {
+export interface RegisterRequest {
     email: string;
     otp: string;
     password: string;
