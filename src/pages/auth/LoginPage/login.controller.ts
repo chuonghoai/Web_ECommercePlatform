@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import { AuthService } from "../../features/auth/services/auth.service";
-import type { LoginRequest } from "../../features/auth/dto/login.type";
+import { AuthService } from "../../../features/auth/services/auth.service";
+import type { LoginRequest } from "../../../features/auth/dto/login.type";
 
 const authService = new AuthService();
 
