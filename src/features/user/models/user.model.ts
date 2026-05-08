@@ -5,7 +5,7 @@ export const EUserRole = {
 export type UserRole = (typeof EUserRole)[keyof typeof EUserRole];
 
 export class User {
-    id: number;
+    id: string;
     email: string;
     fullName: string;
     role: UserRole;
