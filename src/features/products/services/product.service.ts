@@ -1,6 +1,7 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
 import { EFilterState, type FilterState } from "../../../pages/marketplace/components/filter/filter.type";
 import type { ProductItem } from "../models/product.model";
+import type { ProductDetail } from "../models/productDetail.model";
 
 export class ProductService {
 
@@ -150,6 +151,52 @@ export class ProductService {
                 totalItems: fakeTotalItems,
                 totalPages: fakeTotalPages
             }
+        };
+    }
+
+    /**
+     * Get product by id
+     * @param id 
+     * Response: ProductDetail
+     */
+    async getProductById(id: string): Promise<ApiResponse<ProductDetail | null>> {
+        const product = {
+            id: id,
+            name: "Bình gốm mộc nung củi men tro",
+            imageUrl: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+            price: 450000,
+            originalPrice: 500000,
+            discountPercentage: 10,
+            rating: 4.8,
+            categoryId: "1",
+            categoryName: "Gốm sứ & Điêu khắc",
+            createdAt: "2026-05-08T10:00:00Z",
+            soldCount: 125,
+            images: [
+                "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+            ],
+            description: "Bình gốm mộc nung củi men tro",
+            stock: 10,
+            materials: ["Đất sét", "Men tro", "Gỗ sồi"],
+            dimensions: "Cao 15cm, Đường kính 10cm",
+            weight: "500g",
+            careInstructions: "Chỉ rửa bằng tay, không dùng máy rửa bát",
+            isFavorite: false,
+            sellerInfo: {
+                id: "1",
+                name: "Bình gốm mộc nung củi men tro",
+                avatarUrl: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop",
+                totalProducts: 10,
+                averageRating: 4.8,
+            }
+        }
+
+        return {
+            success: true,
+            message: "Lấy sản phẩm thành công",
+            data: product
         };
     }
 }
