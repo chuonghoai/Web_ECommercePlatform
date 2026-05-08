@@ -19,23 +19,16 @@ export const useLoginController = () => {
 
   const onLogin = async (data: LoginRequest) => {
     try {
-      const success = await authService.login(data);
-      if (success) {
+      const result = await authService.login(data);
+      if (result.success) {
         alert("Đăng nhập thành công!");
         // TODO: Navigate to home page
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError("root", {
-          type: "server",
-          message: error.message,
-        });
-      } else {
-        setError("root", {
-          type: "server",
-          message: "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",
-        });
-      }
+      setError("root", {
+        type: "server",
+        message: error instanceof Error ? error.message : "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",
+      });
     }
   };
 

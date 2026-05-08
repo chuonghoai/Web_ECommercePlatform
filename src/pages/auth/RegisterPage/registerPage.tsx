@@ -10,6 +10,8 @@ function RegisterPage() {
         onSendOtp,
         onRegister,
         currentPassword,
+        otpCountdown,
+        isSendingOtp,
     } = useRegisterController();
 
     return (
@@ -101,9 +103,15 @@ function RegisterPage() {
                                         <button
                                             type="button"
                                             onClick={onSendOtp}
-                                            className="bg-transparent border-[1.5px] border-market-primary text-market-primary font-semibold text-[13px] px-4 rounded-[4px] h-[42px] hover:bg-market-background transition-colors whitespace-nowrap"
+                                            disabled={otpCountdown > 0 || isSendingOtp}
+                                            className="bg-transparent border-[1.5px] border-market-primary text-market-primary font-semibold text-[13px] px-4 rounded-[4px] h-[42px] transition-colors whitespace-nowrap min-w-[120px] flex items-center justify-center hover:bg-market-background disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                         >
-                                            Gửi mã
+                                            {isSendingOtp
+                                                ? "Đang gửi..."
+                                                : otpCountdown > 0
+                                                    ? `Gửi lại sau ${otpCountdown}s`
+                                                    : "Gửi mã"
+                                            }
                                         </button>
                                     </div>
                                     {errors.email && (
