@@ -13,14 +13,27 @@ export class AuthService {
         this.authRepository = authRepository || new AuthApiRepository();
     }
 
+    /* 
+    * Request: email, password
+    * Response: accessToken, user: { userId, email, fullname, role}
+    * Flow:
+    *   - call API get ApiResponse.data
+    *   - Save access token and user info to local storage (by tokenService and userStorageService)
+    * Return: ApiResponse have data = null
+    */
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         const result = await this.authRepository.login(data);
 
         tokenService.saveAccessToken(result.data.accessToken);
+        // TODO: save user to userStorageService
 
         return result;
     }
 
+    /**
+     * Request: email and purpose
+     * Response: null
+     */
     async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
         const result: ApiResponse<void> = {
             success: true,
@@ -30,6 +43,12 @@ export class AuthService {
         return result;
     }
 
+    /**
+     * Request: email, otp, password, confirmPassword
+     * Response: accessToken, user: { userId, email, fullname, role}
+     * Flow: like to login (save access token and user info to local storage)
+     * Return: ApiResponse have data = null
+     */
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
         const result: ApiResponse<LoginResponse> = {
             success: true,
