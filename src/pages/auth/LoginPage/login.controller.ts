@@ -3,11 +3,13 @@ import { AuthService } from "../../../features/auth/services/auth.service";
 import type { LoginRequest } from "../../../features/auth/dto/login.type";
 import { useToast } from "../../../components/toast/toast";
 import { AuthMockRepository } from "../../../features/auth/repositories/authMock.repository";
+import { useNavigate } from "react-router-dom";
 
 const authService = new AuthService(new AuthMockRepository);
 
 export const useLoginController = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,6 +27,7 @@ export const useLoginController = () => {
       const result = await authService.login(data);
       if (result.success) {
         toast("Đăng nhập thành công!", "success");
+        navigate("/");
       }
     } catch (error: unknown) {
       toast("Đăng nhập thất bại!", "error");

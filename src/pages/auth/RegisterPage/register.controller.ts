@@ -4,11 +4,13 @@ import { AuthService } from "../../../features/auth/services/auth.service";
 import { useEffect, useState } from "react";
 import { OtpPurpose } from "../../../features/auth/enums/otpPurpose.enum";
 import { useToast } from "../../../components/toast/toast";
+import { useNavigate } from "react-router-dom";
 
 const authService = new AuthService();
 
 export const useRegisterController = () => {
     const { toast } = useToast();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -60,7 +62,6 @@ export const useRegisterController = () => {
             const result = await authService.sendOtp(email, OtpPurpose.REGISTER);
             if (result.success) {
                 toast(`Mã OTP đã được gửi đến email: ${email}`, 'success')
-                // TODO
             } else {
                 toast(result.message, 'error');
                 setOtpCountdown(0);
@@ -85,7 +86,7 @@ export const useRegisterController = () => {
 
             if (result.success) {
                 toast("Đăng ký thành công!", 'success');
-                // TODO
+                navigate("/");
             } else {
                 toast(result.message, 'error');
             }
