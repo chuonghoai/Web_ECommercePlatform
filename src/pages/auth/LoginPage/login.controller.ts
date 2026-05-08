@@ -1,10 +1,13 @@
 import { useForm } from "react-hook-form";
 import { AuthService } from "../../../features/auth/services/auth.service";
 import type { LoginRequest } from "../../../features/auth/dto/login.type";
+import { useToast } from "../../../components/toast/toast";
+import { AuthMockRepository } from "../../../features/auth/repositories/authMock.repository";
 
-const authService = new AuthService();
+const authService = new AuthService(new AuthMockRepository);
 
 export const useLoginController = () => {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -21,10 +24,10 @@ export const useLoginController = () => {
     try {
       const result = await authService.login(data);
       if (result.success) {
-        alert("Đăng nhập thành công!");
-        // TODO: Navigate to home page
+        toast("Đăng nhập thành công!", "success");
       }
     } catch (error: unknown) {
+      toast("Đăng nhập thất bại!", "error");
       setError("root", {
         type: "server",
         message: error instanceof Error ? error.message : "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",

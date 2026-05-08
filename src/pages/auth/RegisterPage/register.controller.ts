@@ -3,10 +3,12 @@ import type { RegisterRequest } from "../../../features/auth/dto/register.type";
 import { AuthService } from "../../../features/auth/services/auth.service";
 import { useEffect, useState } from "react";
 import { OtpPurpose } from "../../../features/auth/enums/otpPurpose.enum";
+import { useToast } from "../../../components/toast/toast";
 
 const authService = new AuthService();
 
 export const useRegisterController = () => {
+    const { toast } = useToast();
     const {
         register,
         handleSubmit,
@@ -57,13 +59,15 @@ export const useRegisterController = () => {
             setOtpCountdown(30);
             const result = await authService.sendOtp(email, OtpPurpose.REGISTER);
             if (result.success) {
-                alert(`Mã OTP đã được yêu cầu gửi đến email: ${email}`);
+                toast(`Mã OTP đã được gửi đến email: ${email}`, 'success')
                 // TODO
             } else {
+                toast(result.message, 'error');
                 setOtpCountdown(0);
                 setError("email", { type: "manual", message: result.message });
             }
         } catch (error: unknown) {
+            toast("Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.", 'error');
             setOtpCountdown(0);
             setError("root", {
                 type: "server",
@@ -80,12 +84,13 @@ export const useRegisterController = () => {
             const result = await authService.register(data);
 
             if (result.success) {
-                alert("Đăng ký thành công! Chuyển hướng đến trang chủ...");
-                // TODO: Navigate to home page
+                toast("Đăng ký thành công!", 'success');
+                // TODO
             } else {
-                alert(result.message);
+                toast(result.message, 'error');
             }
         } catch (error: unknown) {
+            toast("Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.", 'error');
             setError("root", {
                 type: "server",
                 message: error instanceof Error ? error.message : "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",

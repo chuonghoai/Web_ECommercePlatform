@@ -32,7 +32,7 @@ export class AuthService {
 
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
         const result: ApiResponse<LoginResponse> = {
-            success: false,
+            success: true,
             message: "Đăng ký thành công",
             data: {
                 accessToken: "mock_token_123",
