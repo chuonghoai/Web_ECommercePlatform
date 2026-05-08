@@ -37,7 +37,7 @@ function ProductPage() {
 
     const allImages = [product.imageUrl, ...(product.images || [])];
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
-    const displayStock = product.stock >= 20 ? 2 : product.stock;
+    const displayStockStatus = (product.stock >= 20 ? `Còn ` : 'Chỉ còn ') + `${product.stock} sản phẩm`;
 
     return (
         <div className="pb-32 font-['Open_Sans',sans-serif] text-[#1C1917] selection:bg-[#FDF6EC] selection:text-[#9A3412]">
@@ -168,7 +168,7 @@ function ProductPage() {
                         <div className="flex items-center justify-between text-[14px] font-medium">
                             <span className="text-[#D97706] bg-[#FEF3C7] px-3 py-1 rounded-full flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></span>
-                                Chỉ còn {displayStock} tác phẩm
+                                {displayStockStatus}
                             </span>
                         </div>
 
