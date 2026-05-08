@@ -34,7 +34,7 @@ export class ProductService {
         {
             id: "4",
             name: "Vòng tay trầm hương tự nhiên",
-            imageUrl: "https://images.unsplash.com/photo-1611080922858-6a3f9a74fb1c?q=80&w=800&auto=format&fit=crop",
+            imageUrl: "https://chiasetainguyen.com/upload-file/vong-tay-tram-huong-1650d0e1d07052.jpg",
             price: 850000,
             originalPrice: 1000000,
             discountPercentage: 0,
@@ -52,7 +52,7 @@ export class ProductService {
         {
             id: "6",
             name: "Lọ hoa gỗ lũa nghệ thuật",
-            imageUrl: "https://images.unsplash.com/photo-1596484552834-6a58f850d0a1?q=80&w=800&auto=format&fit=crop",
+            imageUrl: "https://th.bing.com/th/id/OIP.prMCooHgX8QImiqNbgeeOwHaHZ?r=0&o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3",
             price: 1200000,
             originalPrice: 1200000,
             discountPercentage: 0,
@@ -64,6 +64,7 @@ export class ProductService {
      * Get list of products with pagination
      * @param page Current page (default = 1)
      * @param pageSize Total item per page (default = 30)
+     * Response: ProductItem[] with pagination
      */
     async getAllProducts(page: number = 1, pageSize: number = 30): Promise<ApiResponse<ProductItem[]>> {
         await new Promise(resolve => setTimeout(resolve, 800));

@@ -1,7 +1,7 @@
 export const Footer = () => {
   return (
     <footer className="bg-market-background border-t border-[#E7E5E4] pt-16 pb-8 text-[#57534E] font-['Open_Sans',sans-serif]">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
 
         <div className="col-span-1 md:col-span-2">
           <h3 className="font-['Lora',serif] text-[22px] font-semibold text-[#1C1917] mb-4">MarketNest</h3>
@@ -31,7 +31,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 pt-8 border-t border-[#D6D3D1] flex flex-col md:flex-row items-center justify-between text-[13px]">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-6 pt-8 border-t border-[#D6D3D1] flex flex-col md:flex-row items-center justify-between text-[13px]">
         <p>© 2026 MarketNest. All rights reserved.</p>
         <div className="flex gap-4 mt-4 md:mt-0 font-medium">
           <span>Sáng tạo</span>
