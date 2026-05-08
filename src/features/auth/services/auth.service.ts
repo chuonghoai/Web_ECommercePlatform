@@ -57,7 +57,7 @@ export class AuthService {
             data: {
                 accessToken: "mock_token_123",
                 user: {
-                    id: 1,
+                    id: "1",
                     email: "manggia098@gmail.com",
                     fullName: "manggia",
                     role: "USER",
