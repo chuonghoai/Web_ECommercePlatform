@@ -3,15 +3,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { productService } from "../../features/products/services/product.service";
 import type { ProductDetail } from "../../features/products/models/productDetail.model";
 import { useToast } from "../../components/toast/toast";
+import { useCart } from "../../features/cart/contexts/CartProvider";
+import { cartService } from "../../features/cart/services/cart.service";
 
 export const useProductController = () => {
     const { id } = useParams<{ id: string }>();
 
     const navigate = useNavigate();
     const { toast } = useToast();
+    const { incrementCart } = useCart();
 
     const [product, setProduct] = useState<ProductDetail | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchProductDetail = async () => {
@@ -44,8 +48,30 @@ export const useProductController = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [id, navigate, toast]);
 
+    const handleAddToCart = async (quantity: number) => {
+        if (!product) return;
+
+        setIsAddingToCart(true);
+        try {
+            const response = await cartService.addToCart(product.id, quantity);
+
+            if (response.success) {
+                incrementCart(quantity);
+                toast(response.message, "success");
+            } else {
+                toast(response.message || "Không thể thêm vào giỏ hàng", "error");
+            }
+        } catch (error) {
+            toast("Lỗi kết nối. Vui lòng thử lại", "error");
+        } finally {
+            setIsAddingToCart(false);
+        }
+    };
+
     return {
         product,
-        isLoading
+        isLoading,
+        isAddingToCart,
+        handleAddToCart
     };
 };

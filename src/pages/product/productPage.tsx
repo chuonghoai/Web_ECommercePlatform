@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useProductController } from "./product.controller";
 
 function ProductPage() {
-    const { product, isLoading } = useProductController();
+    const { product, isLoading, isAddingToCart, handleAddToCart } = useProductController();
     const [activeImgIndex, setActiveImgIndex] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const thumbnailContainerRef = useRef<HTMLDivElement>(null);
@@ -179,9 +179,23 @@ function ProductPage() {
                                 <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))} className="flex-1 h-full text-[#78716C] hover:bg-[#FAFAF9] hover:text-[#1C1917] transition-colors">+</button>
                             </div>
 
-                            <button className="flex-1 bg-[#1C1917] text-white h-full rounded-[8px] font-medium text-[15px] flex items-center justify-center gap-2 shadow-sm hover:bg-market-primary hover:shadow-md hover:-translate-y-px transition-all duration-200 active:translate-y-0">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                                Thêm vào bộ sưu tập
+                            <button
+                                onClick={() => handleAddToCart(quantity)}
+                                disabled={isAddingToCart}
+                                className="flex-1 bg-[#1C1917] text-white h-full rounded-[8px] font-medium text-[15px] flex items-center justify-center gap-2 shadow-sm hover:bg-market-primary hover:shadow-md hover:-translate-y-px transition-all duration-200 active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:-translate-y-0 disabled:hover:shadow-sm"
+                            >
+                                {isAddingToCart ? (
+                                    <svg className="w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                ) : (
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                    </svg>
+                                )}
+
+                                {isAddingToCart ? "Đang chuẩn bị..." : "Thêm vào bộ sưu tập"}
                             </button>
 
                             <button className={`w-[52px] h-full shrink-0 rounded-[8px] border flex items-center justify-center transition-all duration-200 ${product.isFavorite ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#EF4444]' : 'bg-white border-[#D6D3D1] text-[#A8A29E] hover:border-[#1C1917] hover:text-[#1C1917]'}`}>
