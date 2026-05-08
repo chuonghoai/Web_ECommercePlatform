@@ -1,5 +1,5 @@
-// src/features/cart/contexts/CartProvider.tsx
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { localStorageService } from "../../../core/storage/localStorage.service";
 
 interface CartContextType {
     cartCount: number;
@@ -19,7 +19,14 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const [cartCount, setCartCount] = useState(0);
+    const [cartCount, setCartCount] = useState<number>(() => {
+        const savedCartCount = localStorageService.get<number>("cart_count");
+        return savedCartCount !== null ? savedCartCount : 0;
+    });
+
+    useEffect(() => {
+        localStorageService.set("cart_count", cartCount);
+    }, [cartCount]);
 
     const incrementCart = (amount = 1) => {
         setCartCount((prev) => prev + amount);
