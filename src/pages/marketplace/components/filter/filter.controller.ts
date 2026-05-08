@@ -4,7 +4,7 @@ import type { Category } from "../../../../features/category/models/category.mod
 import { EFilterState, type FilterState } from "./filter.type";
 import { useSearchParams } from "react-router-dom";
 
-export const useFilterController = (onApply: (filters: FilterState) => void) => {
+export const useFilterController = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -67,9 +67,7 @@ export const useFilterController = (onApply: (filters: FilterState) => void) => 
         if (localFilters.maxPrice) params.set("maxPrice", localFilters.maxPrice);
 
         localFilters.categories.forEach((id) => params.append("categories", id));
-
         setSearchParams(params);
-        onApply(localFilters);
     };
 
     const handleReset = () => {

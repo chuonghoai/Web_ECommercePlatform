@@ -28,7 +28,7 @@ function MarketplacePage() {
 
                 {/* Filter sidebar */}
                 <aside className="w-full md:w-[280px] shrink-0">
-                    <MarketplaceFilter onApply={() => { }} />
+                    <MarketplaceFilter />
                 </aside>
 
                 {/* Grid products */}
@@ -127,7 +127,6 @@ function MarketplacePage() {
         </div>
     );
 }
-
 
 const generatePagination = (currentPage: number, totalPages: number) => {
     if (totalPages <= 7) {

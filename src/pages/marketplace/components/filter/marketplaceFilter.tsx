@@ -1,11 +1,7 @@
 import { useFilterController } from "./filter.controller";
-import { EFilterState, type FilterState } from "./filter.type";
+import { EFilterState } from "./filter.type";
 
-interface MarketplaceFilterProps {
-    onApply: (filters: FilterState) => void;
-}
-
-export const MarketplaceFilter = ({ onApply }: MarketplaceFilterProps) => {
+export const MarketplaceFilter = () => {
     const {
         categories,
         localFilters,
@@ -14,7 +10,7 @@ export const MarketplaceFilter = ({ onApply }: MarketplaceFilterProps) => {
         handlePriceChange,
         handleApply,
         handleReset
-    } = useFilterController(onApply);
+    } = useFilterController();
 
     return (
         <div className="bg-white border border-[#E7E5E4] rounded-[8px] p-6 font-['Open_Sans',sans-serif]">
