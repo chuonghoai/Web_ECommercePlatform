@@ -1,11 +1,10 @@
 import { useMarketplaceController } from "./marketplace.controller";
 import { ProductCard } from "./components/productCard";
-import { MarketplaceFilter } from "./components/marketplaceFilter";
+import { MarketplaceFilter } from "./components/filter/marketplaceFilter";
 
 function MarketplacePage() {
     const {
         products,
-        categories,
         isLoading,
         pagination,
         filters,
@@ -30,7 +29,6 @@ function MarketplacePage() {
                 {/* Filter sidebar */}
                 <aside className="w-full md:w-[280px] shrink-0">
                     <MarketplaceFilter
-                        categories={categories}
                         initialFilters={filters}
                         onApply={applyFilters}
                     />

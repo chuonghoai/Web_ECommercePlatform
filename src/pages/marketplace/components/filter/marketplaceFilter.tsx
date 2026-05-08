@@ -1,36 +1,21 @@
-import { useState } from "react";
-import type { Category } from "../../../features/category/models/category.model";
-import type { FilterState } from "../marketplace.controller";
+import { useFilterController } from "./filter.controller";
+import { EFilterState, type FilterState } from "./filter.type";
 
 interface MarketplaceFilterProps {
-    categories: Category[];
     initialFilters: FilterState;
     onApply: (filters: FilterState) => void;
 }
 
-export const MarketplaceFilter = ({ categories, initialFilters, onApply }: MarketplaceFilterProps) => {
-    const [localFilters, setLocalFilters] = useState<FilterState>(initialFilters);
-
-    const handleSortChange = (value: string) => {
-        setLocalFilters(prev => ({ ...prev, sortBy: value }));
-    };
-
-    const handleCategoryToggle = (categoryId: number) => {
-        setLocalFilters(prev => {
-            const isSelected = prev.categories.includes(categoryId);
-            if (isSelected) {
-                return { ...prev, categories: prev.categories.filter(id => id !== categoryId) };
-            } else {
-                return { ...prev, categories: [...prev.categories, categoryId] };
-            }
-        });
-    };
-
-    const handlePriceChange = (field: 'minPrice' | 'maxPrice', value: string) => {
-        if (value === '' || /^\d+$/.test(value)) {
-            setLocalFilters(prev => ({ ...prev, [field]: value }));
-        }
-    };
+export const MarketplaceFilter = ({ initialFilters, onApply }: MarketplaceFilterProps) => {
+    const {
+        categories,
+        localFilters,
+        handleSortChange,
+        handleCategoryToggle,
+        handlePriceChange,
+        handleApply,
+        handleReset
+    } = useFilterController(initialFilters, onApply);
 
     return (
         <div className="bg-white border border-[#E7E5E4] rounded-[8px] p-6 font-['Open_Sans',sans-serif]">
@@ -42,10 +27,10 @@ export const MarketplaceFilter = ({ categories, initialFilters, onApply }: Marke
                 <h3 className="text-[13px] font-bold text-[#1C1917] uppercase tracking-[0.09em] mb-4">Sắp xếp theo</h3>
                 <div className="flex flex-col gap-3">
                     {[
-                        { id: 'newest', label: 'Mới nhất' },
-                        { id: 'price_asc', label: 'Giá tăng dần' },
-                        { id: 'price_desc', label: 'Giá giảm dần' },
-                        { id: 'popular', label: 'Phổ biến nhất' }
+                        { id: EFilterState.NEWEST, label: 'Mới nhất' },
+                        { id: EFilterState.PRICE_LOW_TO_HIGH, label: 'Giá tăng dần' },
+                        { id: EFilterState.PRICE_HIGH_TO_LOW, label: 'Giá giảm dần' },
+                        { id: EFilterState.POPULARITY, label: 'Phổ biến nhất' }
                     ].map(option => (
                         <label key={option.id} className="flex items-center gap-3 cursor-pointer group">
                             <input
@@ -113,18 +98,14 @@ export const MarketplaceFilter = ({ categories, initialFilters, onApply }: Marke
             </div>
 
             <button
-                onClick={() => onApply(localFilters)}
+                onClick={handleApply}
                 className="w-full bg-market-primary text-white h-[42px] rounded-[4px] font-semibold text-[15px] hover:bg-[#9A3412] transition-colors"
             >
                 Áp dụng bộ lọc
             </button>
 
             <button
-                onClick={() => {
-                    const resetFilters = { sortBy: 'newest', categories: [], minPrice: '', maxPrice: '' };
-                    setLocalFilters(resetFilters);
-                    onApply(resetFilters);
-                }}
+                onClick={handleReset}
                 className="w-full mt-3 bg-transparent text-[#57534E] h-[42px] rounded-[4px] font-semibold text-[14px] hover:bg-[#F5F5F4] transition-colors"
             >
                 Xóa tất cả
