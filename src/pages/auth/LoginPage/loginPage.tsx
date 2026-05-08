@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLoginController } from "./login.controller";
 
 function LoginPage() {
@@ -163,9 +164,9 @@ function LoginPage() {
                 {/* Register button */}
                 <div className="mt-8 text-center text-[14px] text-[#57534E]">
                   Chưa có tài khoản?{' '}
-                  <a href="#" className="font-semibold text-market-primary hover:text-[#9A3412] transition-colors">
+                  <Link to="/register" className="font-semibold text-market-primary hover:text-[#9A3412] transition-colors">
                     Đăng ký ngay
-                  </a>
+                  </Link>
                 </div>
 
               </form>

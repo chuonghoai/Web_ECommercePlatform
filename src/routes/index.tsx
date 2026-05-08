@@ -5,6 +5,7 @@ import {
     Navigate,
 } from "react-router-dom";
 import LoginPage from "../pages/auth/LoginPage/loginPage";
+import RegisterPage from "../pages/auth/RegisterPage/registerPage";
 
 
 function AppRoutes() {
@@ -12,6 +13,7 @@ function AppRoutes() {
         <BrowserRouter>
             <Routes>
 
+                {/* AUTH */}
                 <Route
                     path="/"
                     element={<Navigate to="/login" replace />}
@@ -20,6 +22,11 @@ function AppRoutes() {
                 <Route
                     path="/login"
                     element={<LoginPage />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<RegisterPage />}
                 />
 
             </Routes>
