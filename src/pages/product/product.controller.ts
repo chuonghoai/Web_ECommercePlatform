@@ -5,6 +5,7 @@ import type { ProductDetail } from "../../features/products/models/productDetail
 import { useToast } from "../../components/toast/toast";
 import { useCart } from "../../features/cart/contexts/CartProvider";
 import { cartService } from "../../features/cart/services/cart.service";
+import { favoriteService } from "../../features/products/services/favorite.service";
 
 export const useProductController = () => {
     const { id } = useParams<{ id: string }>();
@@ -16,6 +17,7 @@ export const useProductController = () => {
     const [product, setProduct] = useState<ProductDetail | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
+    const [isTogglingFavorite, setIsTogglingFavorite] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchProductDetail = async () => {
@@ -68,10 +70,30 @@ export const useProductController = () => {
         }
     };
 
+    const handleToggleFavorite = async () => {
+        if (!product) return;
+
+        setIsTogglingFavorite(true);
+        try {
+            const response = await favoriteService.toggleFavorite(product.id);
+
+            if (response.success && response.data) {
+                setProduct(prev => prev ? { ...prev, isFavorite: response.data!.isFavorite } : null);
+                toast(response.message, response.data.isFavorite ? "success" : "info");
+            }
+        } catch (error) {
+            toast("Lỗi kết nối. Vui lòng thử lại", "error");
+        } finally {
+            setIsTogglingFavorite(false);
+        }
+    };
+
     return {
         product,
         isLoading,
         isAddingToCart,
-        handleAddToCart
+        handleAddToCart,
+        isTogglingFavorite,
+        handleToggleFavorite
     };
 };

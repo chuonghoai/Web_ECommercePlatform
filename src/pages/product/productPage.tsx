@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useProductController } from "./product.controller";
 
 function ProductPage() {
-    const { product, isLoading, isAddingToCart, handleAddToCart } = useProductController();
+    const { product, isLoading, isAddingToCart, handleAddToCart, isTogglingFavorite, handleToggleFavorite } = useProductController();
     const [activeImgIndex, setActiveImgIndex] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const thumbnailContainerRef = useRef<HTMLDivElement>(null);
@@ -198,8 +198,23 @@ function ProductPage() {
                                 {isAddingToCart ? "Đang chuẩn bị..." : "Thêm vào bộ sưu tập"}
                             </button>
 
-                            <button className={`w-[52px] h-full shrink-0 rounded-[8px] border flex items-center justify-center transition-all duration-200 ${product.isFavorite ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#EF4444]' : 'bg-white border-[#D6D3D1] text-[#A8A29E] hover:border-[#1C1917] hover:text-[#1C1917]'}`}>
-                                <svg className={`w-5 h-5 ${product.isFavorite ? 'fill-current' : 'fill-none'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+                            <button
+                                onClick={handleToggleFavorite}
+                                disabled={isTogglingFavorite}
+                                className={`w-[52px] h-full shrink-0 rounded-[8px] border flex items-center justify-center transition-all duration-300 ${product.isFavorite
+                                    ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#EF4444] hover:bg-[#FEE2E2]'
+                                    : 'bg-white border-[#D6D3D1] text-[#A8A29E] hover:border-[#1C1917] hover:text-[#1C1917]'
+                                    } disabled:opacity-50 disabled:cursor-wait`}
+                            >
+                                <svg
+                                    className={`w-5 h-5 transition-transform duration-300 ${product.isFavorite ? 'fill-current scale-110' : 'fill-none scale-100'
+                                        }`}
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    strokeWidth={1.5}
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                </svg>
                             </button>
                         </div>
                     </div>
