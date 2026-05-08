@@ -8,6 +8,7 @@ import LoginPage from "../pages/auth/LoginPage/loginPage";
 import RegisterPage from "../pages/auth/RegisterPage/registerPage";
 import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
+import ProductPage from "../pages/product/productPage";
 
 function AppRoutes() {
     return (
@@ -16,6 +17,7 @@ function AppRoutes() {
                 {/* MAIN */}
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<MarketplacePage />} />
+                    <Route path="product/:id" element={<ProductPage />} />
                 </Route>
 
                 {/* AUTH */}
