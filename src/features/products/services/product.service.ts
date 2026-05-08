@@ -135,12 +135,10 @@ export class ProductService {
             }
         }
 
-        const totalItems = filteredItems.length;
-        const totalPages = Math.ceil(totalItems / pageSize);
-        const currentPage = Math.max(1, Math.min(page, totalPages || 1));
-        const startIndex = (currentPage - 1) * pageSize;
-        const endIndex = startIndex + pageSize;
-        const paginatedItems = filteredItems.slice(startIndex, endIndex);
+        const fakeTotalPages = 50;
+        const fakeTotalItems = 1500;
+        const currentPage = Math.max(1, Math.min(page, fakeTotalPages));
+        const paginatedItems = filteredItems;
 
         return {
             success: true,
@@ -149,8 +147,8 @@ export class ProductService {
             pagination: {
                 page: currentPage,
                 pageSize: pageSize,
-                totalItems: totalItems,
-                totalPages: totalPages
+                totalItems: fakeTotalItems,
+                totalPages: fakeTotalPages
             }
         };
     }

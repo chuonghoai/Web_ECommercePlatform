@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { ApiResponse } from "../../core/api/apiResponse";
 import type { ProductItem } from "../../features/products/models/product.model";
 import { productService } from "../../features/products/services/product.service";
 import { EFilterState, type FilterState } from "./components/filter/filter.type";
+import { useSearchParams } from "react-router-dom";
 
 export const useMarketplaceController = () => {
     const [products, setProducts] = useState<ProductItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [pagination, setPagination] = useState<ApiResponse<any>["pagination"]>();
+    const [searchParams, setSearchParams] = useSearchParams();
 
+    // State filters
     const [filters, setFilters] = useState<FilterState>({
         sortBy: EFilterState.NEWEST,
         categories: [],
@@ -16,9 +19,14 @@ export const useMarketplaceController = () => {
         maxPrice: ''
     });
 
+    // Get page from URL
+    const currentPage = useMemo(() => {
+        return Number(searchParams.get("page")) || 1;
+    }, [searchParams]);
+
     useEffect(() => {
-        fetchProducts(1, filters);
-    }, []);
+        fetchProducts(currentPage, filters);
+    }, [currentPage, filters]);
 
     // Call API get all products
     const fetchProducts = async (page: number = 1, currentFilters: FilterState = filters) => {
@@ -39,7 +47,16 @@ export const useMarketplaceController = () => {
     // Call API get products with filters
     const applyFilters = (newFilters: FilterState) => {
         setFilters(newFilters);
-        fetchProducts(1, newFilters);
+        searchParams.set("page", "1");
+        setSearchParams(searchParams);
+    };
+
+    const handlePageChange = (newPage: number) => {
+        if (pagination && newPage >= 1 && newPage <= pagination.totalPages) {
+            searchParams.set("page", newPage.toString());
+            setSearchParams(searchParams);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     return {
@@ -48,5 +65,7 @@ export const useMarketplaceController = () => {
         pagination,
         filters,
         applyFilters,
+        handlePageChange,
+        currentPage,
     };
 };

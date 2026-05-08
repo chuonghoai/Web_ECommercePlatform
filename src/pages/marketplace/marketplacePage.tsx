@@ -8,7 +8,9 @@ function MarketplacePage() {
         isLoading,
         pagination,
         filters,
-        applyFilters
+        applyFilters,
+        handlePageChange,
+        currentPage,
     } = useMarketplaceController();
 
     return (
@@ -35,7 +37,7 @@ function MarketplacePage() {
                 </aside>
 
                 {/* Grid products */}
-                <div className="flex-1">
+                <div className="flex-1 flex flex-col min-h-full">
                     {!isLoading && pagination && (
                         <div className="mb-6 flex justify-between items-center text-[14px] text-[#57534E]">
                             <p>
@@ -63,6 +65,67 @@ function MarketplacePage() {
                             ))}
                         </div>
                     )}
+
+                    {!isLoading && pagination && pagination.totalPages > 1 && (
+                        <div className="mt-12 pt-8 border-t border-[#E7E5E4] flex flex-wrap items-center justify-center gap-2">
+                            <button
+                                onClick={() => handlePageChange(1)}
+                                disabled={pagination.page === 1}
+                                className="h-[42px] px-4 border-[1.5px] border-[#D6D3D1] rounded-[4px] text-[14px] font-semibold text-[#57534E] hover:bg-[#FDF6EC] hover:text-market-primary hover:border-market-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#57534E] disabled:hover:border-[#D6D3D1]"
+                            >
+                                Đầu
+                            </button>
+
+                            <button
+                                onClick={() => handlePageChange(pagination.page - 1)}
+                                disabled={pagination.page === 1}
+                                className="h-[42px] px-4 border-[1.5px] border-[#D6D3D1] rounded-[4px] text-[14px] font-semibold text-[#57534E] hover:bg-[#FDF6EC] hover:text-market-primary hover:border-market-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#57534E] disabled:hover:border-[#D6D3D1]"
+                            >
+                                Trước
+                            </button>
+
+                            {generatePagination(currentPage, pagination.totalPages).map((item, index) => {
+                                if (item === '...') {
+                                    return (
+                                        <span key={`ellipsis-${index}`} className="w-[42px] h-[42px] flex items-center justify-center text-[14px] font-semibold text-[#A8A29E]">
+                                            ...
+                                        </span>
+                                    );
+                                }
+
+                                const pageNumber = item as number;
+                                const isActive = pageNumber === currentPage;
+                                return (
+                                    <button
+                                        key={pageNumber}
+                                        onClick={() => handlePageChange(pageNumber)}
+                                        className={`w-[42px] h-[42px] rounded-[4px] text-[14px] font-semibold transition-colors flex items-center justify-center ${isActive
+                                            ? 'bg-market-primary text-white border-[1.5px] border-market-primary'
+                                            : 'bg-white border-[1.5px] border-[#D6D3D1] text-[#57534E] hover:bg-[#FDF6EC] hover:text-market-primary hover:border-market-primary'
+                                            }`}
+                                    >
+                                        {pageNumber}
+                                    </button>
+                                );
+                            })}
+
+                            <button
+                                onClick={() => handlePageChange(pagination.page + 1)}
+                                disabled={pagination.page === pagination.totalPages}
+                                className="h-[42px] px-4 border-[1.5px] border-[#D6D3D1] rounded-[4px] text-[14px] font-semibold text-[#57534E] hover:bg-[#FDF6EC] hover:text-market-primary hover:border-market-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#57534E] disabled:hover:border-[#D6D3D1]"
+                            >
+                                Sau
+                            </button>
+
+                            <button
+                                onClick={() => handlePageChange(pagination.totalPages)}
+                                disabled={pagination.page === pagination.totalPages}
+                                className="h-[42px] px-4 border-[1.5px] border-[#D6D3D1] rounded-[4px] text-[14px] font-semibold text-[#57534E] hover:bg-[#FDF6EC] hover:text-market-primary hover:border-market-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#57534E] disabled:hover:border-[#D6D3D1]"
+                            >
+                                Cuối
+                            </button>
+                        </div>
+                    )}
                 </div>
 
             </div>
@@ -70,4 +133,17 @@ function MarketplacePage() {
     );
 }
 
+
+const generatePagination = (currentPage: number, totalPages: number) => {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (currentPage <= 4) {
+        return [1, 2, 3, 4, 5, '...', totalPages];
+    }
+    if (currentPage >= totalPages - 3) {
+        return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+};
 export default MarketplacePage;
