@@ -182,7 +182,7 @@ function ProductPage() {
                             <button
                                 onClick={() => handleAddToCart(quantity)}
                                 disabled={isAddingToCart}
-                                className="flex-1 bg-[#1C1917] text-white h-full rounded-[8px] font-medium text-[15px] flex items-center justify-center gap-2 shadow-sm hover:bg-market-primary hover:shadow-md hover:-translate-y-px transition-all duration-200 active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:-translate-y-0 disabled:hover:shadow-sm"
+                                className="flex-1 bg-[#1C1917] text-white h-full rounded-[8px] font-medium text-[15px] flex items-center justify-center gap-2 shadow-sm hover:bg-market-primary hover:shadow-md hover:-translate-y-px transition-all duration-200 active:translate-y-0 disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm"
                             >
                                 {isAddingToCart ? (
                                     <svg className="w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">

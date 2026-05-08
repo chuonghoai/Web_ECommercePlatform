@@ -57,7 +57,7 @@ export const useProductController = () => {
 
             if (response.success) {
                 incrementCart(quantity);
-                toast(response.message, "success");
+                toast(`Thêm ${quantity} ${product.name} vào giỏ hàng thành công`, "success");
             } else {
                 toast(response.message || "Không thể thêm vào giỏ hàng", "error");
             }
