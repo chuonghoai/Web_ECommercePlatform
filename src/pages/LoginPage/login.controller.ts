@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { AuthService } from "../../features/auth/services/auth.service";
-import { AuthMockRepository } from "../../features/auth/repositories/authMock.repository";
 import type { LoginRequest } from "../../features/auth/dto/login.type";
 
-const authService = new AuthService(new AuthMockRepository());
+const authService = new AuthService();
 
 export const useLoginController = () => {
   const {
