@@ -84,6 +84,7 @@ export class ProductService {
      * Get list of products with pagination
      * @param page Current page (default = 1)
      * @param pageSize Total item per page (default = 30)
+     * @param filters - Object contains filter criteria
      * Response: ProductItem[] with pagination
      */
     async getAllProducts(
