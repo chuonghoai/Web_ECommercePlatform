@@ -9,14 +9,14 @@ function ProductPage() {
         isAddingToCart,
         isTogglingFavorite,
         activeImgIndex,
-        quantity, 
-        thumbnailContainerRef, 
-        setActiveImgIndex, 
-        scrollThumbnails, 
-        handleAddToCart, 
-        handleToggleFavorite, 
-        handleDecreaseQuantity, 
-        handleIncreaseQuantity 
+        quantity,
+        thumbnailContainerRef,
+        setActiveImgIndex,
+        scrollThumbnails,
+        handleAddToCart,
+        handleToggleFavorite,
+        handleDecreaseQuantity,
+        handleIncreaseQuantity
     } = useProductController();
 
     if (isLoading) {
@@ -165,7 +165,11 @@ function ProductPage() {
 
                         <div className="bg-[#FAFAF9] border border-[#E7E5E4] rounded-[16px] p-5 mb-10 flex items-center justify-between group hover:border-[#D6D3D1] transition-colors cursor-pointer">
                             <div className="flex items-center gap-4">
-                                <img src={product.sellerInfo.avatarUrl} className="w-14 h-14 rounded-full object-cover shadow-sm" alt="seller" />
+                                <img
+                                    src={product.sellerInfo.avatarUrl || `https://ui-avatars.com/api/?name=${product.sellerInfo.name}&background=F5F5F4&color=1C1917`}
+                                    className="w-14 h-14 rounded-full object-cover shadow-sm"
+                                    alt="seller"
+                                />
                                 <div>
                                     <p className="text-[12px] text-[#78716C] uppercase tracking-widest font-semibold mb-1">Nghệ nhân</p>
                                     <p className="font-['Lora',serif] text-[18px] font-medium text-[#1C1917] group-hover:text-market-primary transition-colors">{product.sellerInfo.name}</p>
