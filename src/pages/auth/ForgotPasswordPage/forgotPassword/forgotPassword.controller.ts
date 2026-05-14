@@ -1,15 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthService } from "../../../features/auth/services/auth.service";
-import { useToast } from "../../../components/toast/toast";
-import { AuthMockRepository } from "../../../features/auth/repositories/authMock.repository";
+import { AuthService } from "../../../../features/auth/services/auth.service";
+import { useToast } from "../../../../components/toast/toast";
+import { AuthMockRepository } from "../../../../features/auth/repositories/authMock.repository";
+import type { SendOtpForgotPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
 
 const authService = new AuthService(new AuthMockRepository());
-
-interface SendOtpForm {
-    email: string;
-}
 
 export const useForgotPasswordController = () => {
     const { toast } = useToast();
@@ -21,7 +18,7 @@ export const useForgotPasswordController = () => {
         setError,
         clearErrors,
         formState: { errors, isSubmitting },
-    } = useForm<SendOtpForm>({
+    } = useForm<SendOtpForgotPasswordRequest>({
         defaultValues: { email: "" },
     });
 
@@ -36,7 +33,7 @@ export const useForgotPasswordController = () => {
         return () => clearTimeout(timer);
     }, [otpCountdown]);
 
-    const onSubmit = async (data: SendOtpForm) => {
+    const onSubmit = async (data: SendOtpForgotPasswordRequest) => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         if (!emailRegex.test(data.email)) {
             setError("email", { type: "manual", message: "Email không hợp lệ." });

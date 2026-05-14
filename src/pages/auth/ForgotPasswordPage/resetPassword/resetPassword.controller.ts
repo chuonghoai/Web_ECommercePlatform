@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AuthService } from "../../../features/auth/services/auth.service";
-import type { ForgotPasswordRequest } from "../../../features/auth/dto/forgotPassword.type";
-import { useToast } from "../../../components/toast/toast";
-import { AuthMockRepository } from "../../../features/auth/repositories/authMock.repository";
+import { AuthService } from "../../../../features/auth/services/auth.service";
+import type { ForgotPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
+import { useToast } from "../../../../components/toast/toast";
+import { AuthMockRepository } from "../../../../features/auth/repositories/authMock.repository";
 
 const authService = new AuthService(new AuthMockRepository());
 

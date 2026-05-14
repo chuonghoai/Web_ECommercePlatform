@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import LoginPage from "../pages/auth/LoginPage/loginPage";
 import RegisterPage from "../pages/auth/RegisterPage/registerPage";
-import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage/forgotPasswordPage";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage/forgotPassword/forgotPasswordPage";
 import ResetPasswordPage from "../pages/auth/ForgotPasswordPage/resetPasswordPage";
 import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
