@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import type { ProductDetail } from "../../features/products/models/productDetail.model";
 import { useToast } from "../../components/toast/toast";
 import { ProductService } from "../../features/products/services/product.service";
-import { ProductMockRepository } from "../../features/products/repositories/productMock.repository";
 import { cartService } from "../../features/cart/services/cart.service";
 import { FavoriteService } from "../../features/products/services/favorite.service";
 
-const productService = new ProductService(new ProductMockRepository());
-const favoriteService = new FavoriteService(new ProductMockRepository());
+const productService = new ProductService();
+const favoriteService = new FavoriteService();
 
 export const useProductStore = () => {
     const navigate = useNavigate();
