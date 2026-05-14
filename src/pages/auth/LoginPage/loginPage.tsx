@@ -117,9 +117,9 @@ function LoginPage() {
                 </div>
 
                 <div className="flex justify-end mb-6">
-                  <a href="#" className="text-[13px] font-semibold text-market-primary hover:text-[#9A3412] transition-colors">
+                  <Link to="/forgot-password" className="text-[13px] font-semibold text-market-primary hover:text-[#9A3412] transition-colors">
                     Quên mật khẩu?
-                  </a>
+                  </Link>
                 </div>
 
                 {/* Root error */}

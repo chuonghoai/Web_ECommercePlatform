@@ -3,6 +3,7 @@ import { tokenService } from "../../../core/auth/token.service";
 import { userStorageService } from "../../user/services/userStorage.service";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
+import type { ForgotPasswordRequest } from "../dto/forgotPassword.type";
 import type { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
@@ -64,5 +65,18 @@ export class AuthService {
             message: "Đăng xuất thành công",
             data: null
         };
+    }
+
+    async sendOtpForgotPassword(email: string): Promise<ApiResponse<void>> {
+        const result: ApiResponse<void> = {
+            success: true,
+            message: "Gửi OTP thành công",
+            data: null
+        };
+        return result;
+    }
+
+    async forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
+        return this.authRepository.forgotPassword(data);
     }
 }
