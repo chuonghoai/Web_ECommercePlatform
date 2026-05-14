@@ -1,12 +1,13 @@
 import { useMarketplaceController } from "./marketplace.controller";
-import { ProductCard } from "./components/productCard";
+import { ProductCard } from "./components/ProductCard/productCard";
 import { MarketplaceFilter } from "./components/filter/marketplaceFilter";
-import { EmptyProductState } from "./components/emptyProductState";
+import { EmptyProductState } from "./components/EmptyProducts/emptyProductState";
 
 function MarketplacePage() {
     const {
         products,
         isLoading,
+        error,
         pagination,
         handlePageChange,
         currentPage,
@@ -34,7 +35,7 @@ function MarketplacePage() {
 
                 {/* Grid products */}
                 <div className="flex-1 flex flex-col min-h-full">
-                    {!isLoading && pagination && (
+                    {!isLoading && !error && pagination && (
                         <div className="mb-6 flex justify-between items-center text-[14px] text-[#57534E]">
                             <p>
                                 <span className="font-semibold text-[#1C1917]">{pagination.totalItems}</span> tác phẩm
@@ -42,9 +43,7 @@ function MarketplacePage() {
                         </div>
                     )}
 
-                    {!isLoading && products.length === 0 ? (
-                        <EmptyProductState />
-                    ) : isLoading ? (
+                    {isLoading ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                             {[...Array(10)].map((_, index) => (
                                 <div key={index} className="bg-white border border-[#E7E5E4] rounded-[8px] h-[360px] animate-pulse">
@@ -56,6 +55,28 @@ function MarketplacePage() {
                                 </div>
                             ))}
                         </div>
+                    ) : error ? (
+                        <div className="w-full bg-[#FEF2F2] border border-[#FCA5A5] rounded-[8px] py-24 px-6 flex flex-col items-center justify-center text-center">
+                            <div className="w-20 h-20 bg-[#FEE2E2] rounded-full flex items-center justify-center mb-6 border border-[#FCA5A5]">
+                                <svg className="w-10 h-10 text-[#EF4444]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <h3 className="font-['Lora',serif] text-[24px] font-semibold text-[#991B1B] mb-3">
+                                {error}
+                            </h3>
+                            <p className="text-[15px] text-[#7F1D1D] max-w-[420px] mb-8 leading-relaxed font-['Open_Sans',sans-serif]">
+                                Hệ thống đang gặp sự cố gián đoạn hoặc không thể kết nối đến máy chủ. Vui lòng thử lại sau ít phút.
+                            </p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="bg-market-error text-white h-[42px] px-6 rounded-[4px] font-semibold text-[14px] hover:bg-[#B91C1C] transition-colors"
+                            >
+                                Tải lại trang
+                            </button>
+                        </div>
+                    ) : products.length === 0 ? (
+                        <EmptyProductState />
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                             {products.map((item) => (
@@ -64,7 +85,7 @@ function MarketplacePage() {
                         </div>
                     )}
 
-                    {!isLoading && pagination && pagination.totalPages > 1 && (
+                    {!isLoading && !error && pagination && pagination.totalPages > 1 && (
                         <div className="mt-12 pt-8 border-t border-[#E7E5E4] flex flex-wrap items-center justify-center gap-2">
                             <button
                                 onClick={() => handlePageChange(1)}

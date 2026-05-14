@@ -2,12 +2,16 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { ApiResponse } from "../../core/api/apiResponse";
 import type { ProductItem } from "../../features/products/models/product.model";
-import { productService } from "../../features/products/services/product.service";
 import { EFilterState, type FilterState } from "./components/filter/filter.type";
+import { ProductMockRepository } from "../../features/products/repositories/productMock.repository";
+import { ProductService } from "../../features/products/services/product.service";
+
+const productService = new ProductService(new ProductMockRepository());
 
 export const useMarketplaceController = () => {
     const [products, setProducts] = useState<ProductItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
     const [pagination, setPagination] = useState<ApiResponse<any>["pagination"]>();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -24,33 +28,38 @@ export const useMarketplaceController = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            setIsLoading(true);
-            try {
-                const response = await productService.getAllProducts(
-                    currentUrlState.page,
-                    30,
-                    currentUrlState.filters
-                );
-                if (response.success) {
-                    setProducts(response.data);
-                    setPagination(response.pagination);
-                }
-            } catch (error) {
-                console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchProducts();
     }, [currentUrlState]);
+
+    const fetchProducts = async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await productService.getAllProducts(
+                currentUrlState.page,
+                50,
+                currentUrlState.filters
+            );
+
+            if (response.success) {
+                setProducts(response.data);
+                setPagination(response.pagination);
+            } else {
+                setError("Lỗi máy chủ");
+            }
+        } catch (err) {
+            console.error("Lỗi khi lấy danh sách sản phẩm:", err);
+            setError("Lỗi máy chủ");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handlePageChange = (newPage: number) => {
         if (pagination && newPage >= 1 && newPage <= pagination.totalPages) {
             searchParams.set("page", newPage.toString());
             setSearchParams(searchParams);
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
@@ -58,6 +67,7 @@ export const useMarketplaceController = () => {
     return {
         products,
         isLoading,
+        error,
         pagination,
         handlePageChange,
         currentPage: currentUrlState.page,
