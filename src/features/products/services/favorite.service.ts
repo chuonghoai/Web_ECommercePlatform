@@ -1,27 +1,16 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
+import type { ProductRepository } from "../repositories/product.repository";
+import { ProductApiRepository } from "../repositories/productApi.repository";
 
 export class FavoriteService {
-    
-    /**
-     * Toggle favorite product
-     * Request: productId
-     * Response: isFavorite
-     * Note: Delete mockDatabase after connect to real API.
-    */
-    private mockDatabase: Map<string, boolean> = new Map();
-    async toggleFavorite(productId: string): Promise<ApiResponse<{ isFavorite: boolean }>> {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        const currentStatus = this.mockDatabase.get(productId) || false;
-        const newStatus = !currentStatus;
-        this.mockDatabase.set(productId, newStatus);
+    private readonly favoriteRepository: ProductRepository;
 
-        return {
-            success: true,
-            message: newStatus ? "Đã thêm vào bộ sưu tập yêu thích" : "Đã xóa khỏi bộ sưu tập yêu thích",
-            data: {
-                isFavorite: newStatus
-            }
-        };
+    constructor(favoriteRepository?: ProductRepository) {
+        this.favoriteRepository = favoriteRepository || new ProductApiRepository();
+    }
+
+    async toggleFavorite(productId: string): Promise<ApiResponse<null>> {
+        return this.favoriteRepository.toggleFavorite(productId);
     }
 }
 

@@ -6,4 +6,5 @@ import type { ProductDetail } from "../models/productDetail.model";
 export interface ProductRepository {
     getAllProducts(page: number, pageSize: number, filters?: FilterState): Promise<ApiResponse<ProductItem[]>>;
     getProductById(id: string): Promise<ApiResponse<ProductDetail>>;
+    toggleFavorite(productId: string): Promise<ApiResponse<null>>;
 }

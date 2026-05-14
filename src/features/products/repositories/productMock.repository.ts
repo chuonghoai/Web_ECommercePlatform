@@ -192,4 +192,17 @@ export class ProductMockRepository implements ProductRepository {
             data: productDetail
         };
     }
+
+    private mockFavorite: Map<string, boolean> = new Map();
+    async toggleFavorite(productId: string): Promise<ApiResponse<null>> {
+        const currentStatus = this.mockFavorite.get(productId) || false;
+        const newStatus = !currentStatus;
+        this.mockFavorite.set(productId, newStatus);
+
+        return {
+            success: true,
+            message: newStatus ? "Đã thêm vào bộ sưu tập yêu thích" : "Đã xóa khỏi bộ sưu tập yêu thích",
+            data: null
+        };
+    }
 }

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ProductDetail } from "../../features/products/models/productDetail.model";
 import { useToast } from "../../components/toast/toast";
-import { favoriteService } from "../../features/products/services/favorite.service";
 import { ProductService } from "../../features/products/services/product.service";
 import { ProductMockRepository } from "../../features/products/repositories/productMock.repository";
 import { cartService } from "../../features/cart/services/cart.service";
+import { FavoriteService } from "../../features/products/services/favorite.service";
 
 const productService = new ProductService(new ProductMockRepository());
+const favoriteService = new FavoriteService(new ProductMockRepository());
 
 export const useProductStore = () => {
     const navigate = useNavigate();
@@ -50,13 +51,14 @@ export const useProductStore = () => {
 
         const response = await favoriteService.toggleFavorite(product.id);
 
-        if (response.success && response.data) {
-            setProduct(prev => prev ? { ...prev, isFavorite: response.data!.isFavorite } : null);
-            toast(response.message, response.data.isFavorite ? "success" : "info");
+        if (response.success) {
+            setProduct(prev => prev ? { ...prev, isFavorite: !prev.isFavorite } : null);
+            toast(response.message, "success");
             return true;
+        } else {
+            toast(response.message || "Không thể thêm vào giỏ hàng", "error");
+            return false;
         }
-
-        return false;
     };
 
     return {
