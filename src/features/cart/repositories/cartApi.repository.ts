@@ -4,6 +4,14 @@ import type { CartRepository } from "./cart.repository";
 
 export class CartApiRepository implements CartRepository {
     /**
+     * GET /cart/count
+     * @returns totalCartItems
+     */
+    async getCartCount(): Promise<ApiResponse<{ totalCartItems: number }>> {
+        return apiClient.get<ApiResponse<{ totalCartItems: number }>>("/cart/count");
+    }
+
+    /**
      * POST /cart/items
      * @body productId 
      * @body quantity 
