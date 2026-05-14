@@ -1,8 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
-import { categoryService } from "../../../../features/category/services/category.service";
 import type { Category } from "../../../../features/category/models/category.model";
 import { EFilterState, type FilterState } from "./filter.type";
 import { useSearchParams } from "react-router-dom";
+import { CategoryService } from "../../../../features/category/services/category.service";
+import { CategoryMockRepository } from "../../../../features/category/repository/categoryMock.repository";
+
+const categoryService = new CategoryService(new CategoryMockRepository());
 
 export const useFilterController = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -24,19 +27,19 @@ export const useFilterController = () => {
     }, [currentFiltersFromUrl]);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const res = await categoryService.getAllCategories();
-                if (res.success) {
-                    setCategories(res.data);
-                }
-            } catch (error) {
-                console.error("Lỗi lấy danh mục:", error);
-            }
-        };
-
         fetchCategories();
     }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await categoryService.getAllCategories();
+            if (res.success) {
+                setCategories(res.data);
+            }
+        } catch (error) {
+            console.error("Lỗi lấy danh mục:", error);
+        }
+    };
 
     const handleSortChange = (value: EFilterState) => {
         setLocalFilters((prev) => ({ ...prev, sortBy: value }));

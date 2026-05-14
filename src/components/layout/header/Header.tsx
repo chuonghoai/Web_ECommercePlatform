@@ -2,28 +2,43 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userStorageService } from "../../../features/user/services/userStorage.service";
 import type { User } from "../../../features/user/models/user.model";
-import { useCart } from "../../../features/cart/contexts/CartProvider";
 import { useToast } from "../../toast/toast";
 import { AuthService } from "../../../features/auth/services/auth.service";
+import { cartService } from "../../../features/cart/services/cart.service";
 
 const authService = new AuthService();
 
 export const Header = () => {
   const [user, setUser] = useState<User | null>(null);
-  const { cartCount } = useCart();
+
+  const [cartCount, setCartCount] = useState<number>(cartService.getCartCount());
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const currentUser = userStorageService.getUser();
     setUser(currentUser);
+
+    if (currentUser) {
+      cartService.syncCartCount();
+    }
+
+    const unsubscribeCart = cartService.subscribe((newCount) => {
+      setCartCount(newCount);
+    });
+    return () => unsubscribeCart();
   }, []);
 
   const handleLogout = () => {
     authService.logout();
     setUser(null);
     toast("Đăng xuất thành công", "info");
-    navigate("/");
+    navigate("/login");
+  };
+
+  const handleNavigateProfile = () => {
+    navigate("/checkout");
   };
 
   return (
@@ -91,9 +106,9 @@ export const Header = () => {
 
                 <div className="absolute top-full right-0 mt-1 w-[200px] bg-white border border-[#D6D3D1] rounded-[4px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-100 shadow-[0_8px_24px_rgba(28,25,23,0.1)]">
                   <div className="flex flex-col py-1">
-                    <Link to="/profile" className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors">
+                    <button onClick={handleNavigateProfile} className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors">
                       Thông tin cá nhân
-                    </Link>
+                    </button>
                     <Link to="/settings" className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors border-t border-[#E7E5E4]">
                       Cài đặt
                     </Link>

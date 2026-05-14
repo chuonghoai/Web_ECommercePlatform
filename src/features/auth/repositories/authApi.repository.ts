@@ -5,8 +5,16 @@ import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
 import type { OtpPurpose } from "../enums/otpPurpose.enum";
 
-
-export class AuthApiRepository implements AuthRepository { 
+export class AuthApiRepository implements AuthRepository {
+    /**
+     * POST /auth/login
+     * @params (none)
+     * @query (none)
+     * @body LoginRequest
+     * @returns LoginResponse
+     * Fix:
+     *  - Bấm đăng nhập nhưng data trả về thiếu.....
+     */
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         return apiClient.post<ApiResponse<LoginResponse>>("/auth/login", data);
     }
@@ -16,7 +24,7 @@ export class AuthApiRepository implements AuthRepository {
      * @params email, otp, password, confirmPassword 
      * @query (none)
      * @response accessToken, user: { userId, email, fullname, role}
-    */
+     */
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
         return apiClient.post<ApiResponse<LoginResponse>>("/auth/register", data);
     }
@@ -26,10 +34,16 @@ export class AuthApiRepository implements AuthRepository {
      * @params email, purpose
      * @query (none)
      * @response null
-    */
-    async sendOtp(email: string, purpose: OtpPurpose):
-    Promise<ApiResponse<void>> {
+     */
+    async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
         return apiClient.post<ApiResponse<void>>("/auth/send-otp", { email, purpose });
     }
-    
+
+    /**
+     * POST /auth/logout
+     * @returns null
+     */
+    async logout(): Promise<ApiResponse<null>> {
+        return apiClient.post<ApiResponse<null>>("/auth/logout");
+    }
 }

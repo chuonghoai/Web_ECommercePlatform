@@ -14,14 +14,6 @@ export class AuthService {
         this.authRepository = authRepository || new AuthApiRepository();
     }
 
-    /* 
-    * Request: email, password
-    * Response: accessToken, user: { userId, email, fullname, role}
-    * Flow:
-    *   - call API get ApiResponse.data
-    *   - Save access token and user info to local storage (by tokenService and userStorageService)
-    * Return: ApiResponse have data = null
-    */
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         const result = await this.authRepository.login(data);
 
@@ -30,10 +22,6 @@ export class AuthService {
         return result;
     }
 
-    /**
-     * Request: email and purpose
-     * Response: null
-     */
     async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
         const result: ApiResponse<void> = {
             success: true,
@@ -43,12 +31,6 @@ export class AuthService {
         return result;
     }
 
-    /**
-     * Request: email, otp, password, confirmPassword
-     * Response: accessToken, user: { userId, email, fullname, role}
-     * Flow: like to login (save access token and user info to local storage)
-     * Return: ApiResponse have data = null
-     */
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
         // Call the repository (which will perform the real API request)
         const result = await this.authRepository.register(data);
@@ -60,19 +42,10 @@ export class AuthService {
         return result;
     }
 
-    /**
-     * Delete all data token and user info in local storage
-     * Request: null
-     * Response: null
-     */
     async logout(): Promise<ApiResponse<void>> {
         tokenService.clear();
         userStorageService.removeUser();
-
-        return {
-            success: true,
-            message: "Đăng xuất thành công",
-            data: null
-        };
+        const result = this.authRepository.logout();
+        return result;
     }
 }

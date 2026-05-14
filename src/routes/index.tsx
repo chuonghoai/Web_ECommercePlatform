@@ -9,6 +9,7 @@ import RegisterPage from "../pages/auth/RegisterPage/registerPage";
 import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
 import ProductPage from "../pages/product/productPage";
+import CheckoutPage from "../pages/checkout/checkoutPage";
 
 function AppRoutes() {
     return (
@@ -18,6 +19,9 @@ function AppRoutes() {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
+
+                    {/* CHECKOUT */}
+                    <Route path="checkout" element={<CheckoutPage />} />
                 </Route>
 
                 {/* AUTH */}
