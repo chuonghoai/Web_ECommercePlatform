@@ -1,69 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { productService } from "../../features/products/services/product.service";
-import type { ProductDetail } from "../../features/products/models/productDetail.model";
 import { useToast } from "../../components/toast/toast";
-import { useCart } from "../../features/cart/contexts/CartProvider";
-import { cartService } from "../../features/cart/services/cart.service";
-import { favoriteService } from "../../features/products/services/favorite.service";
+import { useProductStore } from "./product.store";
 
 export const useProductController = () => {
     const { id } = useParams<{ id: string }>();
-
     const navigate = useNavigate();
     const { toast } = useToast();
-    const { incrementCart } = useCart();
+    const store = useProductStore();
 
-    const [product, setProduct] = useState<ProductDetail | null>(null);
+    // UI States
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
     const [isTogglingFavorite, setIsTogglingFavorite] = useState<boolean>(false);
+    const [activeImgIndex, setActiveImgIndex] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
+    const thumbnailContainerRef = useRef<HTMLDivElement>(null);
 
+    // Init pages - load product detail
     useEffect(() => {
-        const fetchProductDetail = async () => {
-            if (!id) {
-                toast("Không tìm thấy mã sản phẩm", "error");
-                navigate("/");
-                return;
-            }
+        if (!id) {
+            toast("Không tìm thấy mã sản phẩm", "error");
+            navigate("/");
+            return;
+        }
 
-            setIsLoading(true);
-            try {
-                const response = await productService.getProductById(id);
-
-                if (response.success && response.data) {
-                    setProduct(response.data);
-                } else {
-                    toast(response.message || "Sản phẩm không tồn tại", "error");
-                    navigate("/");
-                }
-            } catch (error) {
+        setIsLoading(true);
+        store.loadProduct(id)
+            .catch(() => {
                 toast("Đã xảy ra lỗi khi tải sản phẩm", "error");
                 navigate("/");
-            } finally {
+            })
+            .finally(() => {
                 setIsLoading(false);
-            }
-        };
-
-        fetchProductDetail();
+            });
 
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [id, navigate, toast]);
+    }, [id]);
 
-    const handleAddToCart = async (quantity: number) => {
-        if (!product) return;
+    // Control thumbnail slider (list product's images)
+    const scrollThumbnails = (direction: "left" | "right") => {
+        if (thumbnailContainerRef.current) {
+            const scrollAmount = 200;
+            thumbnailContainerRef.current.scrollBy({
+                left: direction === "left" ? -scrollAmount : scrollAmount,
+                behavior: "smooth",
+            });
+        }
+    };
 
+    // Handlers action in UI, delegate to store to call services
+    const handleAddToCart = async () => {
         setIsAddingToCart(true);
         try {
-            const response = await cartService.addToCart(product.id, quantity);
-
-            if (response.success) {
-                incrementCart(quantity);
-                toast(`Thêm ${quantity} ${product.name} vào giỏ hàng thành công`, "success");
-            } else {
-                toast(response.message || "Không thể thêm vào giỏ hàng", "error");
-            }
-        } catch (error) {
+            await store.addToCart(quantity);
+        } catch {
             toast("Lỗi kết nối. Vui lòng thử lại", "error");
         } finally {
             setIsAddingToCart(false);
@@ -71,29 +62,43 @@ export const useProductController = () => {
     };
 
     const handleToggleFavorite = async () => {
-        if (!product) return;
-
         setIsTogglingFavorite(true);
         try {
-            const response = await favoriteService.toggleFavorite(product.id);
-
-            if (response.success && response.data) {
-                setProduct(prev => prev ? { ...prev, isFavorite: response.data!.isFavorite } : null);
-                toast(response.message, response.data.isFavorite ? "success" : "info");
-            }
-        } catch (error) {
+            await store.toggleFavorite();
+        } catch {
             toast("Lỗi kết nối. Vui lòng thử lại", "error");
         } finally {
             setIsTogglingFavorite(false);
         }
     };
 
+    const handleDecreaseQuantity = () => {
+        setQuantity(prev => Math.max(1, prev - 1));
+    };
+
+    const handleIncreaseQuantity = () => {
+        const maxStock = store.product?.stock ?? 1;
+        setQuantity(prev => Math.min(maxStock, prev + 1));
+    };
+
     return {
-        product,
+        // Data store
+        product: store.product,
+
+        // UI states
         isLoading,
         isAddingToCart,
-        handleAddToCart,
         isTogglingFavorite,
-        handleToggleFavorite
+        activeImgIndex,
+        quantity,
+        thumbnailContainerRef,
+
+        // UI handlers
+        setActiveImgIndex,
+        scrollThumbnails,
+        handleAddToCart,
+        handleToggleFavorite,
+        handleDecreaseQuantity,
+        handleIncreaseQuantity,
     };
 };

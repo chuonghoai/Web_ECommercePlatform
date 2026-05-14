@@ -28,11 +28,20 @@ export class ProductApiRepository implements ProductRepository {
     }
 
     /**
-     * GET /product/:id
+     * GET /products/:id
      * @param id 
      * @returns - ProductDetail
      */
     getProductById(id: string): Promise<ApiResponse<ProductDetail>> {
         return apiClient.get<ApiResponse<ProductDetail>>(`/products/${id}`);
+    }
+
+    /**
+     * POST /products/:id/favorite
+     * @param productId 
+     * @returns null
+     */
+    toggleFavorite(productId: string): Promise<ApiResponse<null>> {
+        return apiClient.post<ApiResponse<null>>(`/products/${productId}/favorite`);
     }
 }
