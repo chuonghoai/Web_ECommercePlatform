@@ -1,7 +1,7 @@
 import { useMarketplaceController } from "./marketplace.controller";
-import { ProductCard } from "./components/productCard";
+import { ProductCard } from "./components/ProductCard/productCard";
 import { MarketplaceFilter } from "./components/filter/marketplaceFilter";
-import { EmptyProductState } from "./components/emptyProductState";
+import { EmptyProductState } from "./components/EmptyProducts/emptyProductState";
 
 function MarketplacePage() {
     const {

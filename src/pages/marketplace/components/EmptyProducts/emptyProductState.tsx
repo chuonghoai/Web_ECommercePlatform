@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { EFilterState } from "./filter/filter.type";
+import { EFilterState } from "../filter/filter.type";
 
 export const EmptyProductState = () => {
     const [, setSearchParams] = useSearchParams();
