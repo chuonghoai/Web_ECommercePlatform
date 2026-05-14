@@ -3,4 +3,5 @@ import type { LoginRequest, LoginResponse } from "../dto/login.type";
 
 export interface AuthRepository {
     login(data: LoginRequest): Promise<ApiResponse<LoginResponse>>;
+    logout(): Promise<ApiResponse<null>>;
 }
