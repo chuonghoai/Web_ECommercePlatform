@@ -28,7 +28,7 @@ export class ProductApiRepository implements ProductRepository {
     }
 
     /**
-     * GET /product/:id
+     * GET /products/:id
      * @param id 
      * @returns - ProductDetail
      */
