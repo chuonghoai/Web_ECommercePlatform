@@ -61,6 +61,70 @@ const mockWishlistItems = [
         thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
         isFavorite: true as const,
     },
+    {
+        id: "8",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "9",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "10",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "11",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "12",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "13",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "14",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "15",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
 ];
 
 export class UserMockRepository implements UserRepository {
@@ -90,11 +154,11 @@ export class UserMockRepository implements UserRepository {
     }
 
 
-    async getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>> {
+    async getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>> {
         const total = mockWishlistItems.length;
-        const totalPages = Math.ceil(total / limit);
-        const start = (page - 1) * limit;
-        const items = mockWishlistItems.slice(start, start + limit);
+        const totalPages = Math.ceil(total / pageSize);
+        const start = (page - 1) * pageSize;
+        const items = mockWishlistItems.slice(start, start + pageSize);
 
         return {
             success: true,
@@ -102,7 +166,7 @@ export class UserMockRepository implements UserRepository {
             data: {
                 items
             },
-            pagination: { page: page, pageSize: limit, totalItems: total, totalPages: totalPages },
+            pagination: { page: page, pageSize: pageSize, totalItems: total, totalPages: totalPages },
         };
     }
 }

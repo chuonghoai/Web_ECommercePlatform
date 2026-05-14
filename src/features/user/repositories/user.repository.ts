@@ -6,5 +6,5 @@ import type { UserProfileResponse } from "../dto/getProfile.type";
 export interface UserRepository {
     getProfile(): Promise<ApiResponse<UserProfileResponse>>;
     updateProfile(data: UpdateProfileRequest): Promise<ApiResponse<null>>;
-    getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>>;
+    getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>>;
 }

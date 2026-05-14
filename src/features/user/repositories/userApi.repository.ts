@@ -26,12 +26,12 @@ export class UserApiRepository implements UserRepository {
 
     /**
      * GET /users/me/wishlist
-     * @query page: number, limit: number
+     * @query page: number, pageSize: number
      * @returns ApiResponse<WishlistResponse>
      */
-    async getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>> {
+    async getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>> {
         return apiClient.get<ApiResponse<WishlistResponse>>("/users/me/wishlist", {
-            params: { page, limit },
+            params: { page, pageSize },
         });
     }
 }

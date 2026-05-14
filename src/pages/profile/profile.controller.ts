@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { UpdateProfileRequest } from "../../features/user/dto/updateProfile.type";
 import { useProfileStore } from "./profile.store";
 
@@ -16,19 +17,23 @@ export const useProfileController = () => {
         saveProfile
     } = useProfileStore();
 
-    const [activeTab, setActiveTab] = useState<"info" | "wishlist">("info");
-    const [wishlistPage, setWishlistPage] = useState(1);
-    const [isEditingMode, setIsEditingMode] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const currentUrlState = useMemo(() => {
+        return {
+            page: Number(searchParams.get("page")) || 1,
+        };
+    }, [searchParams]);
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     useEffect(() => {
         loadProfile();
     }, []);
 
     useEffect(() => {
-        if (activeTab === "wishlist") {
-            loadWishlist(wishlistPage);
-        }
-    }, [activeTab, wishlistPage]);
+        loadWishlist(currentUrlState.page);
+    }, [currentUrlState.page]);
 
     const handleFieldChange = (field: keyof UpdateProfileRequest, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -37,32 +42,48 @@ export const useProfileController = () => {
     const handleSaveProfile = async () => {
         const success = await saveProfile();
         if (success) {
-            setIsEditingMode(false);
+            setIsEditModalOpen(false);
         }
     };
 
     const handleEditClick = () => {
-        setIsEditingMode(true);
+        setIsEditModalOpen(true);
     };
 
-    const handleWishlistPageChange = (page: number) => {
-        setWishlistPage(page);
+    const handleCloseModal = () => {
+        setIsEditModalOpen(false);
+        // Có thể reset lại formData về giá trị user hiện tại nếu đóng không lưu
+        if (user) {
+            setFormData({
+                fullName: user.fullName,
+                phone: formData.phone,
+                gender: formData.gender,
+                dateOfBirth: formData.dateOfBirth,
+            });
+        }
+    };
+
+    const handleWishlistPageChange = (newPage: number) => {
+        if (wishlistPagination && newPage >= 1 && newPage <= wishlistPagination.totalPages) {
+            searchParams.set("page", newPage.toString());
+            setSearchParams(searchParams);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     return {
-        activeTab,
-        setActiveTab,
         user,
         formData,
         isSaving,
         wishlistItems,
         wishlistPagination,
-        wishlistPage,
+        wishlistPage: currentUrlState.page,
         isLoadingWishlist,
-        isEditingMode,
+        isEditModalOpen,
         handleFieldChange,
         handleSaveProfile,
         handleEditClick,
+        handleCloseModal,
         handleWishlistPageChange,
     };
 };

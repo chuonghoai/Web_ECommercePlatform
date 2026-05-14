@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import type { WishlistItem } from "../../../features/user/dto/wishlist.type";
+import type { WishlistItem } from "../../../features/user/models/wishlist.model";
 
 interface WishlistTabProps {
     items: WishlistItem[];
     isLoading: boolean;
-    pagination: { page: number; limit: number; total: number; totalPages: number } | null;
+    pagination: { page: number; pageSize: number; totalItems: number; totalPages: number } | undefined;
     currentPage: number;
     onPageChange: (page: number) => void;
 }
@@ -13,7 +13,7 @@ const formatPrice = (price: number) =>
     new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(price);
 
 const WishlistSkeleton = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {[...Array(6)].map((_, i) => (
             <div key={i} className="bg-white border border-[#E7E5E4] rounded-[8px] overflow-hidden animate-pulse">
                 <div className="h-[180px] bg-[#F5F5F4]" />
@@ -59,11 +59,11 @@ export const WishlistTab = ({
         <div className="flex flex-col gap-6">
             {pagination && (
                 <p className="text-[14px] text-[#57534E]">
-                    <span className="font-semibold text-[#1C1917]">{pagination.total}</span> sản phẩm yêu thích
+                    <span className="font-semibold text-[#1C1917]">{pagination.totalItems}</span> sản phẩm yêu thích
                 </p>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {items.map((item) => {
                     const discount = Math.round(((item.price - item.discountPrice) / item.price) * 100);
                     return (

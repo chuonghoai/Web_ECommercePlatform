@@ -8,7 +8,7 @@ import { useToast } from "../../components/toast/toast";
 import type { ApiResponse } from "../../core/api/apiResponse";
 
 const userService = new UserService();
-const WISHLIST_LIMIT = 6;
+const WISHLIST_PAGE_SIZE = 40;
 
 export const useProfileStore = () => {
     const { toast } = useToast();
@@ -56,7 +56,7 @@ export const useProfileStore = () => {
     const loadWishlist = async (page: number) => {
         setIsLoadingWishlist(true);
         try {
-            const result = await userService.getWishlist(page, WISHLIST_LIMIT);
+            const result = await userService.getWishlist(page, WISHLIST_PAGE_SIZE);
             setWishlistItems(result.data.items);
             setWishlistPagination(result.pagination);
         } catch {

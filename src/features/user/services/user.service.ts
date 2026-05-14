@@ -21,7 +21,7 @@ export class UserService {
     }
 
 
-    async getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>> {
-        return this.userRepository.getWishlist(page, limit);
+    async getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>> {
+        return this.userRepository.getWishlist(page, pageSize);
     }
 }

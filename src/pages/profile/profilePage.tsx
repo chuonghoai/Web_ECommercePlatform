@@ -1,16 +1,10 @@
 import { useProfileController } from "./profile.controller";
-import { PersonalInfoTab } from "./components/personalInfoTab";
+import { UserInfoSidebar } from "./components/userInfoSidebar";
 import { WishlistTab } from "./components/wishlistTab";
-
-const tabs = [
-    { key: "info" as const, label: "Thông tin cá nhân" },
-    { key: "wishlist" as const, label: "Sản phẩm yêu thích" },
-];
+import { EditProfileModal } from "./components/editProfileModal";
 
 function ProfilePage() {
     const {
-        activeTab,
-        setActiveTab,
         user,
         formData,
         isSaving,
@@ -18,15 +12,16 @@ function ProfilePage() {
         wishlistPagination,
         wishlistPage,
         isLoadingWishlist,
-        isEditingMode,
+        isEditModalOpen,
         handleFieldChange,
         handleSaveProfile,
         handleEditClick,
+        handleCloseModal,
         handleWishlistPageChange,
     } = useProfileController();
 
     return (
-        <div className="max-w-[900px] mx-auto pb-12">
+        <div className="w-full px-[5%] py-8 mx-auto min-h-screen bg-stone-50/50">
             {/* Page title */}
             <div className="mb-8">
                 <h1 className="font-['Lora',serif] text-[32px] font-semibold text-[#1C1917] leading-tight">
@@ -37,44 +32,22 @@ function ProfilePage() {
                 </p>
             </div>
 
-            {/* Card container */}
-            <div className="bg-white border border-[#E7E5E4] rounded-[8px] overflow-hidden">
-                {/* Tab nav */}
-                <div className="flex border-b border-[#E7E5E4]">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.key}
-                            id={`profile-tab-${tab.key}`}
-                            onClick={() => setActiveTab(tab.key)}
-                            className={`relative h-[52px] px-6 text-[14px] font-semibold transition-colors ${
-                                activeTab === tab.key
-                                    ? "text-market-primary"
-                                    : "text-[#57534E] hover:text-[#1C1917] hover:bg-market-background"
-                            }`}
-                        >
-                            {tab.label}
-                            {activeTab === tab.key && (
-                                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-market-primary rounded-t-full" />
-                            )}
-                        </button>
-                    ))}
+            <div className="flex flex-col lg:flex-row gap-8 items-start">
+                {/* Left column: Sticky User Info */}
+                <div className="w-full lg:w-[320px] xl:w-[360px] shrink-0 lg:sticky lg:top-[100px]">
+                    <UserInfoSidebar 
+                        user={user}
+                        formData={formData}
+                        onEditClick={handleEditClick}
+                    />
                 </div>
 
-                {/* Tab content */}
-                <div className="p-6 md:p-8">
-                    {activeTab === "info" && (
-                        <PersonalInfoTab
-                            user={user}
-                            formData={formData}
-                            isSaving={isSaving}
-                            isEditingMode={isEditingMode}
-                            onFieldChange={handleFieldChange}
-                            onSave={handleSaveProfile}
-                            onEditClick={handleEditClick}
-                        />
-                    )}
-
-                    {activeTab === "wishlist" && (
+                {/* Right column: Wishlist */}
+                <div className="flex-1 min-w-0">
+                    <div className="bg-white border border-[#E7E5E4] rounded-[12px] p-6 lg:p-8 shadow-sm">
+                        <h2 className="text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
+                            Sản phẩm yêu thích
+                        </h2>
                         <WishlistTab
                             items={wishlistItems}
                             isLoading={isLoadingWishlist}
@@ -82,9 +55,19 @@ function ProfilePage() {
                             currentPage={wishlistPage}
                             onPageChange={handleWishlistPageChange}
                         />
-                    )}
+                    </div>
                 </div>
             </div>
+
+            {/* Edit Modal */}
+            <EditProfileModal
+                isOpen={isEditModalOpen}
+                onClose={handleCloseModal}
+                formData={formData}
+                isSaving={isSaving}
+                onFieldChange={handleFieldChange}
+                onSave={handleSaveProfile}
+            />
         </div>
     );
 }
