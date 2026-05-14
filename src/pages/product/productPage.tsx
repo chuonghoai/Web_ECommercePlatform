@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useProductController } from "./product.controller";
+import { ProductReviews } from "./components/reviews/productReviews";
 
 function ProductPage() {
     const {
@@ -276,6 +277,8 @@ function ProductPage() {
                     </div>
 
                 </div>
+
+                <ProductReviews productId={product.id} />
             </div>
 
         </div>
