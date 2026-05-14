@@ -4,7 +4,3 @@ export type UpdateProfileRequest = {
     gender?: "male" | "female" | "other";
     dateOfBirth?: string;
 };
-
-export type UploadAvatarResponse = {
-    avatarUrl: string;
-};

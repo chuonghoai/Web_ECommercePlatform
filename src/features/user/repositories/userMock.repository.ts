@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { UpdateProfileRequest, UploadAvatarResponse } from "../dto/updateProfile.type";
-import type { WishlistResponse } from "../dto/wishlist.type";
+import type { UpdateProfileRequest } from "../dto/updateProfile.type";
+import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
 
@@ -89,15 +89,6 @@ export class UserMockRepository implements UserRepository {
         };
     }
 
-    async uploadAvatar(_file: File): Promise<ApiResponse<UploadAvatarResponse>> {
-        return {
-            success: true,
-            message: "Upload avatar thành công",
-            data: {
-                avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80",
-            },
-        };
-    }
 
     async getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>> {
         const total = mockWishlistItems.length;

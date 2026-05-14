@@ -1,7 +1,7 @@
 import { apiClient } from "../../../core/api/apiClient";
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { UpdateProfileRequest, UploadAvatarResponse } from "../dto/updateProfile.type";
-import type { WishlistResponse } from "../dto/wishlist.type";
+import type { UpdateProfileRequest } from "../dto/updateProfile.type";
+import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
 
@@ -23,18 +23,6 @@ export class UserApiRepository implements UserRepository {
         return apiClient.put<ApiResponse<null>>("/users/me", data);
     }
 
-    /**
-     * POST /users/me/avatar
-     * @body FormData (file)
-     * @returns ApiResponse<UploadAvatarResponse>
-     */
-    async uploadAvatar(file: File): Promise<ApiResponse<UploadAvatarResponse>> {
-        const formData = new FormData();
-        formData.append("file", file);
-        return apiClient.post<ApiResponse<UploadAvatarResponse>>("/users/me/avatar", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
-    }
 
     /**
      * GET /users/me/wishlist

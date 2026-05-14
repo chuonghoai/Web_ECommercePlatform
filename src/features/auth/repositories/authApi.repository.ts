@@ -47,8 +47,6 @@ export class AuthApiRepository implements AuthRepository {
     async logout(): Promise<ApiResponse<null>> {
         return apiClient.post<ApiResponse<null>>("/auth/logout");
     }
-}
-
 
     /**
      * POST /auth/forgot-password

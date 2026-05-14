@@ -14,9 +14,6 @@ function ProfilePage() {
         user,
         formData,
         isSaving,
-        avatarPreview,
-        isUploadingAvatar,
-        fileInputRef,
         wishlistItems,
         wishlistPagination,
         wishlistPage,
@@ -25,8 +22,6 @@ function ProfilePage() {
         handleFieldChange,
         handleSaveProfile,
         handleEditClick,
-        handleAvatarClick,
-        handleAvatarChange,
         handleWishlistPageChange,
     } = useProfileController();
 
@@ -72,15 +67,10 @@ function ProfilePage() {
                             user={user}
                             formData={formData}
                             isSaving={isSaving}
-                            avatarPreview={avatarPreview}
-                            isUploadingAvatar={isUploadingAvatar}
                             isEditingMode={isEditingMode}
-                            fileInputRef={fileInputRef}
                             onFieldChange={handleFieldChange}
                             onSave={handleSaveProfile}
                             onEditClick={handleEditClick}
-                            onAvatarClick={handleAvatarClick}
-                            onAvatarChange={handleAvatarChange}
                         />
                     )}
 

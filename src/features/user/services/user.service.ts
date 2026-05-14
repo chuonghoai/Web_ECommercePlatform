@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { UpdateProfileRequest, UploadAvatarResponse } from "../dto/updateProfile.type";
-import type { WishlistResponse } from "../dto/wishlist.type";
+import type { UpdateProfileRequest } from "../dto/updateProfile.type";
+import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "../repositories/user.repository";
 import { UserMockRepository } from "../repositories/userMock.repository";
@@ -20,9 +20,6 @@ export class UserService {
         return this.userRepository.updateProfile(data);
     }
 
-    async uploadAvatar(file: File): Promise<ApiResponse<UploadAvatarResponse>> {
-        return this.userRepository.uploadAvatar(file);
-    }
 
     async getWishlist(page: number, limit: number): Promise<ApiResponse<WishlistResponse>> {
         return this.userRepository.getWishlist(page, limit);
