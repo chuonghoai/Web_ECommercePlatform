@@ -33,38 +33,21 @@ export class AuthService {
     }
 
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
-        const result: ApiResponse<LoginResponse> = {
-            success: true,
-            message: "Đăng ký thành công",
-            data: {
-                accessToken: "mock_token_123",
-                user: {
-                    id: "1",
-                    email: "manggia098@gmail.com",
-                    fullName: "manggia",
-                    role: "USER",
-                    avatarUrl: ""
-                }
-            },
+        // Call the repository (which will perform the real API request)
+        const result = await this.authRepository.register(data);
+        // If the request succeeded and we have data, store token and user info
+        if (result.success && result.data) {
+            userStorageService.setUser(result.data.user);
+            tokenService.saveAccessToken(result.data.accessToken);
         }
-        userStorageService.setUser(result.data.user);
-
-        return {
-            success: result.success,
-            message: result.message,
-            data: null
-        };
+        return result;
     }
 
     async logout(): Promise<ApiResponse<void>> {
         tokenService.clear();
         userStorageService.removeUser();
-
-        return {
-            success: true,
-            message: "Đăng xuất thành công",
-            data: null
-        };
+        const result = this.authRepository.logout();
+        return result;
     }
 
     async sendOtpForgotPassword(email: string): Promise<ApiResponse<void>> {

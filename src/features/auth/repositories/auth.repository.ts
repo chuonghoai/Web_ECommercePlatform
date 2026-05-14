@@ -6,4 +6,5 @@ export interface AuthRepository {
     login(data: LoginRequest): Promise<ApiResponse<LoginResponse>>;
     resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>>;
     sendOtpForgotPassword(data: {email: string}): Promise<ApiResponse<void>>;
+    logout(): Promise<ApiResponse<null>>;
 }

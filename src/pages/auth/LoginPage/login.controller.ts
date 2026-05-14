@@ -5,7 +5,7 @@ import { useToast } from "../../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import { AuthMockRepository } from "../../../features/auth/repositories/authMock.repository";
 
-const authService = new AuthService(new AuthMockRepository);
+const authService = new AuthService(new AuthMockRepository());
 
 export const useLoginController = () => {
   const { toast } = useToast();
