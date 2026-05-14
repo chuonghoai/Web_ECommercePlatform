@@ -12,6 +12,7 @@ import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
 import ProductPage from "../pages/product/productPage";
 import CheckoutPage from "../pages/checkout/checkoutPage";
+import ProfilePage from "../pages/profile/profilePage";
 
 function AppRoutes() {
     return (
@@ -24,6 +25,9 @@ function AppRoutes() {
 
                     {/* CHECKOUT */}
                     <Route path="checkout" element={<CheckoutPage />} />
+
+                    {/* PROFILE */}
+                    <Route path="profile" element={<ProfilePage />} />
                 </Route>
 
                 {/* AUTH */}

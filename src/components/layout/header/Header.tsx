@@ -27,7 +27,7 @@ export const Header = () => {
   };
 
   const handleNavigateProfile = () => {
-    navigate("/checkout");
+    navigate("/profile");
   };
 
   return (

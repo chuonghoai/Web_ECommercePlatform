@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthService } from "../../../../features/auth/services/auth.service";
-import type { ForgotPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
+import type { ResetPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
 import { useToast } from "../../../../components/toast/toast";
 import { AuthMockRepository } from "../../../../features/auth/repositories/authMock.repository";
 
@@ -20,7 +20,7 @@ export const useResetPasswordController = () => {
         setError,
         watch,
         formState: { errors, isSubmitting },
-    } = useForm<ForgotPasswordRequest>({
+    } = useForm<ResetPasswordRequest>({
         defaultValues: {
             email,
             otp: "",
@@ -31,7 +31,7 @@ export const useResetPasswordController = () => {
 
     const currentPassword = watch("newPassword");
 
-    const onResetPassword = async (data: ForgotPasswordRequest) => {
+    const onResetPassword = async (data: ResetPasswordRequest) => {
         try {
             const result = await authService.resetPassword({ ...data, email });
             if (result.success) {

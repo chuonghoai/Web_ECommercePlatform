@@ -1,7 +1,7 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
 import { UnauthorizedException } from "../../../core/exceptions/unauthorized.exception";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
-import type { ForgotPasswordRequest } from "../dto/forgotPassword.type";
+import type { ResetPasswordRequest } from "../dto/forgotPassword.type";
 import type { AuthRepository } from "./auth.repository";
 
 export class AuthMockRepository implements AuthRepository {
@@ -26,7 +26,7 @@ export class AuthMockRepository implements AuthRepository {
         throw new UnauthorizedException("Sai email hoặc mật khẩu");
     }
 
-    async resetPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
+    async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {
     const { otp } = data;
 
     if (!/^\d+$/.test(otp)) {
