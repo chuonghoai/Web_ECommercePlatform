@@ -109,9 +109,9 @@ export class UserMockRepository implements UserRepository {
             success: true,
             message: "Lấy danh sách yêu thích thành công",
             data: {
-                items,
-                pagination: { page, limit, total, totalPages },
+                items
             },
+            pagination: { page: page, pageSize: limit, totalItems: total, totalPages: totalPages },
         };
     }
 }

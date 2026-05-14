@@ -5,6 +5,7 @@ import type { UpdateProfileRequest } from "../../features/user/dto/updateProfile
 import type { WishlistItem } from "../../features/user/dto/wishlist.type";
 import type { User } from "../../features/user/models/user.model";
 import { useToast } from "../../components/toast/toast";
+import type { ApiResponse } from "../../core/api/apiResponse";
 
 const userService = new UserService();
 const WISHLIST_LIMIT = 6;
@@ -27,9 +28,7 @@ export const useProfileController = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-    const [wishlistPagination, setWishlistPagination] = useState<{
-        page: number; limit: number; total: number; totalPages: number;
-    } | null>(null);
+    const [wishlistPagination, setWishlistPagination] = useState<ApiResponse<any>["pagination"]>();
     const [wishlistPage, setWishlistPage] = useState(1);
     const [isLoadingWishlist, setIsLoadingWishlist] = useState(false);
 
@@ -49,7 +48,7 @@ export const useProfileController = () => {
         try {
             const result = await userService.getProfile();
             const profile = result.data;
-            
+
             const updatedUser: User = {
                 id: profile.id,
                 email: profile.email,
@@ -57,7 +56,7 @@ export const useProfileController = () => {
                 role: user?.role || "USER",
                 avatarUrl: profile.avatarUrl
             };
-            
+
             setUser(updatedUser);
             userStorageService.setUser(updatedUser);
 
@@ -78,7 +77,7 @@ export const useProfileController = () => {
         try {
             const result = await userService.getWishlist(page, WISHLIST_LIMIT);
             setWishlistItems(result.data.items);
-            setWishlistPagination(result.data.pagination);
+            setWishlistPagination(result.pagination);
         } catch {
             toast("Không thể tải danh sách yêu thích", "error");
         } finally {

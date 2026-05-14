@@ -9,10 +9,4 @@ export type WishlistItem = {
 
 export type WishlistResponse = {
     items: WishlistItem[];
-    pagination: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-    };
 };
