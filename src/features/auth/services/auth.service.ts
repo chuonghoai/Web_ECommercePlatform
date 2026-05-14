@@ -68,15 +68,10 @@ export class AuthService {
     }
 
     async sendOtpForgotPassword(email: string): Promise<ApiResponse<void>> {
-        const result: ApiResponse<void> = {
-            success: true,
-            message: "Gửi OTP thành công",
-            data: null
-        };
-        return result;
+        return this.authRepository.sendOtpForgotPassword({email});
     }
 
-    async forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
-        return this.authRepository.forgotPassword(data);
+    async resetPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
+        return this.authRepository.resetPassword(data);
     }
 }

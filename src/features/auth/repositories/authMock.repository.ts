@@ -26,13 +26,29 @@ export class AuthMockRepository implements AuthRepository {
         throw new UnauthorizedException("Sai email hoặc mật khẩu");
     }
 
-    async forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
-        if (data.otp !== "123456") {
-            throw new Error("Mã OTP không hợp lệ hoặc đã hết hạn.");
-        }
+    async resetPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>> {
+    const { otp } = data;
+
+    if (!/^\d+$/.test(otp)) {
+        throw new Error("OTP chỉ được chứa số.");
+    }
+    if (otp.length !== 6) {
+        throw new Error("OTP phải đủ 6 chữ số.");
+    }
+    if (otp !== "123456") {
+        throw new Error("Mã OTP không đúng hoặc đã hết hạn.");
+    }
+    return {
+        success: true,
+        message: "Đặt lại mật khẩu thành công",
+        data: null,
+    };
+}
+
+    async sendOtpForgotPassword(data: {email: string}): Promise<ApiResponse<void>> {
         return {
             success: true,
-            message: "Đặt lại mật khẩu thành công",
+            message: "Mã OTP đã được gửi đến email của bạn",
             data: null,
         };
     }

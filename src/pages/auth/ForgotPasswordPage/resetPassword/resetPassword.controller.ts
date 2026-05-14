@@ -33,7 +33,7 @@ export const useResetPasswordController = () => {
 
     const onResetPassword = async (data: ForgotPasswordRequest) => {
         try {
-            const result = await authService.forgotPassword({ ...data, email });
+            const result = await authService.resetPassword({ ...data, email });
             if (result.success) {
                 toast("Đặt lại mật khẩu thành công! Vui lòng đăng nhập.", "success");
                 navigate("/login");

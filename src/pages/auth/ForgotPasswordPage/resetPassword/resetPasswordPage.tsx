@@ -101,6 +101,13 @@ function ResetPasswordPage() {
                                     )}
                                 </div>
 
+                                {/* Root error */}
+                                {errors.root && (
+                                    <div className="bg-[#FEE2E2] text-[#991B1B] p-3 rounded-[4px] text-[14px] mb-6 text-center border border-market-error/20">
+                                        {errors.root.message}
+                                    </div>
+                                )}
+
                                 {/* New Password input */}
                                 <div className="flex flex-col mb-4">
                                     <label className="text-[13px] font-semibold text-[#1C1917] mb-2">Mật khẩu mới</label>
@@ -135,12 +142,7 @@ function ResetPasswordPage() {
                                     )}
                                 </div>
 
-                                {/* Root error */}
-                                {errors.root && (
-                                    <div className="bg-[#FEE2E2] text-[#991B1B] p-3 rounded-[4px] text-[14px] mb-6 text-center border border-market-error/20">
-                                        {errors.root.message}
-                                    </div>
-                                )}
+                                
 
                                 {/* Submit button */}
                                 <button

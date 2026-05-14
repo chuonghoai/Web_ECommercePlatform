@@ -4,5 +4,6 @@ import type { ForgotPasswordRequest } from "../dto/forgotPassword.type";
 
 export interface AuthRepository {
     login(data: LoginRequest): Promise<ApiResponse<LoginResponse>>;
-    forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>>;
+    resetPassword(data: ForgotPasswordRequest): Promise<ApiResponse<void>>;
+    sendOtpForgotPassword(data: {email: string}): Promise<ApiResponse<void>>;
 }
