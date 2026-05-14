@@ -58,11 +58,7 @@ export class AuthService {
     async logout(): Promise<ApiResponse<void>> {
         tokenService.clear();
         userStorageService.removeUser();
-
-        return {
-            success: true,
-            message: "Đăng xuất thành công",
-            data: null
-        };
+        const result = this.authRepository.logout();
+        return result;
     }
 }

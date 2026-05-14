@@ -23,7 +23,7 @@ export const Header = () => {
     authService.logout();
     setUser(null);
     toast("Đăng xuất thành công", "info");
-    navigate("/");
+    navigate("/login");
   };
 
   const handleNavigateProfile = () => {

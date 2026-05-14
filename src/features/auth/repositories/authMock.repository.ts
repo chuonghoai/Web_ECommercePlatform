@@ -24,4 +24,12 @@ export class AuthMockRepository implements AuthRepository {
 
         throw new UnauthorizedException("Sai email hoặc mật khẩu");
     }
+
+    async logout(): Promise<ApiResponse<null>> {
+        return {
+            success: true,
+            message: "Đăng xuất thành công",
+            data: null,
+        };
+    }
 }
