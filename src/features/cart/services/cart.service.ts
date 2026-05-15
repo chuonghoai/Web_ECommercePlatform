@@ -1,7 +1,6 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
 import type { CartRepository } from "../repositories/cart.repository";
 import { CartApiRepository } from "../repositories/cartApi.repository";
-import { CartMockRepository } from "../repositories/cartMock.repository";
 
 export class CartService {
     private readonly cartRepository: CartRepository;
@@ -58,4 +57,4 @@ export class CartService {
 }
 
 // export const cartService = new CartService();
-export const cartService = new CartService(new CartMockRepository());
+export const cartService = new CartService();
