@@ -23,13 +23,9 @@ export class AuthService {
         return result;
     }
 
-    async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
-        const result: ApiResponse<void> = {
-            success: true,
-            message: "Gửi OTP thành công",
-            data: null
-        };
-        return result;
+    async sendOtp(email: string, purpose: OtpPurpose): 
+    Promise<ApiResponse<void>> {
+        return this.authRepository.sendOtp(email, purpose);
     }
 
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {

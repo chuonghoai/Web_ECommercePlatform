@@ -3,9 +3,8 @@ import type { Category } from "../../../../features/category/models/category.mod
 import { EFilterState, type FilterState } from "./filter.type";
 import { useSearchParams } from "react-router-dom";
 import { CategoryService } from "../../../../features/category/services/category.service";
-import { CategoryMockRepository } from "../../../../features/category/repository/categoryMock.repository";
 
-const categoryService = new CategoryService(new CategoryMockRepository());
+const categoryService = new CategoryService();
 
 export const useFilterController = () => {
     const [categories, setCategories] = useState<Category[]>([]);
