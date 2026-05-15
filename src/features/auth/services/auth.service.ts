@@ -3,6 +3,7 @@ import { tokenService } from "../../../core/auth/token.service";
 import { userStorageService } from "../../user/services/userStorage.service";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
+import type { ResetPasswordRequest } from "../dto/forgotPassword.type";
 import type { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
@@ -43,5 +44,13 @@ export class AuthService {
         userStorageService.removeUser();
         const result = this.authRepository.logout();
         return result;
+    }
+
+    async sendOtpForgotPassword(email: string): Promise<ApiResponse<void>> {
+        return this.authRepository.sendOtpForgotPassword({email});
+    }
+
+    async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {
+        return this.authRepository.resetPassword(data);
     }
 }

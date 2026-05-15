@@ -4,6 +4,7 @@ import type { ApiResponse } from "../../../core/api/apiResponse";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
 import type { OtpPurpose } from "../enums/otpPurpose.enum";
+import type { ResetPasswordRequest } from "../dto/forgotPassword.type";
 
 export class AuthApiRepository implements AuthRepository {
     /**
@@ -45,5 +46,27 @@ export class AuthApiRepository implements AuthRepository {
      */
     async logout(): Promise<ApiResponse<null>> {
         return apiClient.post<ApiResponse<null>>("/auth/logout");
+    }
+
+    /**
+     * POST /auth/forgot-password
+     * @params
+     * @query
+     * @body ForgotPasswordRequest
+     * @returns void
+     */
+    async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {
+        return apiClient.post<ApiResponse<void>>("/auth/forgot-password", data);
+    }
+
+    /**
+     * POST /auth/forgot-password/reset
+     * @params
+     * @query
+     * @body { email: string }
+     * @returns void
+     */
+    async sendOtpForgotPassword(data: { email: string }): Promise<ApiResponse<void>> {
+        return apiClient.post<ApiResponse<void>>("/auth/forgot-password/reset", data);
     }
 }

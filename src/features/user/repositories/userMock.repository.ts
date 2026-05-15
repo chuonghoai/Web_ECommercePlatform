@@ -1,0 +1,172 @@
+import type { ApiResponse } from "../../../core/api/apiResponse";
+import type { UpdateProfileRequest } from "../dto/updateProfile.type";
+import type { WishlistResponse } from "../models/wishlist.model";
+import type { UserProfileResponse } from "../dto/getProfile.type";
+import type { UserRepository } from "./user.repository";
+
+const mockWishlistItems = [
+    {
+        id: "1",
+        name: "Bình gốm thủ công men ngọc",
+        price: 850000,
+        discountPrice: 720000,
+        thumbnail: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "2",
+        name: "Tranh thêu tay hoa sen",
+        price: 1200000,
+        discountPrice: 1050000,
+        thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "3",
+        name: "Đèn lồng giấy truyền thống",
+        price: 350000,
+        discountPrice: 280000,
+        thumbnail: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "4",
+        name: "Giỏ mây đan tay cao cấp",
+        price: 620000,
+        discountPrice: 520000,
+        thumbnail: "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "5",
+        name: "Khăn lụa thêu hoa văn dân tộc",
+        price: 480000,
+        discountPrice: 420000,
+        thumbnail: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "6",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "7",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "8",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "9",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "10",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "11",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "12",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "13",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "14",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+    {
+        id: "15",
+        name: "Vòng tay ngọc bích tự nhiên",
+        price: 980000,
+        discountPrice: 850000,
+        thumbnail: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80",
+        isFavorite: true as const,
+    },
+];
+
+export class UserMockRepository implements UserRepository {
+    async getProfile(): Promise<ApiResponse<UserProfileResponse>> {
+        return {
+            success: true,
+            message: "Lấy thông tin thành công",
+            data: {
+                id: "1",
+                email: "manggia098@gmail.com",
+                fullName: "manggia",
+                phone: "0123456789",
+                avatarUrl: "",
+                gender: "male",
+                dateOfBirth: "1990-01-01",
+                createdAt: "2023-01-01T00:00:00.000Z",
+            },
+        };
+    }
+
+    async updateProfile(_data: UpdateProfileRequest): Promise<ApiResponse<null>> {
+        return {
+            success: true,
+            message: "Cập nhật hồ sơ thành công",
+            data: null,
+        };
+    }
+
+
+    async getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>> {
+        const total = mockWishlistItems.length;
+        const totalPages = Math.ceil(total / pageSize);
+        const start = (page - 1) * pageSize;
+        const items = mockWishlistItems.slice(start, start + pageSize);
+
+        return {
+            success: true,
+            message: "Lấy danh sách yêu thích thành công",
+            data: {
+                items
+            },
+            pagination: { page: page, pageSize: pageSize, totalItems: total, totalPages: totalPages },
+        };
+    }
+}
