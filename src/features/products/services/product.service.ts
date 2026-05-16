@@ -4,12 +4,17 @@ import type { ProductItem } from "../models/product.model";
 import type { ProductDetail } from "../models/productDetail.model";
 import type { ProductRepository } from "../repositories/product.repository";
 import { ProductApiRepository } from "../repositories/productApi.repository";
+import { ProductMockRepository } from "../repositories/productMock.repository";
 
 export class ProductService {
     private readonly productRepository: ProductRepository;
 
-    constructor(productRepository?: ProductRepository) {
-        this.productRepository = productRepository || new ProductApiRepository();
+    constructor(productRepository?: ProductRepository, useMock: boolean = true) {
+        if (productRepository) {
+            this.productRepository = productRepository;
+        } else {
+            this.productRepository = useMock ? new ProductMockRepository() : new ProductApiRepository();
+        }
     }
 
     async getAllProducts(
@@ -25,4 +30,5 @@ export class ProductService {
     }
 }
 
-export const productService = new ProductService();
+// Bật useMock = true để chạy giao diện không cần Backend
+export const productService = new ProductService(undefined, true);
