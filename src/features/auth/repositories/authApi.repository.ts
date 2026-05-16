@@ -58,15 +58,4 @@ export class AuthApiRepository implements AuthRepository {
     async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {
         return apiClient.post<ApiResponse<void>>("/auth/forgot-password", data);
     }
-
-    /**
-     * POST /auth/forgot-password/reset
-     * @params
-     * @query
-     * @body { email: string }
-     * @returns void
-     */
-    async sendOtpForgotPassword(data: { email: string }): Promise<ApiResponse<void>> {
-        return apiClient.post<ApiResponse<void>>("/auth/forgot-password/reset", data);
-    }
 }

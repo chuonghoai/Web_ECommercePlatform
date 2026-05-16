@@ -4,7 +4,7 @@ import { userStorageService } from "../../user/services/userStorage.service";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
 import type { ResetPasswordRequest } from "../dto/forgotPassword.type";
-import type { OtpPurpose } from "../enums/otpPurpose.enum";
+import { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
 
@@ -47,7 +47,7 @@ export class AuthService {
     }
 
     async sendOtpForgotPassword(email: string): Promise<ApiResponse<void>> {
-        return this.authRepository.sendOtpForgotPassword({email});
+        return this.authRepository.sendOtp(email, OtpPurpose.FORGOT_PASSWORD);
     }
 
     async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {

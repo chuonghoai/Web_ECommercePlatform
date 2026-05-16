@@ -11,7 +11,6 @@ export interface AuthRepository {
     sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>>;
 
     resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>>;
-    sendOtpForgotPassword(data: { email: string }): Promise<ApiResponse<void>>;
 
     logout(): Promise<ApiResponse<null>>;
 }

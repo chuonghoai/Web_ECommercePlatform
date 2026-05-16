@@ -54,14 +54,20 @@ export class AuthMockRepository implements AuthRepository {
     }
 
     async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
-        if (purpose != OtpPurpose.REGISTER) {
-            throw new ApiException("Mục đích không hợp lệ", 400);
+        if (purpose == OtpPurpose.FORGOT_PASSWORD) {
+            return {
+                success: true,
+                message: `Mã OTP thay đổi mật khẩu đã được gửi đến email ${email} của bạn`,
+                data: null,
+            };
         }
-        return {
-            success: true,
-            message: `Mã OTP đã được gửi đến email ${email} của bạn`,
-            data: null,
-        };
+        else if (purpose == OtpPurpose.REGISTER) {
+            return {
+                success: true,
+                message: `Mã OTP đăng ký tài khoản đã được gửi đến email ${email} của bạn`,
+                data: null,
+            };
+        }
     }
 
     async logout(): Promise<ApiResponse<null>> {
@@ -87,14 +93,6 @@ export class AuthMockRepository implements AuthRepository {
         return {
             success: true,
             message: "Đặt lại mật khẩu thành công",
-            data: null,
-        };
-    }
-
-    async sendOtpForgotPassword(data: { email: string }): Promise<ApiResponse<void>> {
-        return {
-            success: true,
-            message: `Mã OTP đã được gửi đến email ${data.email} của bạn`,
             data: null,
         };
     }
