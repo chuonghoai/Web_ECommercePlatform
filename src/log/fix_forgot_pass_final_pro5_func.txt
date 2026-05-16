@@ -1,7 +1,0 @@
-- Xóa mọi dòng code liên quan đến upload avatar, từ controller -> service -> repository
-- refactor: tách code điều khiển UI và code gọi service thành 2 file: controller và store
-- đưa file wishlist trong dto sang models -> sửa tên thành wishlist.model.ts
-
-- fix lại flow call api get wishlist: Sửa lại cơ chế phân trang giống với flow GET /products
-- sửa lại cách gọi dữ liệu trong profile dựa trên url. Sửa lại giống trong file marketplace.controller.ts trong branch UI
-- sửa lại layout của giao diện profile, để hiện đủ thông tin cá nhân, wishlist.
