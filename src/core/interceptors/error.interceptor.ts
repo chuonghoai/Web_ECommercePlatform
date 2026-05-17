@@ -11,8 +11,9 @@ axiosInstance.interceptors.response.use(
         if (axios.isAxiosError(error)) {
             const status =
                 error.response?.status;
+            const requestUrl = error.config?.url || "";
 
-            if (status === 401) {
+            if (status === 401 && !requestUrl.includes("/auth/login")) {
                 tokenService.clear();
 
                 window.location.href =
