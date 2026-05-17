@@ -28,11 +28,14 @@ export const useLoginController = () => {
         toast("Đăng nhập thành công!", "success");
         navigate("/");
       }
-    } catch (error: unknown) {
-      toast("Đăng nhập thất bại!", "error");
+    } catch (error: any) {
+      const apiErrorMsg = error.response?.data?.error?.message 
+                        || error.response?.data?.message 
+                        || "Tài khoản hoặc mật khẩu không đúng";
+      toast(apiErrorMsg, "error");
       setError("root", {
         type: "server",
-        message: error instanceof Error ? error.message : "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.",
+        message: apiErrorMsg,
       });
     }
   };
