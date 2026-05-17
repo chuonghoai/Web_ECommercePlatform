@@ -1,11 +1,3 @@
-- xóa dấu vết note của AI, nếu cần note thì tự viết lại
-- các đường dẫn hình ảnh, video cần có thêm chữ Url. Sửa lại trong cartItem.type.ts
-- đổi folder và file dto/cartItem.type.ts thành models/cart-item.model.ts
-- sửa lại contructor trong cart.service.ts, product.service.ts thành cơ chế depency injection (tham khảo category.service.ts)
-- sửa lại productCard.tsx: Khi bấm thêm vào giỏ hàng thì ko navigate to /cart
-- nếu chưa đăng nhập mà bấm thêm vào giỏ hàng, điều hướng vào giỏ hàng... (hay các hành động liên quan đến dữ liệu người dùng)
-    thì navigate to /login và hiện toast("Bạn cần đăng nhập để sử dụng chức năng này")
 - sửa lại văn bản sang tiếng Việt
-
-- sửa lại giao diện cart: Xóa các thông tin phí vận chuyển, giỏ hàng... Giữ lại tổng tiền giỏ hàng
-- Lấp đầy giao diện giỏ hàng, tránh để khoảng trống "kỳ lạ"
+- Bỏ khung phương thức thanh toán trong giao diện giỏ hàng
+- rà soát lại và bỏ các note của AI

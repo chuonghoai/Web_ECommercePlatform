@@ -16,7 +16,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
 
     const handleAddToCart = async (e: React.MouseEvent) => {
-        e.preventDefault(); // Ngăn sự kiện click lan ra component <Link>
+        e.preventDefault();
         
         if (!tokenService.getAccessToken()) {
             toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");

@@ -19,7 +19,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [items, setItems] = useState<CartItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Dùng useCallback để hàm không bị tạo lại mỗi lần render
     const loadCart = useCallback(async () => {
         setIsLoading(true);
         const res = await cartService.getCartItems();
@@ -32,20 +31,19 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const updateQuantity = async (productId: string, quantity: number) => {
         if (quantity < 1) return;
         await cartService.updateQuantity(productId, quantity);
-        await loadCart(); // Tải lại danh sách sau khi update
+        await loadCart();
     };
 
     const removeItem = async (productId: string) => {
         await cartService.removeFromCart(productId);
-        await loadCart(); // Tải lại danh sách sau khi xóa
+        await loadCart();
     };
 
     const addToCart = async (productId: string, quantity: number) => {
         await cartService.addToCart(productId, quantity);
-        await loadCart(); // Tải lại danh sách sau khi thêm
+        await loadCart(); 
     };
 
-    // Load giỏ hàng lần đầu
     useEffect(() => {
         loadCart();
     }, [loadCart]);

@@ -26,7 +26,7 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFBF5] font-sans pb-24">
-      {/* Header Placeholder (nếu layout bọc bên ngoài thì bỏ dòng này) */}
+      {/* Header Placeholder */}
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <header className="mb-10">
