@@ -2,4 +2,6 @@
     - Khi nhập sai email hoặc mật khẩu, trang web chưa kịp báo lỗi thì đã bị reload lại trang
         sửa lại để user phải thấy được lỗi báo cái gì
     - Khi nhập sai format email, lỗi hiện trên web là "Request failed with status code 400", sửa lại cho đúng message "Email không hợp lệ"
-    
+**Danh sách sản phẩm yêu thích:
+    - Khi bấm yêu thích 1 sản phẩm, nút heart hiện màu đỏ, trong hồ sơ cá nhân có hiện sản phẩm đó, nhưng quay lại trang chi tiết sản phẩm đó thì mất dấu tim màu đó
+    - Trường hợp ngược lại là sản phẩm đó đang có trong danh sách, không hiện đỏ trái tim, bấm hủy yêu thích thì hiện đỏ
