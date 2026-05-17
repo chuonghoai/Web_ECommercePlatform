@@ -2,87 +2,73 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  subtotal: number;
-  shippingFee: number;
   finalTotal: number;
-  coupon: string;
-  onCouponChange: (val: string) => void;
-  onApplyCoupon: () => void;
   onCheckout: () => void;
   formatMoney: (val: number) => string;
 }
 
-export const CartSummary: React.FC<Props> = ({ subtotal, shippingFee, finalTotal, coupon, onCouponChange, onApplyCoupon, onCheckout, formatMoney }) => {
+export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMoney }) => {
   return (
     <div className="sticky top-8 bg-white border border-[#E7E5E4] rounded-lg p-6 flex flex-col font-sans">
-      <h2 className="text-xl font-serif text-gray-900 mb-6 pb-4 border-b border-[#E7E5E4]">Order Summary</h2>
-
-      <div className="space-y-4 text-sm mb-6">
-        <div className="flex justify-between text-gray-600">
-          <span>Subtotal</span>
-          <span className="font-medium text-gray-900">{formatMoney(subtotal)}</span>
-        </div>
-        <div className="flex justify-between text-gray-600">
-          <span>Standard Shipping</span>
-          <span className="font-medium text-gray-900">{formatMoney(shippingFee)}</span>
-        </div>
-        
-        {/* Coupon Input */}
-        <div className="pt-2">
-          <div className="flex gap-2">
-            <input 
-              type="text" 
-              placeholder="Gift card or discount code" 
-              value={coupon}
-              onChange={(e) => onCouponChange(e.target.value)}
-              className="w-full border border-[#D6D3D1] rounded-[4px] px-3 py-2 text-sm focus:outline-none focus:border-[#D4A373] focus:ring-1 focus:ring-[#D4A373] bg-[#FFFBF5]"
-              aria-label="Coupon code"
-            />
-            <button 
-              onClick={onApplyCoupon}
-              className="px-4 py-2 border border-[#E7E5E4] rounded-[4px] text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
+      <h2 className="text-xl font-serif text-gray-900 mb-6 pb-4 border-b border-[#E7E5E4]">Tóm tắt đơn hàng</h2>
 
       {/* Total Section */}
-      <div className="border-t border-dashed border-[#D6D3D1] pt-4 mb-8">
+      <div className="mb-8">
         <div className="flex justify-between items-baseline">
-          <span className="text-base font-semibold text-gray-900">Total</span>
-          <span className="text-2xl font-serif text-gray-900">{formatMoney(finalTotal)}</span>
+          <span className="text-base font-semibold text-gray-900">Tổng tiền</span>
+          <span className="text-3xl font-serif text-market-primary">{formatMoney(finalTotal)}</span>
         </div>
-        <p className="text-xs text-gray-500 mt-1 text-right">Including taxes</p>
+        <p className="text-sm text-gray-500 mt-2 text-right">Đã bao gồm thuế (nếu có)</p>
       </div>
 
       {/* Action Buttons */}
       <div className="space-y-3">
         <button 
           onClick={onCheckout}
-          className="w-full py-3.5 bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#7C2D12] text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20"
+          className="w-full py-3.5 bg-market-primary hover:bg-market-primary/90 active:bg-market-primary/80 text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-market-primary/20"
         >
-          Proceed to Checkout
+          Tiến hành thanh toán
         </button>
         <Link 
           to="/marketplace" 
           className="w-full flex items-center justify-center py-3.5 border border-[#D6D3D1] text-gray-700 hover:border-gray-400 hover:bg-white bg-[#FFFBF5] rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400/20"
         >
-          Continue Shopping
+          Tiếp tục mua sắm
         </Link>
       </div>
 
       {/* Trust Block */}
-      <div className="mt-8 space-y-3 pt-6 border-t border-[#E7E5E4]">
+      <div className="mt-8 space-y-4 pt-6 border-t border-[#E7E5E4]">
         <div className="flex items-start gap-3">
           <span className="text-[#365314] text-lg leading-none mt-0.5">⚲</span>
-          <p className="text-xs text-gray-600 leading-relaxed">Directly supports independent makers & local communities.</p>
+          <p className="text-xs text-gray-600 leading-relaxed">Hỗ trợ trực tiếp cho các nghệ nhân độc lập & cộng đồng địa phương.</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-[#365314] text-lg leading-none mt-0.5">☻</span>
-          <p className="text-xs text-gray-600 leading-relaxed">Secure, encrypted checkout. Transparent shipping origins.</p>
+          <p className="text-xs text-gray-600 leading-relaxed">Thanh toán bảo mật, mã hóa an toàn. Minh bạch nguồn gốc vận chuyển.</p>
         </div>
+        <div className="flex items-start gap-3">
+          <span className="text-[#365314] text-lg leading-none mt-0.5">↻</span>
+          <p className="text-xs text-gray-600 leading-relaxed">Đổi trả miễn phí trong vòng 7 ngày đối với sản phẩm lỗi do nhà sản xuất.</p>
+        </div>
+      </div>
+
+      {/* Payment Methods */}
+      <div className="mt-6 pt-6 border-t border-[#E7E5E4]">
+        <p className="text-xs font-semibold text-gray-900 mb-3 uppercase tracking-wider">Phương thức thanh toán</p>
+        <div className="flex flex-wrap gap-2">
+          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">Visa / Master</div>
+          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">MoMo</div>
+          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">ZaloPay</div>
+          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">Thanh toán khi nhận (COD)</div>
+        </div>
+      </div>
+
+      {/* Support Info */}
+      <div className="mt-6 pt-6 border-t border-[#E7E5E4]">
+        <p className="text-xs font-semibold text-gray-900 mb-2 uppercase tracking-wider">Cần hỗ trợ?</p>
+        <p className="text-xs text-gray-600 mb-1">Hotline: <span className="font-medium text-gray-900">1900 1234</span> (8:00 - 22:00)</p>
+        <p className="text-xs text-gray-600">Email: <a href="mailto:support@marketnest.vn" className="text-market-primary hover:underline font-medium">support@marketnest.vn</a></p>
       </div>
     </div>
   );

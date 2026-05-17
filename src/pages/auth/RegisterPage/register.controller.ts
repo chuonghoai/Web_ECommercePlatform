@@ -1,12 +1,10 @@
 import { useForm } from "react-hook-form";
 import type { RegisterRequest } from "../../../features/auth/dto/register.type";
-import { AuthService } from "../../../features/auth/services/auth.service";
+import { authService } from "../../../features/auth/services/auth.service";
 import { useEffect, useState } from "react";
 import { OtpPurpose } from "../../../features/auth/enums/otpPurpose.enum";
 import { useToast } from "../../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
-
-const authService = new AuthService();
 
 export const useRegisterController = () => {
     const { toast } = useToast();

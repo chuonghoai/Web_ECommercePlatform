@@ -1,6 +1,6 @@
 import { apiClient } from "../../../core/api/apiClient";
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { CartItem } from "../dto/cartItem.type";
+import type { CartItem } from "../models/cart-item.model";
 import type { CartRepository } from "./cart.repository";
 
 export class CartApiRepository implements CartRepository {

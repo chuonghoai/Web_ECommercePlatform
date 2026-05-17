@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { CartItem } from "../dto/cartItem.type";
+import type { CartItem } from "../models/cart-item.model";
 import type { CartRepository } from "./cart.repository";
 import { productService } from "../../products/services/product.service";
 
@@ -25,7 +25,7 @@ export class CartMockRepository implements CartRepository {
                 product: {
                     id: productId,
                     name: pData?.name || `Sản phẩm thủ công #${productId.substring(0, 4)}`,
-                    image: pData?.imageUrl || `https://picsum.photos/seed/${productId}/300/400`,
+                    imageUrl: pData?.imageUrl || `https://picsum.photos/seed/${productId}/300/400`,
                     price: pData?.price || Math.floor(Math.random() * 3 + 1) * 150000
                 },
                 quantity

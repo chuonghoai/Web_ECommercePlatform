@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
-import type { CartItem } from "../dto/cartItem.type";
+import type { CartItem } from "../models/cart-item.model";
 import { cartService, calcTotal } from "../services/cart.service";
 
 interface ICartContextProps {

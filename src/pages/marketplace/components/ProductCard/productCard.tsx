@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { ProductItem } from "../../../../features/products/models/product.model";
 import { useCart } from "../../../../features/cart/contexts/CartContext";
+import { useToast } from "../../../../components/toast/toast";
+import { tokenService } from "../../../../core/auth/token.service";
 
 interface ProductCardProps {
     product: ProductItem;
@@ -9,13 +11,21 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
     const { addToCart } = useCart();
     const navigate = useNavigate();
+    const { toast } = useToast();
 
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
 
     const handleAddToCart = async (e: React.MouseEvent) => {
         e.preventDefault(); // Ngăn sự kiện click lan ra component <Link>
+        
+        if (!tokenService.getAccessToken()) {
+            toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
+            navigate("/login");
+            return;
+        }
+
         await addToCart(product.id, 1);
-        navigate("/cart");
+        toast("Thêm vào giỏ hàng thành công", "success");
     };
 
     let discountBadgeContent = null;

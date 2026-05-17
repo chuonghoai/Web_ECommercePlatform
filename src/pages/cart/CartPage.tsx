@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { tokenService } from '../../core/auth/token.service';
+import { useToast } from '../../components/toast/toast';
 import { useCartController } from './cart.controller';
 import { CartEmptyState } from './components/CartEmptyState';
 import { CartItemCard } from './components/CartItemCard';
 import { CartSummary } from './components/CartSummary';
 
 const CartPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!tokenService.getAccessToken()) {
+      toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
+      navigate('/login');
+    }
+  }, [navigate, toast]);
+
   const controller = useCartController();
 
   if (!controller.isLoading && controller.items.length === 0) {
@@ -17,9 +30,9 @@ const CartPage: React.FC = () => {
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <header className="mb-10">
-          <h1 className="text-4xl font-serif text-gray-900 mb-3">Your Cart</h1>
+          <h1 className="text-4xl font-serif text-gray-900 mb-3">Giỏ hàng của bạn</h1>
           <p className="text-gray-600 text-lg">
-            You’re supporting <span className="font-semibold text-gray-900">{controller.totalMakers} independent makers</span> with this order.
+            Bạn đang trực tiếp ủng hộ <span className="font-semibold text-gray-900">{controller.totalMakers} nghệ nhân độc lập</span> thông qua đơn hàng này.
           </p>
         </header>
 
@@ -31,7 +44,7 @@ const CartPage: React.FC = () => {
             <div className="bg-[#FEF3C7]/40 border border-[#D4A373]/30 rounded-[20px] p-6 flex items-start gap-4">
               <span className="text-[#C2410C] text-lg leading-none mt-0.5">✧</span>
               <p className="text-sm text-gray-800 leading-relaxed max-w-2xl">
-                <strong className="font-medium text-gray-900">Every item in your cart carries a maker’s story.</strong> By checking out today, you are directly funding traditional craft preservation and independent artistry.
+                <strong className="font-medium text-gray-900">Mỗi sản phẩm mang theo câu chuyện của một nghệ nhân.</strong> Bằng việc hoàn tất thanh toán, bạn đang chung tay bảo tồn nghề thủ công truyền thống và tôn vinh sự sáng tạo độc lập.
               </p>
             </div>
 
@@ -59,12 +72,7 @@ const CartPage: React.FC = () => {
           {/* Cột Phải: Summary */}
           <div className="w-full lg:w-[380px] shrink-0">
             <CartSummary 
-              subtotal={controller.totalPrice}
-              shippingFee={controller.shippingFee}
               finalTotal={controller.finalTotal}
-              coupon={controller.coupon}
-              onCouponChange={controller.setCoupon}
-              onApplyCoupon={controller.handleApplyCoupon}
               onCheckout={controller.handleCheckout}
               formatMoney={controller.formatMoney}
             />

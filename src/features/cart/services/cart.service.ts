@@ -2,7 +2,7 @@ import type { ApiResponse } from "../../../core/api/apiResponse";
 import type { CartRepository } from "../repositories/cart.repository";
 import { CartApiRepository } from "../repositories/cartApi.repository";
 import { CartMockRepository } from "../repositories/cartMock.repository";
-import type { CartItem } from "../dto/cartItem.type";
+import type { CartItem } from "../models/cart-item.model";
 
 export class CartService {
     private readonly cartRepository: CartRepository;
@@ -10,12 +10,8 @@ export class CartService {
     private cartCount: number = 0;
     private listeners: Set<(count: number) => void> = new Set();
 
-    constructor(cartRepository?: CartRepository, useMock: boolean = true) {
-        if (cartRepository) {
-            this.cartRepository = cartRepository;
-        } else {
-            this.cartRepository = useMock ? new CartMockRepository() : new CartApiRepository();
-        }
+    constructor(cartRepository?: CartRepository) {
+        this.cartRepository = cartRepository || new CartApiRepository();
     }
 
     // State manage cart count in header
@@ -98,4 +94,7 @@ export const formatVND = (value: number) =>
 export const calcTotal = (items: CartItem[]) =>
     items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
-export const cartService = new CartService(undefined, true); // Dùng useMock = true để tiện phát triển UI
+const useMock = true; 
+export const cartService = new CartService(
+    useMock ? new CartMockRepository() : undefined
+);

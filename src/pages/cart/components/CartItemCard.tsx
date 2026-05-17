@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CartItem } from '../../../features/cart/dto/cartItem.type';
+import type { CartItem } from '../../../features/cart/models/cart-item.model';
 import { QuantitySelector } from './QuantitySelector';
 
 interface Props {
@@ -23,7 +23,7 @@ export const CartItemCard: React.FC<Props> = ({ item, makerInfo, isLoading, onUp
       <div className="sm:w-[160px] shrink-0">
         <div className="aspect-[4/5] bg-[#E7E5E4] rounded-lg overflow-hidden border border-[#E7E5E4]">
           <img 
-            src={product.image} 
+            src={product.imageUrl} 
             alt={product.name} 
             className="w-full h-full object-cover object-center"
           />

@@ -9,12 +9,8 @@ import { ProductMockRepository } from "../repositories/productMock.repository";
 export class ProductService {
     private readonly productRepository: ProductRepository;
 
-    constructor(productRepository?: ProductRepository, useMock: boolean = true) {
-        if (productRepository) {
-            this.productRepository = productRepository;
-        } else {
-            this.productRepository = useMock ? new ProductMockRepository() : new ProductApiRepository();
-        }
+    constructor(productRepository?: ProductRepository) {
+        this.productRepository = productRepository || new ProductApiRepository();
     }
 
     async getAllProducts(
@@ -31,4 +27,7 @@ export class ProductService {
 }
 
 // Bật useMock = true để chạy giao diện không cần Backend
-export const productService = new ProductService(undefined, true);
+const useMock = true;
+export const productService = new ProductService(
+    useMock ? new ProductMockRepository() : undefined
+);
