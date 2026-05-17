@@ -3,9 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthService } from "../../../../features/auth/services/auth.service";
 import type { ResetPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
 import { useToast } from "../../../../components/toast/toast";
-import { AuthMockRepository } from "../../../../features/auth/repositories/authMock.repository";
 
-const authService = new AuthService(new AuthMockRepository());
+const authService = new AuthService();
 
 export const useResetPasswordController = () => {
     const { toast } = useToast();

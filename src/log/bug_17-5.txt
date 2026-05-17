@@ -1,0 +1,5 @@
+**Đăng nhập:
+    - Khi nhập sai email hoặc mật khẩu, trang web chưa kịp báo lỗi thì đã bị reload lại trang
+        sửa lại để user phải thấy được lỗi báo cái gì
+    - Khi nhập sai format email, lỗi hiện trên web là "Request failed with status code 400", sửa lại cho đúng message "Email không hợp lệ"
+    

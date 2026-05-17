@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../../../features/auth/services/auth.service";
 import { useToast } from "../../../../components/toast/toast";
-import { AuthMockRepository } from "../../../../features/auth/repositories/authMock.repository";
 import type { SendOtpForgotPasswordRequest } from "../../../../features/auth/dto/forgotPassword.type";
 
-const authService = new AuthService(new AuthMockRepository());
+const authService = new AuthService();
 
 export const useForgotPasswordController = () => {
     const { toast } = useToast();

@@ -3,7 +3,7 @@ import type { UpdateProfileRequest } from "../../../features/user/dto/updateProf
 
 interface UserInfoSidebarProps {
     user: User | null;
-    formData: UpdateProfileRequest; // Used to show current info if needed, but we can just use user & formData
+    formData: UpdateProfileRequest;
     onEditClick: () => void;
 }
 
