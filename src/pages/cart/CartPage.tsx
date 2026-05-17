@@ -1,23 +1,10 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { tokenService } from '../../core/auth/token.service';
-import { useToast } from '../../components/toast/toast';
-import { useCartController } from './cart.controller';
+import React from 'react';
+import { useCartController } from './controllers/cart.controller';
 import { CartEmptyState } from './components/CartEmptyState';
 import { CartItemCard } from './components/CartItemCard';
 import { CartSummary } from './components/CartSummary';
 
 const CartPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (!tokenService.getAccessToken()) {
-      toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
-      navigate('/login');
-    }
-  }, [navigate, toast]);
-
   const controller = useCartController();
 
   if (!controller.isLoading && controller.items.length === 0) {

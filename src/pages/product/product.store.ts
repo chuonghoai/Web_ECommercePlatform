@@ -4,6 +4,7 @@ import type { ProductDetail } from "../../features/products/models/productDetail
 import { useToast } from "../../components/toast/toast";
 import { productService } from "../../features/products/services/product.service";
 import { cartService } from "../../features/cart/services/cart.service";
+import { useCart } from "../../features/cart/contexts/CartContext";
 import { FavoriteService } from "../../features/products/services/favorite.service";
 import { tokenService } from "../../core/auth/token.service";
 
@@ -12,6 +13,7 @@ const favoriteService = new FavoriteService();
 export const useProductStore = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
+    const { loadCart } = useCart();
 
     const [product, setProduct] = useState<ProductDetail | null>(null);
 
@@ -43,6 +45,7 @@ export const useProductStore = () => {
 
         if (response.success) {
             toast(`Thêm ${quantity} ${product.name} vào giỏ hàng thành công`, "success");
+            await loadCart();
             return true;
         } else {
             toast(response.message || "Không thể thêm vào giỏ hàng", "error");

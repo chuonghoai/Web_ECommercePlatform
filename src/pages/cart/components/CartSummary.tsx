@@ -53,16 +53,7 @@ export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMon
         </div>
       </div>
 
-      {/* Payment Methods */}
-      <div className="mt-6 pt-6 border-t border-[#E7E5E4]">
-        <p className="text-xs font-semibold text-gray-900 mb-3 uppercase tracking-wider">Phương thức thanh toán</p>
-        <div className="flex flex-wrap gap-2">
-          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">Visa / Master</div>
-          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">MoMo</div>
-          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">ZaloPay</div>
-          <div className="px-2 py-1.5 bg-gray-50 rounded text-[11px] font-semibold text-gray-600 border border-gray-200 uppercase tracking-wide">Thanh toán khi nhận (COD)</div>
-        </div>
-      </div>
+
 
       {/* Support Info */}
       <div className="mt-6 pt-6 border-t border-[#E7E5E4]">

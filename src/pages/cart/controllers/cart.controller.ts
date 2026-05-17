@@ -1,6 +1,9 @@
-import { useState } from 'react';
-import { useCart } from '../../features/cart/contexts/CartContext';
-import { formatVND } from '../../features/cart/services/cart.service';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../../features/cart/contexts/CartContext';
+import { formatVND } from '../../../features/cart/services/cart.service';
+import { tokenService } from '../../../core/auth/token.service';
+import { useToast } from '../../../components/toast/toast';
 
 export const mockMakerData: Record<string, any> = {
   p1: {
@@ -23,6 +26,16 @@ export const useCartController = () => {
   const { items, totalPrice, updateQuantity, removeItem, isLoading } = useCart();
   
   const [coupon, setCoupon] = useState("");
+
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!tokenService.getAccessToken()) {
+      toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
+      navigate('/login');
+    }
+  }, [navigate, toast]);
 
   const shippingFee = items.length > 0 ? 35000 : 0;
   const finalTotal = totalPrice + shippingFee;

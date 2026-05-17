@@ -10,16 +10,16 @@ export const CartEmptyState: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
         </div>
-        <h2 className="text-3xl font-serif text-gray-900">Your cart feels a bit empty</h2>
+        <h2 className="text-3xl font-serif text-gray-900">Giỏ hàng của bạn đang trống</h2>
         <p className="text-gray-600 font-sans">
-          Discover unique, handcrafted pieces and support independent makers around the world.
+          Khám phá các sản phẩm thủ công độc đáo và ủng hộ các nghệ nhân độc lập trên toàn thế giới.
         </p>
         <div className="pt-4">
           <Link 
             to="/marketplace" 
             className="inline-block px-8 py-3.5 bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#7C2D12] text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20"
           >
-            Explore the Marketplace
+            Khám phá gian hàng
           </Link>
         </div>
       </div>
