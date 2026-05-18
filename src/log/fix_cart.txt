@@ -1,3 +1,0 @@
-- sửa lại văn bản sang tiếng Việt
-- Bỏ khung phương thức thanh toán trong giao diện giỏ hàng
-- rà soát lại và bỏ các note của AI
