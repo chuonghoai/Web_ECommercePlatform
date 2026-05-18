@@ -60,7 +60,7 @@ export class AuthService {
 }
 
 // Bật useMock = true để chạy giao diện không cần Backend
-const useMock = true;
+const useMock = false;
 export const authService = new AuthService(
     useMock ? new AuthMockRepository() : undefined
 );

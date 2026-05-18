@@ -27,7 +27,7 @@ export class ProductService {
 }
 
 // Bật useMock = true để chạy giao diện không cần Backend
-const useMock = true;
+const useMock = false;
 export const productService = new ProductService(
     useMock ? new ProductMockRepository() : undefined
 );

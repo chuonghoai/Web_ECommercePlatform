@@ -94,7 +94,7 @@ export const formatVND = (value: number) =>
 export const calcTotal = (items: CartItem[]) =>
     items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
-const useMock = true; 
+const useMock = false; 
 export const cartService = new CartService(
     useMock ? new CartMockRepository() : undefined
 );
