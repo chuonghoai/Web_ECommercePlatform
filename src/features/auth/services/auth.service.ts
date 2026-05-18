@@ -7,6 +7,7 @@ import type { ResetPasswordRequest } from "../dto/forgotPassword.type";
 import { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
+import { AuthMockRepository } from "../repositories/authMock.repository";
 
 export class AuthService {
     private readonly authRepository: AuthRepository;
@@ -18,7 +19,10 @@ export class AuthService {
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
         const result = await this.authRepository.login(data);
 
-        userStorageService.setUser(result.data.user);
+        if (result.success && result.data) {
+            userStorageService.setUser(result.data.user);
+            tokenService.saveAccessToken(result.data.accessToken);
+        }
 
         return result;
     }
@@ -54,3 +58,9 @@ export class AuthService {
         return this.authRepository.resetPassword(data);
     }
 }
+
+// Bật useMock = true để chạy giao diện không cần Backend
+const useMock = true;
+export const authService = new AuthService(
+    useMock ? new AuthMockRepository() : undefined
+);

@@ -1,12 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { ProductItem } from "../../../../features/products/models/product.model";
+import { useCart } from "../../../../features/cart/contexts/CartContext";
+import { useToast } from "../../../../components/toast/toast";
+import { tokenService } from "../../../../core/auth/token.service";
 
 interface ProductCardProps {
     product: ProductItem;
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
+    const { addToCart } = useCart();
+    const navigate = useNavigate();
+    const { toast } = useToast();
+
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
+
+    const handleAddToCart = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        
+        if (!tokenService.getAccessToken()) {
+            toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
+            navigate("/login");
+            return;
+        }
+
+        await addToCart(product.id, 1);
+        toast("Thêm vào giỏ hàng thành công", "success");
+    };
 
     let discountBadgeContent = null;
     if (isSale) {
@@ -40,16 +60,27 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                     {product.name}
                 </h3>
 
-                <div className="mt-auto flex items-baseline gap-2">
-                    <span className="text-[16px] font-bold text-[#1C1917]">
-                        {product.price.toLocaleString('vi-VN')}đ
-                    </span>
-
-                    {isSale && (
-                        <span className="text-[13px] text-[#A8A29E] line-through font-normal">
-                            {product.originalPrice!.toLocaleString('vi-VN')}đ
+                <div className="mt-auto flex items-end justify-between gap-2">
+                    <div className="flex flex-col gap-0.5">
+                        {isSale && (
+                            <span className="text-[13px] text-[#A8A29E] line-through font-normal">
+                                {product.originalPrice!.toLocaleString('vi-VN')}đ
+                            </span>
+                        )}
+                        <span className="text-[16px] font-bold text-[#1C1917]">
+                            {product.price.toLocaleString('vi-VN')}đ
                         </span>
-                    )}
+                    </div>
+
+                    <button 
+                        onClick={handleAddToCart}
+                        className="p-2 border border-[#E7E5E4] rounded-[4px] hover:bg-market-primary hover:text-white hover:border-market-primary transition-colors text-[#57534E]"
+                        title="Thêm vào giỏ hàng"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </Link>

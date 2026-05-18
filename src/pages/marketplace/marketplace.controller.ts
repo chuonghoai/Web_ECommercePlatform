@@ -3,9 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import type { ApiResponse } from "../../core/api/apiResponse";
 import type { ProductItem } from "../../features/products/models/product.model";
 import { EFilterState, type FilterState } from "./components/filter/filter.type";
-import { ProductService } from "../../features/products/services/product.service";
-
-const productService = new ProductService();
+import { productService } from "../../features/products/services/product.service";
 
 export const useMarketplaceController = () => {
     const [products, setProducts] = useState<ProductItem[]>([]);

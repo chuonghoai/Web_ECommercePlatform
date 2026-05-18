@@ -1,6 +1,8 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
 import type { CartRepository } from "../repositories/cart.repository";
 import { CartApiRepository } from "../repositories/cartApi.repository";
+import { CartMockRepository } from "../repositories/cartMock.repository";
+import type { CartItem } from "../models/cart-item.model";
 
 export class CartService {
     private readonly cartRepository: CartRepository;
@@ -52,9 +54,47 @@ export class CartService {
             success: result.success,
             message: result.message,
             data: null
+        };
+    }
+
+    // Lấy toàn bộ danh sách giỏ hàng
+    async getCartItems(): Promise<ApiResponse<CartItem[]>> {
+        return this.cartRepository.getCartItems();
+    }
+
+    // Cập nhật số lượng
+    async updateQuantity(productId: string, quantity: number): Promise<ApiResponse<null>> {
+        const result = await this.cartRepository.updateQuantity(productId, quantity);
+        if (result.success && result.data) {
+            this.cartCount = result.data.totalCartItems;
+            this.notifyListeners();
         }
+        return { success: result.success, message: result.message, data: null };
+    }
+
+    // Xóa sản phẩm khỏi giỏ
+    async removeFromCart(productId: string): Promise<ApiResponse<null>> {
+        const result = await this.cartRepository.removeFromCart(productId);
+        if (result.success && result.data) {
+            this.cartCount = result.data.totalCartItems;
+            this.notifyListeners();
+        }
+        return { success: result.success, message: result.message, data: null };
     }
 }
 
-// export const cartService = new CartService();
-export const cartService = new CartService();
+/** Định dạng tiền VNĐ */
+export const formatVND = (value: number) =>
+    new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND"
+    }).format(value);
+
+/** Tính tổng (có thể tách ra khỏi context nếu muốn dùng trong nhiều chỗ) */
+export const calcTotal = (items: CartItem[]) =>
+    items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+
+const useMock = true; 
+export const cartService = new CartService(
+    useMock ? new CartMockRepository() : undefined
+);

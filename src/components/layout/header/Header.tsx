@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { userStorageService } from "../../../features/user/services/userStorage.service";
 import type { User } from "../../../features/user/models/user.model";
 import { useToast } from "../../toast/toast";
-import { AuthService } from "../../../features/auth/services/auth.service";
+import { authService } from "../../../features/auth/services/auth.service";
 import { cartService } from "../../../features/cart/services/cart.service";
-
-const authService = new AuthService();
 
 export const Header = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -78,7 +76,18 @@ export const Header = () => {
 
           <div className="flex items-center gap-5 border-l border-[#E7E5E4] pl-6">
             {/* Cart button */}
-            <Link to="/cart" className="relative text-[#57534E] hover:text-market-primary transition-colors">
+            <Link 
+              to="/cart" 
+              onClick={(e) => {
+                const currentUser = userStorageService.getUser();
+                if (!currentUser) {
+                  e.preventDefault();
+                  toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
+                  navigate("/login");
+                }
+              }} 
+              className="relative text-[#57534E] hover:text-market-primary transition-colors"
+            >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>

@@ -13,6 +13,7 @@ import MarketplacePage from "../pages/marketplace/marketplacePage";
 import ProductPage from "../pages/product/productPage";
 import CheckoutPage from "../pages/checkout/checkoutPage";
 import ProfilePage from "../pages/profile/profilePage";
+import CartPage from "../pages/cart/CartPage";
 
 function AppRoutes() {
     return (
@@ -22,6 +23,7 @@ function AppRoutes() {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
+                    <Route path="cart" element={<CartPage />} />
 
                     {/* CHECKOUT */}
                     <Route path="checkout" element={<CheckoutPage />} />

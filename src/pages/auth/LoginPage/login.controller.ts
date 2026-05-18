@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
-import { AuthService } from "../../../features/auth/services/auth.service";
+import { authService } from "../../../features/auth/services/auth.service";
 import type { LoginRequest } from "../../../features/auth/dto/login.type";
 import { useToast } from "../../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
-
-const authService = new AuthService();
 
 export const useLoginController = () => {
   const { toast } = useToast();
