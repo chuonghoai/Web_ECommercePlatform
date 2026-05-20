@@ -26,8 +26,7 @@ export class AuthService {
         return result;
     }
 
-    async sendOtp(email: string, purpose: OtpPurpose): 
-    Promise<ApiResponse<void>> {
+    async sendOtp(email: string, purpose: OtpPurpose): Promise<ApiResponse<void>> {
         return this.authRepository.sendOtp(email, purpose);
     }
 
