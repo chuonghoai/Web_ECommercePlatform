@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import type { ProductItem } from "../../../../features/products/models/product.model";
 import { useCart } from "../../../../features/cart/contexts/CartContext";
 import { useToast } from "../../../../components/toast/toast";
-import { tokenService } from "../../../../core/auth/token.service";
+import { userStorageService } from "../../../../features/user/services/userStorage.service";
 
 interface ProductCardProps {
     product: ProductItem;
@@ -18,7 +18,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     const handleAddToCart = async (e: React.MouseEvent) => {
         e.preventDefault();
         
-        if (!tokenService.getAccessToken()) {
+        if (!userStorageService.getUser()) {
             toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
             navigate("/login");
             return;

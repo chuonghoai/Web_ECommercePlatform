@@ -1,14 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { tokenService } from "./token.service";
+import { userStorageService } from "../../features/user/services/userStorage.service";
 
 interface Props {
     children: React.ReactNode;
 }
 
 function AuthGuard({ children }: Props) {
-    const token = tokenService.getAccessToken();
+    const user = userStorageService.getUser();
 
-    if (!token) {
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
 

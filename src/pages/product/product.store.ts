@@ -6,7 +6,7 @@ import { productService } from "../../features/products/services/product.service
 import { cartService } from "../../features/cart/services/cart.service";
 import { useCart } from "../../features/cart/contexts/CartContext";
 import { FavoriteService } from "../../features/products/services/favorite.service";
-import { tokenService } from "../../core/auth/token.service";
+import { userStorageService } from "../../features/user/services/userStorage.service";
 
 const favoriteService = new FavoriteService();
 
@@ -35,7 +35,7 @@ export const useProductStore = () => {
     const addToCart = async (quantity: number): Promise<boolean> => {
         if (!product) return false;
 
-        if (!tokenService.getAccessToken()) {
+        if (!userStorageService.getUser()) {
             toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
             navigate("/login");
             return false;
@@ -57,7 +57,7 @@ export const useProductStore = () => {
     const toggleFavorite = async (): Promise<boolean> => {
         if (!product) return false;
 
-        if (!tokenService.getAccessToken()) {
+        if (!userStorageService.getUser()) {
             toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
             navigate("/login");
             return false;

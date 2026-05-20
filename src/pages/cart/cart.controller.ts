@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../features/cart/contexts/CartContext';
 import { formatVND } from '../../features/cart/services/cart.service';
-import { tokenService } from '../../core/auth/token.service';
 import { useToast } from '../../components/toast/toast';
+import { userStorageService } from '../../features/user/services/userStorage.service';
 
 export const mockMakerData: Record<string, any> = {
   p1: {
@@ -31,7 +31,7 @@ export const useCartController = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!tokenService.getAccessToken()) {
+    if (!userStorageService.getUser()) {
       toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
       navigate('/login');
     }

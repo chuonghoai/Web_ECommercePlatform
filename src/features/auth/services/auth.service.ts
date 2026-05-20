@@ -1,5 +1,4 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import { tokenService } from "../../../core/auth/token.service";
 import { userStorageService } from "../../user/services/userStorage.service";
 import type { LoginRequest, LoginResponse } from "../dto/login.type";
 import type { RegisterRequest } from "../dto/register.type";
@@ -39,7 +38,6 @@ export class AuthService {
     }
 
     async logout(): Promise<ApiResponse<void>> {
-        tokenService.clear();
         userStorageService.removeUser();
         const result = this.authRepository.logout();
         return result;
