@@ -10,6 +10,8 @@ export const useFilterController = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const searchParamsString = searchParams.toString();
+
     const currentFiltersFromUrl = useMemo((): FilterState => {
         return {
             sortBy: (searchParams.get("sortBy") as EFilterState) || EFilterState.NEWEST,
@@ -17,13 +19,13 @@ export const useFilterController = () => {
             minPrice: searchParams.get("minPrice") || "",
             maxPrice: searchParams.get("maxPrice") || "",
         };
-    }, [searchParams]);
+    }, [searchParamsString]);
 
     const [localFilters, setLocalFilters] = useState<FilterState>(currentFiltersFromUrl);
 
     useEffect(() => {
         setLocalFilters(currentFiltersFromUrl);
-    }, [currentFiltersFromUrl]);
+    }, [searchParamsString]);
 
     useEffect(() => {
         fetchCategories();

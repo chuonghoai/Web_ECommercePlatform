@@ -12,6 +12,8 @@ export const useMarketplaceController = () => {
     const [pagination, setPagination] = useState<ApiResponse<any>["pagination"]>();
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const searchParamsString = searchParams.toString();
+
     const currentUrlState = useMemo(() => {
         return {
             page: Number(searchParams.get("page")) || 1,
@@ -22,11 +24,11 @@ export const useMarketplaceController = () => {
                 maxPrice: searchParams.get("maxPrice") || "",
             } as FilterState,
         };
-    }, [searchParams]);
+    }, [searchParamsString]);
 
     useEffect(() => {
         fetchProducts();
-    }, [currentUrlState]);
+    }, [searchParamsString]);
 
     const fetchProducts = async () => {
         setIsLoading(true);
