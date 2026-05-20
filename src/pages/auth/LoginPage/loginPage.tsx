@@ -43,9 +43,11 @@ function LoginPage() {
           {/* Left: Website introduction */}
           <div className="hidden md:flex w-1/2 flex-col justify-between p-12 bg-market-background border-r border-[#E7E5E4] relative overflow-hidden">
             <div className="relative z-10">
-              <h2 className="font-['Lora',serif] text-[26px] font-semibold text-[#1C1917] mb-2 tracking-[-0.24px]">
-                MarketNest
-              </h2>
+              <Link to="/" className="inline-block hover:opacity-80 transition-opacity">
+                <h2 className="font-['Lora',serif] text-[26px] font-semibold text-[#1C1917] mb-2 tracking-[-0.24px]">
+                  MarketNest
+                </h2>
+              </Link>
               <div className="w-[40px] h-[2px] bg-market-primary mb-8"></div>
 
               <h1 className="font-['Lora',serif] text-[36px] font-semibold leading-tight tracking-[0.005em] text-[#1C1917] mb-6">
