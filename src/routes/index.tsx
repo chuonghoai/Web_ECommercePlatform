@@ -14,6 +14,7 @@ import ProductPage from "../pages/product/productPage";
 import CheckoutPage from "../pages/checkout/checkoutPage";
 import ProfilePage from "../pages/profile/profilePage";
 import CartPage from "../pages/cart/CartPage";
+import AuthGuard from "../core/auth/auth.guard";
 
 function AppRoutes() {
     return (
@@ -23,13 +24,26 @@ function AppRoutes() {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
-                    <Route path="cart" element={<CartPage />} />
+                    {/* CART */}
+                    <Route path="cart" element={
+                        <AuthGuard>
+                            <CartPage />
+                        </AuthGuard>
+                    } />
 
                     {/* CHECKOUT */}
-                    <Route path="checkout" element={<CheckoutPage />} />
+                    <Route path="checkout" element={
+                        <AuthGuard>
+                            <CheckoutPage />
+                        </AuthGuard>
+                    } />
 
                     {/* PROFILE */}
-                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile" element={
+                        <AuthGuard>
+                            <ProfilePage />
+                        </AuthGuard>
+                    } />
                 </Route>
 
                 {/* AUTH */}

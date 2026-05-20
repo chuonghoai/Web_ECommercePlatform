@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import type { ReactNode } from "react";
 import type { CartItem } from "../models/cart-item.model";
 import { cartService, calcTotal } from "../services/cart.service";
+import { userStorageService } from "../../user/services/userStorage.service";
 
 interface ICartContextProps {
     items: CartItem[];
@@ -20,6 +21,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [isLoading, setIsLoading] = useState(false);
 
     const loadCart = useCallback(async () => {
+        if (!userStorageService.getUser()) {
+            setItems([]);
+            return;
+        }
+        
         setIsLoading(true);
         const res = await cartService.getCartItems();
         if (res.success && res.data) {
