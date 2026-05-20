@@ -57,12 +57,12 @@ export class CartService {
         };
     }
 
-    // Lấy toàn bộ danh sách giỏ hàng
+    // Get all cart items
     async getCartItems(): Promise<ApiResponse<CartItem[]>> {
         return this.cartRepository.getCartItems();
     }
 
-    // Cập nhật số lượng
+    // Update item's quantity
     async updateQuantity(productId: string, quantity: number): Promise<ApiResponse<null>> {
         const result = await this.cartRepository.updateQuantity(productId, quantity);
         if (result.success && result.data) {
@@ -72,7 +72,7 @@ export class CartService {
         return { success: result.success, message: result.message, data: null };
     }
 
-    // Xóa sản phẩm khỏi giỏ
+    // Remove item from cart
     async removeFromCart(productId: string): Promise<ApiResponse<null>> {
         const result = await this.cartRepository.removeFromCart(productId);
         if (result.success && result.data) {
@@ -83,18 +83,16 @@ export class CartService {
     }
 }
 
-/** Định dạng tiền VNĐ */
 export const formatVND = (value: number) =>
     new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND"
     }).format(value);
 
-/** Tính tổng (có thể tách ra khỏi context nếu muốn dùng trong nhiều chỗ) */
 export const calcTotal = (items: CartItem[]) =>
     items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
-const useMock = false; 
+const useMock = false;
 export const cartService = new CartService(
     useMock ? new CartMockRepository() : undefined
 );

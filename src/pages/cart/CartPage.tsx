@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCartController } from './controllers/cart.controller';
+import { useCartController } from './cart.controller';
 import { CartEmptyState } from './components/CartEmptyState';
 import { CartItemCard } from './components/CartItemCard';
 import { CartSummary } from './components/CartSummary';
@@ -14,7 +14,7 @@ const CartPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FFFBF5] font-sans pb-24">
       {/* Header Placeholder */}
-      
+
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <header className="mb-10">
           <h1 className="text-4xl font-serif text-gray-900 mb-3">Giỏ hàng của bạn</h1>
@@ -24,8 +24,8 @@ const CartPage: React.FC = () => {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-12 items-start">
-          
-          {/* Cột Trái: Items */}
+
+          {/* Items */}
           <div className="flex-1 w-full space-y-10">
             {/* Editorial Callout */}
             <div className="bg-[#FEF3C7]/40 border border-[#D4A373]/30 rounded-[20px] p-6 flex items-start gap-4">
@@ -39,7 +39,7 @@ const CartPage: React.FC = () => {
             <div className="space-y-10">
               {controller.items.map((item, index) => (
                 <div key={item.product.id}>
-                  <CartItemCard 
+                  <CartItemCard
                     item={item}
                     makerInfo={controller.mockMakerData[item.product.id]}
                     isLoading={controller.isLoading}
@@ -56,9 +56,9 @@ const CartPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Cột Phải: Summary */}
+          {/* Summary */}
           <div className="w-full lg:w-[380px] shrink-0">
-            <CartSummary 
+            <CartSummary
               finalTotal={controller.finalTotal}
               onCheckout={controller.handleCheckout}
               formatMoney={controller.formatMoney}
@@ -68,7 +68,6 @@ const CartPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer Placeholder (nếu layout bọc ngoài thì bỏ) */}
     </div>
   );
 };

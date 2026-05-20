@@ -5,7 +5,6 @@ import { productService } from "../../products/services/product.service";
 
 export class CartMockRepository implements CartRepository {
     private mockTotalItems = 0;
-    // Dữ liệu giả lập trống
     private mockItems: CartItem[] = [];
 
     async getCartCount(): Promise<ApiResponse<{ totalCartItems: number; }>> {
@@ -17,7 +16,6 @@ export class CartMockRepository implements CartRepository {
         if (existing) {
             existing.quantity += quantity;
         } else {
-            // Lấy thông tin thật của sản phẩm mock để UI đồng bộ
             const productRes = await productService.getProductById(productId);
             const pData = productRes.data;
 
@@ -35,7 +33,6 @@ export class CartMockRepository implements CartRepository {
         return { success: true, message: "Thêm thành công", data: { totalCartItems: this.mockTotalItems } };
     }
 
-    // 3 hàm thêm mới:
     async getCartItems(): Promise<ApiResponse<CartItem[]>> {
         return { success: true, message: "OK", data: [...this.mockItems] };
     }

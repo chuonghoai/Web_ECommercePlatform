@@ -21,7 +21,6 @@ export class AuthService {
 
         if (result.success && result.data) {
             userStorageService.setUser(result.data.user);
-            tokenService.saveAccessToken(result.data.accessToken);
         }
 
         return result;
@@ -33,12 +32,9 @@ export class AuthService {
     }
 
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {
-        // Call the repository (which will perform the real API request)
         const result = await this.authRepository.register(data);
-        // If the request succeeded and we have data, store token and user info
         if (result.success && result.data) {
             userStorageService.setUser(result.data.user);
-            tokenService.saveAccessToken(result.data.accessToken);
         }
         return result;
     }
@@ -59,7 +55,6 @@ export class AuthService {
     }
 }
 
-// Bật useMock = true để chạy giao diện không cần Backend
 const useMock = false;
 export const authService = new AuthService(
     useMock ? new AuthMockRepository() : undefined

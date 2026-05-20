@@ -57,7 +57,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     );
 };
 
-// Hook tiện ích để dùng trong UI
 export const useCart = () => {
     const context = useContext(CartContext);
     if (!context) throw new Error("useCart must be used within a CartProvider");

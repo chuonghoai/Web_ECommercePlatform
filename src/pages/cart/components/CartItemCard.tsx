@@ -14,12 +14,11 @@ interface Props {
 export const CartItemCard: React.FC<Props> = ({ item, makerInfo, isLoading, onUpdateQuantity, onRemove, formatMoney }) => {
   const { product, quantity } = item;
   
-  // Fallback info nếu chưa map đúng id
   const info = makerInfo || { maker: "Artisan Maker", avatar: "https://i.pravatar.cc/150", location: "Local Studio", tags: ["Handmade"], story: "Crafted with care." };
 
   return (
     <div className="flex flex-col sm:flex-row gap-6 group">
-      {/* Product Image - Natural aspect ratio */}
+      {/* Product Image */}
       <div className="sm:w-[160px] shrink-0">
         <div className="aspect-[4/5] bg-[#E7E5E4] rounded-lg overflow-hidden border border-[#E7E5E4]">
           <img 
