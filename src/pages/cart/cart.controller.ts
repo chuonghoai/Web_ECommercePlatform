@@ -46,7 +46,7 @@ export const useCartController = () => {
   };
 
   const handleCheckout = () => {
-    console.log("Proceed to checkout...");
+    navigate("/order/checkout")
   };
 
   return {

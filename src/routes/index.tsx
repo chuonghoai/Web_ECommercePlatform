@@ -11,7 +11,7 @@ import ResetPasswordPage from "../pages/auth/ForgotPasswordPage/resetPassword/re
 import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
 import ProductPage from "../pages/product/productPage";
-import CheckoutPage from "../pages/checkout/checkoutPage";
+import CheckoutPage from "../pages/order-checkout/checkoutPage";
 import ProfilePage from "../pages/profile/profilePage";
 import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
@@ -31,8 +31,8 @@ function AppRoutes() {
                         </AuthGuard>
                     } />
 
-                    {/* CHECKOUT */}
-                    <Route path="checkout" element={
+                    {/* ORDER-CHECKOUT */}
+                    <Route path="order/checkout" element={
                         <AuthGuard>
                             <CheckoutPage />
                         </AuthGuard>
