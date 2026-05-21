@@ -181,11 +181,11 @@ function ProductPage() {
                         {/* Price */}
                         <div className="flex items-baseline gap-4 mb-6">
                             <span className="font-['Lora',serif] text-[32px] font-semibold text-[#1e1b17] tracking-tight">
-                                {product.price.toLocaleString('vi-VN')} ₫
+                                {Number(product.price).toLocaleString('vi-VN')} ₫
                             </span>
                             {isSale && (
                                 <span className="text-[18px] text-[#A8A29E] line-through font-light">
-                                    {product.originalPrice!.toLocaleString('vi-VN')} ₫
+                                    {Number(product.originalPrice).toLocaleString('vi-VN')} ₫
                                 </span>
                             )}
                         </div>
