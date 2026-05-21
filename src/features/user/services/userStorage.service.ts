@@ -4,6 +4,7 @@ import type { User } from "../models/user.model";
 class UserStorageService {
     setUser(user: User): void {
         localStorageService.set("user", user);
+        window.dispatchEvent(new Event("auth_changed"));
     }
 
     getUser(): User | null {
@@ -12,6 +13,7 @@ class UserStorageService {
 
     removeUser(): void {
         localStorageService.remove("user");
+        window.dispatchEvent(new Event("auth_changed"));
     }
 }
 

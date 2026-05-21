@@ -52,6 +52,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         loadCart();
+
+        const handleAuthChange = () => {
+            loadCart();
+        };
+
+        window.addEventListener("auth_changed", handleAuthChange);
+        return () => window.removeEventListener("auth_changed", handleAuthChange);
     }, [loadCart]);
 
     const totalPrice = calcTotal(items);
