@@ -14,7 +14,12 @@ interface Props {
 export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantity, onRemove, formatMoney }) => {
   const { product, quantity } = item;
   
-  const info = { maker: "Artisan Maker", avatar: "https://i.pravatar.cc/150", location: "Local Studio", tags: ["Handmade"], story: "Crafted with care." };
+  const makerName = product.seller?.name || "Artisan Maker";
+  const avatarUrl = product.seller?.avatarUrl || "https://i.pravatar.cc/150";
+  const storyText = product.description || "Crafted with care.";
+  
+  // Vị trí và tags vẫn dùng tạm dữ liệu cứng vì Backend chưa cung cấp
+  const info = { tags: ["Handmade"] };
 
   return (
     <div className="flex flex-col sm:flex-row gap-6 group">
@@ -38,10 +43,8 @@ export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantit
               
               {/* Maker Identity */}
               <div className="flex items-center gap-2 mt-3 mb-4">
-                <img src={info.avatar} alt={info.maker} className="w-5 h-5 rounded-full object-cover border border-[#E7E5E4]" />
-                <span className="text-sm text-gray-800 font-medium">{info.maker}</span>
-                <span className="text-[#D6D3D1]">•</span>
-                <span className="text-sm text-gray-500">{info.location}</span>
+                <img src={avatarUrl} alt={makerName} className="w-5 h-5 rounded-full object-cover border border-[#E7E5E4]" />
+                <span className="text-sm text-gray-800 font-medium">{makerName}</span>
               </div>
 
               {/* Material Tags */}
@@ -53,7 +56,7 @@ export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantit
                 ))}
               </div>
 
-              <p className="text-sm text-gray-500 italic font-serif mt-2">"{info.story}"</p>
+              <p className="text-sm text-gray-500 italic font-serif mt-2">"{storyText}"</p>
             </div>
 
             <div className="text-right">
