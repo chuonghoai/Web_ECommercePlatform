@@ -5,22 +5,7 @@ import { formatVND } from '../../features/cart/services/cart.service';
 import { useToast } from '../../components/toast/toast';
 import { userStorageService } from '../../features/user/services/userStorage.service';
 
-export const mockMakerData: Record<string, any> = {
-  p1: {
-    maker: "Elena Silva",
-    avatar: "https://i.pravatar.cc/150?u=elena",
-    location: "Da Lat, Vietnam",
-    tags: ["Hand-thrown stoneware", "Lead-free glaze"],
-    story: "Made in small batches by local artisans."
-  },
-  p2: {
-    maker: "Khai Nguyen",
-    avatar: "https://i.pravatar.cc/150?u=khai",
-    location: "Hoi An, Vietnam",
-    tags: ["Natural cotton", "Plant-dyed"],
-    story: "Woven on traditional wooden looms."
-  }
-};
+
 
 export const useCartController = () => {
   const { items, totalPrice, updateQuantity, removeItem, isLoading } = useCart();
@@ -57,7 +42,6 @@ export const useCartController = () => {
     totalMakers,
     isLoading,
     coupon,
-    mockMakerData,
     setCoupon,
     updateQuantity,
     removeItem,

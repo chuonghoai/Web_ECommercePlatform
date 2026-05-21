@@ -41,7 +41,6 @@ const CartPage: React.FC = () => {
                 <div key={item.product.id}>
                   <CartItemCard
                     item={item}
-                    makerInfo={controller.mockMakerData[item.product.id]}
                     isLoading={controller.isLoading}
                     onUpdateQuantity={controller.updateQuantity}
                     onRemove={controller.removeItem}

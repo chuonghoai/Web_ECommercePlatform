@@ -4,17 +4,17 @@ import { QuantitySelector } from './QuantitySelector';
 
 interface Props {
   item: CartItem;
-  makerInfo: any;
+
   isLoading: boolean;
   onUpdateQuantity: (id: string, qty: number) => void;
   onRemove: (id: string) => void;
   formatMoney: (val: number) => string;
 }
 
-export const CartItemCard: React.FC<Props> = ({ item, makerInfo, isLoading, onUpdateQuantity, onRemove, formatMoney }) => {
+export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantity, onRemove, formatMoney }) => {
   const { product, quantity } = item;
   
-  const info = makerInfo || { maker: "Artisan Maker", avatar: "https://i.pravatar.cc/150", location: "Local Studio", tags: ["Handmade"], story: "Crafted with care." };
+  const info = { maker: "Artisan Maker", avatar: "https://i.pravatar.cc/150", location: "Local Studio", tags: ["Handmade"], story: "Crafted with care." };
 
   return (
     <div className="flex flex-col sm:flex-row gap-6 group">
