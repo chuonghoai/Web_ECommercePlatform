@@ -46,7 +46,7 @@ export class CheckoutMockRepository implements CheckoutRepository {
                             imageUrl: "https://example.com/product2.jpg",
                             price: 90000,
                             originalPrice: 100000,
-                            discountPercentage: 10,
+                            discountPercentage: 0,
 
                         },
                         quantity: 1,
@@ -58,7 +58,12 @@ export class CheckoutMockRepository implements CheckoutRepository {
                 shippingFee: 30000,
                 totalAmount: 290000 + 30000,
 
-                invalidItems: [],
+                invalidItems: [
+                    {
+                        productId: "1",
+                        reason: "Hết hàng"
+                    }
+                ],
             },
         };
 

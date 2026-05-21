@@ -17,70 +17,98 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
     onRemove
 }) => {
     return (
-        <section className="flex-grow space-y-6 w-full lg:w-2/3">
+        <section className="w-full space-y-6">
             <h2 className="font-headline text-2xl text-text-ink border-b border-subtle pb-2">Giỏ hàng của bạn</h2>
             <div className="bg-surface-card card-border rounded-lg p-6 space-y-6">
-                {items.map((item, idx) => (
-                    <div key={item.product.id} className={`flex flex-col sm:flex-row gap-4 pb-4 ${idx !== items.length - 1 ? 'border-b border-subtle' : ''}`}>
-                        <div className="w-full sm:w-32 h-32 flex-shrink-0 bg-surface-container rounded-lg overflow-hidden">
-                            <img alt={item.product.name} className="w-full h-full object-cover" src={item.product.imageUrl} />
-                        </div>
-                        <div className="flex-grow flex flex-col justify-between">
-                            <div>
-                                <h3 className="font-subhead text-lg text-text-ink">{item.product.name}</h3>
-                                {item.product.discountPercentage > 0 && (
-                                    <p className="font-caption text-primary mt-1">Giảm {item.product.discountPercentage}%</p>
+                {items.map((item, idx) => {
+                    const invalidInfo = invalidItems?.find(invalid => invalid.productId === item.product.id);
+                    const isInvalid = !!invalidInfo;
+
+                    return (
+                        <div
+                            key={item.product.id}
+                            className={`flex flex-col sm:flex-row gap-4 pb-4 ${idx !== items.length - 1 ? 'border-b border-subtle' : ''
+                                } ${isInvalid ? 'bg-surface-container-high/60 dark:bg-surface-container/40 p-4 rounded-lg border border-error/20 shadow-inner transition-all' : ''
+                                }`}
+                        >
+                            {/* Product image */}
+                            <div className={`w-full sm:w-32 h-32 flex-shrink-0 bg-surface-container rounded-lg overflow-hidden ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
+                                <img alt={item.product.name} className="w-full h-full object-cover" src={item.product.imageUrl} />
+                            </div>
+
+                            {/* Product details */}
+                            <div className="flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h3 className={`font-subhead text-lg text-text-ink ${isInvalid ? 'line-through text-text-muted font-normal' : ''}`}>
+                                        {item.product.name}
+                                    </h3>
+
+                                    {/* Invalid message */}
+                                    {isInvalid ? (
+                                        <div className="mt-3 flex flex-col gap-1 text-error font-body-sm bg-error-container/20 px-3 py-2 rounded-lg w-fit">
+                                            <div className="flex items-center gap-1 font-semibold">
+                                                <span className="material-symbols-outlined text-sm" style={{ fontSize: '16px' }}>warning</span>
+                                                <span>Sản phẩm không khả dụng</span>
+                                            </div>
+                                            <span className="pl-5">Lý do: {invalidInfo.reason}</span>
+                                        </div>
+                                    ) : item.product.discountPercentage > 0 ? (
+                                        <p className="font-caption text-primary mt-1">Giảm {item.product.discountPercentage}%</p>
+                                    ) : item.product.discountPercentage === 0 && item.product.price < item.product.originalPrice ? (
+                                        <p className="font-caption text-primary mt-1">
+                                            Giảm {(item.product.originalPrice - item.product.price).toLocaleString('vi-VN')}₫
+                                        </p>
+                                    ) : null}
+                                </div>
+
+                                {/* Valid product: Modify quantity */}
+                                {!isInvalid && (
+                                    <div className="flex items-center justify-between mt-2 sm:mt-0">
+                                        <div className="flex items-center border border-border-medium rounded bg-surface">
+                                            <button
+                                                aria-label="Decrease quantity"
+                                                className="px-2 py-1 text-text-muted hover:text-primary transition-colors"
+                                                onClick={() => onDecrease(item.product.id)}
+                                            >
+                                                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>remove</span>
+                                            </button>
+                                            <span className="font-body-sm px-2 text-text-ink">{item.quantity}</span>
+                                            <button
+                                                aria-label="Increase quantity"
+                                                className="px-2 py-1 text-text-muted hover:text-primary transition-colors"
+                                                onClick={() => onIncrease(item.product.id)}
+                                            >
+                                                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
+                                            </button>
+                                        </div>
+                                        <div className="text-right">
+                                            {item.product.originalPrice > item.product.price && (
+                                                <p className="font-caption text-text-muted line-through">{item.product.originalPrice.toLocaleString('vi-VN')}₫</p>
+                                            )}
+                                            <p className="font-body font-semibold text-text-ink">{item.product.price.toLocaleString('vi-VN')}₫</p>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                            <div className="flex items-center justify-between mt-2 sm:mt-0">
-                                <div className="flex items-center border border-border-medium rounded">
-                                    <button
-                                        aria-label="Decrease quantity"
-                                        className="px-2 py-1 text-text-muted hover:text-primary transition-colors"
-                                        onClick={() => onDecrease(item.product.id)}
-                                    >
-                                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>remove</span>
-                                    </button>
-                                    <span className="font-body-sm px-2 text-text-ink">{item.quantity}</span>
-                                    <button
-                                        aria-label="Increase quantity"
-                                        className="px-2 py-1 text-text-muted hover:text-primary transition-colors"
-                                        onClick={() => onIncrease(item.product.id)}
-                                    >
-                                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
-                                    </button>
-                                </div>
-                                <div className="text-right">
-                                    {item.product.originalPrice > item.product.price && (
-                                        <p className="font-caption text-text-muted line-through">{item.product.originalPrice.toLocaleString('vi-VN')}₫</p>
-                                    )}
-                                    <p className="font-body font-semibold text-text-ink">{item.product.price.toLocaleString('vi-VN')}₫</p>
-                                </div>
+
+                            {/* Button remove items */}
+                            <div className="sm:flex-shrink-0 flex items-start justify-end pt-2 sm:pt-0">
+                                <button
+                                    type="button"
+                                    aria-label="Remove item"
+                                    className={`transition-colors flex items-center gap-1 rounded-lg ${isInvalid
+                                        ? 'btn-primary py-2 px-4 text-sm font-semibold shadow-md'
+                                        : 'font-caption py-1.5 px-3 text-text-muted hover:text-error'
+                                        }`}
+                                    onClick={() => onRemove(item.product.id)}
+                                >
+                                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+                                    <span>{isInvalid ? 'Xóa khỏi đơn hàng' : 'Xóa'}</span>
+                                </button>
                             </div>
                         </div>
-                        <div className="sm:flex-shrink-0 flex items-start justify-end pt-2 sm:pt-0">
-                            <button
-                                aria-label="Remove item"
-                                className="text-text-muted hover:text-error transition-colors flex items-center gap-1 font-caption"
-                                onClick={() => onRemove(item.product.id)}
-                            >
-                                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
-                                <span className="sm:hidden">Xóa</span>
-                            </button>
-                        </div>
-                    </div>
-                ))}
-
-                {invalidItems.length > 0 && (
-                    <div className="bg-error-container text-on-error-container p-4 rounded-lg mt-4">
-                        <p className="font-bold mb-2">Sản phẩm không khả dụng:</p>
-                        <ul className="list-disc pl-5">
-                            {invalidItems.map(invalid => (
-                                <li key={invalid.productId}>{invalid.productId} - {invalid.reason}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                    );
+                })}
             </div>
         </section>
     );

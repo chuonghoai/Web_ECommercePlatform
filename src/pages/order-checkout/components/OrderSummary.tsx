@@ -21,7 +21,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
 }) => {
     return (
         <aside className="w-full lg:w-1/3">
-            <div className="sticky top-6 space-y-6">
+            <div className="lg:sticky lg:top-6 space-y-6">
                 <h2 className="font-headline text-2xl text-text-ink border-b border-subtle pb-2 hidden lg:block">Tóm tắt đơn hàng</h2>
                 <div className="bg-surface-card card-border rounded-lg p-6 space-y-4">
                     <div className="space-y-2 font-body-sm border-b border-subtle pb-4">
@@ -41,29 +41,46 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     </div>
                     <p className="font-caption text-text-muted text-right italic">(Đã bao gồm VAT)</p>
 
-                    <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium mt-4 flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary-container">
+                    {/* Voucher button: open modal choosing voucher */}
+                    <div className="pt-2">
+                        <button
+                            type="button"
+                            className="w-full font-body-sm text-primary border border-border-medium bg-surface hover:bg-surface-container-low transition-colors py-2 rounded-lg flex justify-center items-center gap-1.5"
+                            onClick={onOpenVoucherModal}
+                        >
+                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>confirmation_number</span>
+                            Áp dụng voucher
+                        </button>
+                    </div>
+
+                    {/* Payment method button: open modal choosing payment method */}
+                    <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                            <span className="material-symbols-outlined text-primary-container flex-shrink-0">
                                 {selectedPaymentMethod === "COD" ? "local_shipping" : "account_balance"}
                             </span>
-                            <span className="font-body-sm text-text-ink">
+                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản ngân hàng"}>
                                 {selectedPaymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản ngân hàng"}
                             </span>
                         </div>
-                        <button className="font-caption text-primary-container hover:underline" onClick={onOpenPaymentModal}>Thay đổi</button>
+                        <button
+                            type="button"
+                            className="font-caption text-primary-container hover:underline flex-shrink-0 ml-1 whitespace-nowrap"
+                            onClick={onOpenPaymentModal}
+                        >
+                            Thay đổi
+                        </button>
                     </div>
 
-                    <div className="pt-4 space-y-3">
+                    {/* Place order button */}
+                    <div className="pt-2 space-y-3">
                         <button className="w-full btn-primary py-2 font-body font-semibold tracking-wide flex justify-center items-center gap-2" onClick={onOrderSubmit}>
                             <span className="material-symbols-outlined">check_circle</span>
                             Đặt hàng
                         </button>
-                        <button className="w-full font-body-sm text-primary hover:underline flex justify-center items-center gap-1 mt-2" onClick={onOpenVoucherModal}>
-                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>confirmation_number</span>
-                            Chọn voucher
-                        </button>
                     </div>
                 </div>
+
                 <div className="flex items-center justify-center gap-2 font-caption text-text-muted mt-4">
                     <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>verified</span>
                     <span>Đổi trả miễn phí trong 30 ngày</span>

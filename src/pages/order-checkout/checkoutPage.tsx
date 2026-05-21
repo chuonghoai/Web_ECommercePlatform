@@ -57,22 +57,24 @@ function CheckoutPage() {
             </header>
 
             <main className="flex-grow py-8 md:py-12 px-6">
-                <div className="max-w-7xl mx-auto flex flex-col gap-8">
-
-                    {/* Component 1: Thông tin giao hàng */}
-                    <ShippingDetailForm address={data.address} />
-
+                <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col lg:flex-row gap-8">
-                        {/* Component 2: Danh sách sản phẩm giỏ hàng (Left Column) */}
-                        <OrderItemsList
-                            items={data.items}
-                            invalidItems={data.invalidItems}
-                            onIncrease={handleIncreaseQuantity}
-                            onDecrease={handleDecreaseQuantity}
-                            onRemove={handleRemoveItem}
-                        />
 
-                        {/* Component 3: Tóm tắt đơn hàng và thanh toán (Right Column) */}
+                        <div className="w-full lg:w-2/3 space-y-8">
+                            {/* Component: Shipping info */}
+                            <ShippingDetailForm address={data.address} />
+
+                            {/* Component: Order item list */}
+                            <OrderItemsList
+                                items={data.items}
+                                invalidItems={data.invalidItems}
+                                onIncrease={handleIncreaseQuantity}
+                                onDecrease={handleDecreaseQuantity}
+                                onRemove={handleRemoveItem}
+                            />
+                        </div>
+
+                        {/* Component: Order summary */}
                         <OrderSummary
                             subTotal={data.subTotal}
                             shippingFee={data.shippingFee}
@@ -90,7 +92,7 @@ function CheckoutPage() {
                 <p className="font-caption text-text-muted">© 2024 Artisan Market. Giao dịch được mã hóa an toàn.</p>
             </footer>
 
-            {/* Component 4: Modal Voucher */}
+            {/* Modal: Choosing voucher */}
             <VoucherModal
                 isOpen={isVoucherModalOpen}
                 onClose={() => setIsVoucherModalOpen(false)}
@@ -98,7 +100,7 @@ function CheckoutPage() {
                 onSelectVoucher={setSelectedVoucher}
             />
 
-            {/* Component 5: Modal Phương thức thanh toán */}
+            {/* Modal: Payment method */}
             <PaymentMethodModal
                 isOpen={isPaymentModalOpen}
                 onClose={() => setIsPaymentModalOpen(false)}
