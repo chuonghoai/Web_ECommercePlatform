@@ -59,7 +59,6 @@ const CartPage: React.FC = () => {
           <div className="w-full lg:w-[380px] shrink-0">
             <CartSummary
               finalTotal={controller.finalTotal}
-              onCheckout={controller.handleCheckout}
               formatMoney={controller.formatMoney}
             />
           </div>

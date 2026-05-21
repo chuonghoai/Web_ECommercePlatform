@@ -8,7 +8,7 @@ import { userStorageService } from '../../features/user/services/userStorage.ser
 
 
 export const useCartController = () => {
-  const { items, totalPrice, updateQuantity, removeItem, isLoading } = useCart();
+  const { items, totalPrice, updateQuantity, removeItem, isLoading, loadCart } = useCart();
 
   const [coupon, setCoupon] = useState("");
 
@@ -20,19 +20,15 @@ export const useCartController = () => {
       toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
       navigate('/login');
     }
-  }, [navigate, toast]);
+    else {
+      loadCart();
+    }
+  }, [navigate, toast, loadCart]);
 
   const shippingFee = items.length > 0 ? 35000 : 0;
   const finalTotal = totalPrice + shippingFee;
   const totalMakers = new Set(items.map(item => item.product.id)).size;
 
-  const handleApplyCoupon = () => {
-    console.log("Applying coupon:", coupon);
-  };
-
-  const handleCheckout = () => {
-    console.log("Proceed to checkout...");
-  };
 
   return {
     items,
@@ -45,8 +41,6 @@ export const useCartController = () => {
     setCoupon,
     updateQuantity,
     removeItem,
-    handleApplyCoupon,
-    handleCheckout,
     formatMoney: formatVND
   };
 };
