@@ -25,15 +25,13 @@ export const useCartController = () => {
     }
   }, [navigate, toast, loadCart]);
 
-  const shippingFee = items.length > 0 ? 35000 : 0;
-  const finalTotal = totalPrice + shippingFee;
+  const finalTotal = totalPrice;
   const totalMakers = new Set(items.map(item => item.product.id)).size;
 
 
   return {
     items,
     totalPrice,
-    shippingFee,
     finalTotal,
     totalMakers,
     isLoading,
