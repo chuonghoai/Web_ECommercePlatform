@@ -9,17 +9,17 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ links = [], showSearch = true, rightActions }) => {
     return (
-        <header className="bg-surface-container-lowest text-primary docked full-width top-0 sticky z-40 border-b-[1.5px] border-outline-variant shadow-sm transition-all duration-200 ease-in-out flex justify-between items-center w-full px-margin-desktop py-md">
-            <div className="flex items-center gap-xl">
-                <nav className="flex gap-lg">
+        <header className="bg-surface-card text-primary docked full-width top-0 sticky z-40 border-b-[1px] border-border-subtle shadow-sm transition-all duration-200 ease-in-out flex justify-between items-center w-full px-10 py-4">
+            <div className="flex items-center gap-8">
+                <nav className="flex gap-6">
                     {links.map((link, idx) => (
                         <Link
                             key={idx}
                             to={link.href}
-                            className={`font-label-md text-label-md transition-transform duration-200 ${
+                            className={`font-body text-sm font-semibold transition-transform duration-200 ${
                                 link.active
                                     ? 'text-primary font-bold border-b-2 border-primary pb-1'
-                                    : 'text-on-surface-variant hover:text-on-surface hover:translate-y-[-2px]'
+                                    : 'text-text-muted hover:text-text-ink hover:translate-y-[-2px]'
                             }`}
                         >
                             {link.label}
@@ -27,17 +27,17 @@ export const Header: React.FC<HeaderProps> = ({ links = [], showSearch = true, r
                     ))}
                 </nav>
             </div>
-            <div className="flex items-center gap-lg">
+            <div className="flex items-center gap-6">
                 {showSearch && (
                     <div className="relative group">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-hover:text-primary transition-colors">search</span>
-                        <input className="pl-10 pr-4 py-2 bg-primary-container border-[1px] border-brand-tan rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-on-surface transition-colors w-64 placeholder-on-surface-variant" placeholder="Search orders, products..." type="text" />
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted group-hover:text-primary transition-colors">search</span>
+                        <input className="input-field pl-10 pr-4 py-2 font-body text-sm text-text-ink w-64 placeholder-text-muted" placeholder="Search orders, products..." type="text" />
                     </div>
                 )}
-                <div className="flex items-center gap-md border-l-[1px] border-outline-variant pl-lg">
-                    <button className="relative text-on-surface-variant hover:text-on-surface hover:translate-y-[-2px] transition-all">
+                <div className="flex items-center gap-4 border-l-[1px] border-border-subtle pl-6">
+                    <button className="relative text-text-muted hover:text-text-ink hover:translate-y-[-2px] transition-all">
                         <span className="material-symbols-outlined">notifications</span>
-                        <span className="absolute top-0 right-0 w-2 h-2 bg-brand-orange rounded-full"></span>
+                        <span className="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full"></span>
                     </button>
                     {rightActions}
                 </div>
