@@ -84,7 +84,7 @@ export const useRegisterController = () => {
 
             if (result.success) {
                 toast("Đăng ký thành công!", 'success');
-                navigate("/");
+                navigate(result.data?.route || "/");
             } else {
                 toast(result.message, 'error');
             }

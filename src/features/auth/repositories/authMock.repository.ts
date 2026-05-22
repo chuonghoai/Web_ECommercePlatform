@@ -19,7 +19,7 @@ export class AuthMockRepository implements AuthRepository {
                         id: "1",
                         email: "manggia098@gmail.com",
                         fullName: "manggia",
-                        role: "USER",
+                        role: "ADMIN",
                         avatarUrl: ""
                     }
                 },

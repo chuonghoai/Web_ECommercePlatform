@@ -15,6 +15,8 @@ import CheckoutPage from "../pages/order-checkout/checkoutPage";
 import ProfilePage from "../pages/profile/profilePage";
 import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
+import { AdminLayout } from "../admin/layout/AdminLayout";
+import { DashboardPage } from "../admin/pages/overview/Dashboard";
 
 function AppRoutes() {
     return (
@@ -44,6 +46,11 @@ function AppRoutes() {
                             <ProfilePage />
                         </AuthGuard>
                     } />
+                </Route>
+
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/overview" replace />} />
+                    <Route path="overview" element={<DashboardPage />} />
                 </Route>
 
                 {/* AUTH */}
