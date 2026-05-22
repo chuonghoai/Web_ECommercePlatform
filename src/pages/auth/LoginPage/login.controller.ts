@@ -42,7 +42,7 @@ export const useLoginController = () => {
       const result = await authService.login(data);
       if (result.success) {
         toast("Đăng nhập thành công!", "success");
-        navigate("/");
+        navigate(result.data?.route || "/");
       }
     } catch (error: any) {
       const apiErrorMsg = error.response?.data?.error?.message
