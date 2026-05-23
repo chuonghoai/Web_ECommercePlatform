@@ -15,17 +15,28 @@ export const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const currentUser = userStorageService.getUser();
-    setUser(currentUser);
+    const loadUserAndCart = () => {
+      const currentUser = userStorageService.getUser();
+      setUser(currentUser);
 
-    if (currentUser) {
-      cartService.syncCartCount();
-    }
+      if (currentUser) {
+        cartService.syncCartCount();
+      } else {
+        setCartCount(0);
+      }
+    };
+
+    loadUserAndCart();
+
+    window.addEventListener("auth_changed", loadUserAndCart);
 
     const unsubscribeCart = cartService.subscribe((newCount) => {
       setCartCount(newCount);
     });
-    return () => unsubscribeCart();
+    return () => {
+      unsubscribeCart();
+      window.removeEventListener("auth_changed", loadUserAndCart);
+    };
   }, []);
 
   const handleLogout = () => {
