@@ -18,9 +18,6 @@ export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantit
   const avatarUrl = product.seller?.avatarUrl || "https://i.pravatar.cc/150";
   const storyText = product.description || "Crafted with care.";
   
-  // Vị trí và tags vẫn dùng tạm dữ liệu cứng vì Backend chưa cung cấp
-  const info = { tags: ["Handmade"] };
-
   return (
     <div className="flex flex-col sm:flex-row gap-6 group">
       {/* Product Image */}
@@ -45,15 +42,6 @@ export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantit
               <div className="flex items-center gap-2 mt-3 mb-4">
                 <img src={avatarUrl} alt={makerName} className="w-5 h-5 rounded-full object-cover border border-[#E7E5E4]" />
                 <span className="text-sm text-gray-800 font-medium">{makerName}</span>
-              </div>
-
-              {/* Material Tags */}
-              <div className="flex flex-wrap gap-2 mb-3">
-                {info.tags.map((tag: string) => (
-                  <span key={tag} className="px-2.5 py-1 text-xs font-medium text-[#365314] bg-[#F7FEE7] border border-[#365314]/20 rounded-[4px]">
-                    {tag}
-                  </span>
-                ))}
               </div>
 
               <p className="text-sm text-gray-500 italic font-serif mt-2">"{storyText}"</p>

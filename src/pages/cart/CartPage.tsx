@@ -23,9 +23,9 @@ const CartPage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-12 items-start">
 
           {/* Items */}
-          <div className="flex-1 w-full space-y-10">
+          <div className="flex-1 w-full">
             {/* Item List */}
-            <div className="space-y-10">
+            <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 sm:p-10 space-y-10 shadow-sm">
               {controller.items.map((item, index) => (
                 <div key={item.product.id}>
                   <CartItemCard
