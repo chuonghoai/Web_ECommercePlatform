@@ -26,6 +26,7 @@ export const useProfileController = () => {
     }, [searchParams]);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
     useEffect(() => {
         loadProfile();
@@ -52,7 +53,6 @@ export const useProfileController = () => {
 
     const handleCloseModal = () => {
         setIsEditModalOpen(false);
-        // Có thể reset lại formData về giá trị user hiện tại nếu đóng không lưu
         if (user) {
             setFormData({
                 fullName: user.fullName,
@@ -61,6 +61,14 @@ export const useProfileController = () => {
                 dateOfBirth: formData.dateOfBirth,
             });
         }
+    };
+
+    const handleOpenChangePassword = () => {
+        setIsChangePasswordOpen(true);
+    };
+
+    const handleCloseChangePassword = () => {
+        setIsChangePasswordOpen(false);
     };
 
     const handleWishlistPageChange = (newPage: number) => {
@@ -80,10 +88,13 @@ export const useProfileController = () => {
         wishlistPage: currentUrlState.page,
         isLoadingWishlist,
         isEditModalOpen,
+        isChangePasswordOpen,
         handleFieldChange,
         handleSaveProfile,
         handleEditClick,
         handleCloseModal,
+        handleOpenChangePassword,
+        handleCloseChangePassword,
         handleWishlistPageChange,
     };
 };

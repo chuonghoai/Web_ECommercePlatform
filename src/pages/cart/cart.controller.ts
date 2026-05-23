@@ -28,6 +28,9 @@ export const useCartController = () => {
   const finalTotal = totalPrice;
   const totalMakers = new Set(items.map(item => item.product.id)).size;
 
+  const handleCheckout = () => {
+    navigate("/order/checkout")
+  };
 
   return {
     items,

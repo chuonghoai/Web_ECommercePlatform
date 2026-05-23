@@ -7,6 +7,7 @@ import { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
 import { AuthMockRepository } from "../repositories/authMock.repository";
+import { EUserRole, type UserRole } from "../../user/models/user.model";
 
 export class AuthService {
     private readonly authRepository: AuthRepository;

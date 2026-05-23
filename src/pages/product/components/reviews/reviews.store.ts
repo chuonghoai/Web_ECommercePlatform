@@ -1,8 +1,6 @@
 import { useState } from "react";
 import type { Review } from "../../../../features/review/models/review.model";
-import { ReviewService } from "../../../../features/review/services/review.service";
-
-const reviewService = new ReviewService();
+import { reviewService } from "../../../../features/review/services/review.service";
 
 export const useReviewStore = () => {
     const [reviewData, setReviewData] = useState<Review | null>(null);
