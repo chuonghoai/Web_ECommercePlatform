@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 
 interface Props {
   finalTotal: number;
+  onCheckout: () => void;
   formatMoney: (val: number) => string;
 }
 
-export const CartSummary: React.FC<Props> = ({ finalTotal, formatMoney }) => {
+export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMoney }) => {
   return (
     <div className="sticky top-8 bg-white border border-[#E7E5E4] rounded-lg p-6 flex flex-col font-sans">
       <h2 className="text-xl font-serif text-gray-900 mb-6 pb-4 border-b border-[#E7E5E4]">Tóm tắt đơn hàng</h2>
@@ -23,6 +24,7 @@ export const CartSummary: React.FC<Props> = ({ finalTotal, formatMoney }) => {
       {/* Action Buttons */}
       <div className="space-y-3">
         <button 
+          onClick={onCheckout}
           className="w-full py-3.5 bg-market-primary hover:bg-market-primary/90 active:bg-market-primary/80 text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-market-primary/20"
         >
           Tiến hành thanh toán

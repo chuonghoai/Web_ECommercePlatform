@@ -42,6 +42,7 @@ export const useCartController = () => {
     setCoupon,
     updateQuantity,
     removeItem,
+    handleCheckout,
     formatMoney: formatVND
   };
 };
