@@ -4,6 +4,7 @@ import type { LoginRequest } from "../../../features/auth/dto/login.type";
 import { useToast } from "../../../components/toast/toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import { getDefaultRouteByRole } from "../../../utils/route.util";
 
 export const useLoginController = () => {
   const { toast } = useToast();
@@ -21,7 +22,7 @@ export const useLoginController = () => {
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   useEffect(() => {
     const reason = searchParams.get("reason");
 
@@ -42,7 +43,8 @@ export const useLoginController = () => {
       const result = await authService.login(data);
       if (result.success) {
         toast("Đăng nhập thành công!", "success");
-        navigate(result.data?.route || "/");
+        const nextRoute = getDefaultRouteByRole(result.data.user.role);
+        navigate(nextRoute);
       }
     } catch (error: any) {
       const apiErrorMsg = error.response?.data?.error?.message

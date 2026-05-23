@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { OtpPurpose } from "../../../features/auth/enums/otpPurpose.enum";
 import { useToast } from "../../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
+import { getDefaultRouteByRole } from "../../../utils/route.util";
 
 export const useRegisterController = () => {
     const { toast } = useToast();
@@ -84,7 +85,8 @@ export const useRegisterController = () => {
 
             if (result.success) {
                 toast("Đăng ký thành công!", 'success');
-                navigate(result.data?.route || "/");
+                const nextRoute = getDefaultRouteByRole(result.data.user.role);
+                navigate(nextRoute);
             } else {
                 toast(result.message, 'error');
             }
