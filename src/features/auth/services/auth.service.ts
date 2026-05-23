@@ -21,7 +21,6 @@ export class AuthService {
 
         if (result.success && result.data) {
             userStorageService.setUser(result.data.user);
-            result.data.route = this.getAdminRoute(result.data.user.role);
         }
 
         return result;
@@ -35,7 +34,6 @@ export class AuthService {
         const result = await this.authRepository.register(data);
         if (result.success && result.data) {
             userStorageService.setUser(result.data.user);
-            result.data.route = this.getAdminRoute(result.data.user.role);
         }
         return result;
     }
@@ -52,13 +50,6 @@ export class AuthService {
 
     async resetPassword(data: ResetPasswordRequest): Promise<ApiResponse<void>> {
         return this.authRepository.resetPassword(data);
-    }
-
-    getAdminRoute(role: UserRole): string {
-        if (role === EUserRole.ADMIN || role === EUserRole.STAFF) {
-            return "/admin";
-        }
-        return "/";
     }
 }
 

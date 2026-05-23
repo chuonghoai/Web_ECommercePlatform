@@ -17,38 +17,51 @@ import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
 import { AdminLayout } from "../admin/layout/AdminLayout";
 import { DashboardPage } from "../admin/pages/overview/Dashboard";
+import { CartProvider } from "../features/cart/contexts/CartContext";
+import { EUserRole } from "../features/user/models/user.model";
 
 function AppRoutes() {
     return (
         <BrowserRouter>
             <Routes>
                 {/* MAIN */}
-                <Route path="/" element={<MainLayout />}>
+                <Route path="/" element={
+                    <AuthGuard requireAuth={false} allowedRoles={[EUserRole.USER]}>
+                        <CartProvider>
+                            <MainLayout />
+                        </CartProvider>
+                    </AuthGuard>
+                }>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
                     {/* CART */}
                     <Route path="cart" element={
-                        <AuthGuard>
+                        <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
                             <CartPage />
                         </AuthGuard>
                     } />
 
                     {/* ORDER-CHECKOUT */}
                     <Route path="order/checkout" element={
-                        <AuthGuard>
+                        <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
                             <CheckoutPage />
                         </AuthGuard>
                     } />
 
                     {/* PROFILE */}
                     <Route path="profile" element={
-                        <AuthGuard>
+                        <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
                             <ProfilePage />
                         </AuthGuard>
                     } />
                 </Route>
 
-                <Route path="/admin" element={<AdminLayout />}>
+                {/* ADMIN & STAFF */}
+                <Route path="/admin" element={
+                    <AuthGuard requireAuth={true} allowedRoles={[EUserRole.ADMIN, EUserRole.STAFF]}>
+                        <AdminLayout />
+                    </AuthGuard>
+                }>
                     <Route index element={<Navigate to="/admin/overview" replace />} />
                     <Route path="overview" element={<DashboardPage />} />
                 </Route>

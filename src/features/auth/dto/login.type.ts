@@ -8,9 +8,4 @@ export interface LoginRequest {
 export interface LoginResponse {
     accessToken: string;
     user: User;
-
-    /**
-     * Biến route được xử lý cục bộ ở frontend, backend không đụng đến field này
-     */
-    route?: string;
 }
