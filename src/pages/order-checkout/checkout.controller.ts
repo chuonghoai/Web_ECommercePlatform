@@ -2,10 +2,12 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
 import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
 import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod.enum";
+import { useToast } from "../../components/toast/toast";
 
 export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
     const hasFetched = useRef(false);
+    const { toast } = useToast();
 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);

@@ -1,10 +1,11 @@
 import React from 'react';
+import { PaymentMethod } from '../../../features/order/checkout/enums/paymentMethod.enum';
 
 interface OrderSummaryProps {
     subTotal: number;
     shippingFee: number;
     totalAmount: number;
-    selectedPaymentMethod: string;
+    selectedPaymentMethod: PaymentMethod; // Đổi type sang enum
     onOpenPaymentModal: () => void;
     onOpenVoucherModal: () => void;
     onOrderSubmit: () => void;
@@ -56,11 +57,20 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     {/* Payment method button: open modal choosing payment method */}
                     <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                            <span className="material-symbols-outlined text-primary-container shrink-0">
-                                {selectedPaymentMethod === "COD" ? "local_shipping" : "account_balance"}
-                            </span>
-                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản ngân hàng"}>
-                                {selectedPaymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản ngân hàng"}
+                            {selectedPaymentMethod === PaymentMethod.COD ? (
+                                <span className="material-symbols-outlined text-primary-container shrink-0 text-xl">
+                                    local_shipping
+                                </span>
+                            ) : (
+                                <img
+                                    src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square-1024x1024.png"
+                                    alt="MoMo"
+                                    className="w-5 h-5 object-contain rounded-sm shrink-0"
+                                />
+                            )}
+
+                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === PaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}>
+                                {selectedPaymentMethod === PaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}
                             </span>
                         </div>
                         <button
@@ -72,7 +82,6 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                         </button>
                     </div>
 
-                    {/* Place order button */}
                     <div className="pt-2 space-y-3">
                         <button className="w-full btn-primary py-2 font-body font-semibold tracking-wide flex justify-center items-center gap-2" onClick={onOrderSubmit}>
                             <span className="material-symbols-outlined">check_circle</span>
