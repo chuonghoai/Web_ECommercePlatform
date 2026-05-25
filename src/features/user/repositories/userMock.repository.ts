@@ -4,6 +4,8 @@ import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
+import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
+import { apiClient } from "../../../core/api/apiClient";
 
 const mockWishlistItems = [
     {
@@ -208,5 +210,20 @@ export class UserMockRepository implements UserRepository {
                 },
             ],
         };
+    }
+
+    async getDistricts(): Promise<DistrictModel[]> {
+        const res: any = apiClient.get<DistrictModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/province");
+        return res.data;
+    }
+
+    async getProvinces(): Promise<ProvinceModel[]> {
+        const res: any = apiClient.get<ProvinceModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/district");
+        return res.data;
+    }
+
+    async getWards(): Promise<WardModel[]> {
+        const res: any = apiClient.get<WardModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/district");
+        return res.data;
     }
 }

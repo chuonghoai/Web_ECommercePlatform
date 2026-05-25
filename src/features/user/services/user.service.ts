@@ -6,6 +6,7 @@ import type { UserRepository } from "../repositories/user.repository";
 import { UserApiRepository } from "../repositories/userApi.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
 import { UserMockRepository } from "../repositories/userMock.repository";
+import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
 
 export class UserService {
     private readonly userRepository: UserRepository;
@@ -28,6 +29,18 @@ export class UserService {
 
     async getAddress(): Promise<ApiResponse<Address[]>> {
         return this.userRepository.getAddress();
+    }
+
+    async getProvinces(): Promise<ProvinceModel[]> {
+        return this.userRepository.getProvinces();
+    }
+
+    async getDistricts(): Promise<DistrictModel[]> {
+        return this.userRepository.getDistricts();
+    }
+
+    async getWards(): Promise<WardModel[]> {
+        return this.userRepository.getWards();
     }
 }
 
