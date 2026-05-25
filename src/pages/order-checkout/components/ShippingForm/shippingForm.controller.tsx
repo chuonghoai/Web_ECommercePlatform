@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Marker, useMapEvents, Tooltip } from 'react-leaflet';
+import { useState, useEffect } from 'react';
+import { Marker, Tooltip } from 'react-leaflet'; 
+// Đã xóa useMapEvents vì không cần bắt sự kiện click nữa
 
-// Hook quản lý State của Form
-export const useShippingDetailController = (initialLat: number, initialLng: number) => {
+export const useShippingController = (initialLat: number, initialLng: number) => {
     const [position, setPosition] = useState<[number, number]>([initialLat, initialLng]);
 
     useEffect(() => {
@@ -15,21 +15,12 @@ export const useShippingDetailController = (initialLat: number, initialLng: numb
     };
 };
 
-// Component xử lý sự kiện click trên bản đồ
+// Đã gỡ hàm setPosition khỏi props vì không còn cho phép đổi vị trí
 export const LocationSelector = ({
     position,
-    setPosition
 }: {
     position: [number, number];
-    setPosition: (pos: [number, number]) => void
 }) => {
-    useMapEvents({
-        click(e) {
-            // Khi click, set lại state tọa độ mới
-            setPosition([e.latlng.lat, e.latlng.lng]);
-        },
-    });
-
     return (
         <Marker position={position}>
             <Tooltip permanent direction="top" offset={[0, -40]}>

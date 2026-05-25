@@ -1,11 +1,11 @@
 import { useCheckoutController } from './checkout.controller';
-import { ShippingForm } from './components/ShippingDetailForm/ShippingForm';
 import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
 import { VoucherModal } from './components/Modal/VoucherModal';
 import { PaymentMethodModal } from './components/Modal/PaymentMethodModal';
 import { Navigate, useLocation } from 'react-router-dom';
 import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
+import { ShippingForm } from './components/ShippingForm/ShippingForm';
 
 function CheckoutPage() {
     const location = useLocation();
