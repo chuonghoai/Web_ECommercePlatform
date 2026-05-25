@@ -47,6 +47,16 @@ export class UserApiRepository implements UserRepository {
     }
 
     /**
+     * POST /users/me/address
+     * @body Address: Frontend không gửi field "id", backend tự sinh.
+     *       Omit là toán từ loại bỏ "id" khỏi Address    
+     * @returns Address: Có field "id" do backend vừa sinh
+     */
+    async addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        return apiClient.post<ApiResponse<Address>>("/users/me/address", data);
+    }
+
+    /**
      * Get open API province, district and ward
      */
     async getProvinces(): Promise<ProvinceModel[]> {

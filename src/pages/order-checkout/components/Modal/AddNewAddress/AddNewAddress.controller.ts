@@ -2,22 +2,19 @@ import { useState, useCallback, useEffect } from 'react';
 import { userService } from '../../../../../features/user/services/user.service';
 import type { ProvinceModel, DistrictModel, WardModel } from '../../../../../features/user/models/address.model';
 
-export const useAddNewAddressController = (isOpen: boolean) => {
+export const useAddNewAddressController = (isOpen: boolean, onSuccess?: () => void) => {
     const [formData, setFormData] = useState({
-        fullName: '',
-        phoneNumber: '',
-        provinceCode: 0,
-        provinceName: '',
-        districtCode: 0,
-        districtName: '',
-        wardCode: 0,
-        wardName: '',
+        fullName: '', phoneNumber: '',
+        provinceCode: 0, provinceName: '',
+        districtCode: 0, districtName: '',
+        wardCode: 0, wardName: '',
         street: ''
     });
 
     const [location, setLocation] = useState<[number, number] | null>(null);
     const [isVerifying, setIsVerifying] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [provinces, setProvinces] = useState<ProvinceModel[]>([]);
     const [districts, setDistricts] = useState<DistrictModel[]>([]);
@@ -26,15 +23,8 @@ export const useAddNewAddressController = (isOpen: boolean) => {
     useEffect(() => {
         if (isOpen) {
             setFormData({
-                fullName: '',
-                phoneNumber: '',
-                provinceCode: 0,
-                provinceName: '',
-                districtCode: 0,
-                districtName: '',
-                wardCode: 0,
-                wardName: '',
-                street: ''
+                fullName: '', phoneNumber: '', provinceCode: 0, provinceName: '',
+                districtCode: 0, districtName: '', wardCode: 0, wardName: '', street: ''
             });
             setLocation(null);
             setIsVerified(false);
@@ -44,17 +34,13 @@ export const useAddNewAddressController = (isOpen: boolean) => {
                 .then(data => setProvinces(data))
                 .catch(err => console.error("Lỗi khi tải tỉnh thành:", err));
         } else {
-            setProvinces([]);
-            setDistricts([]);
-            setWards([]);
+            setProvinces([]); setDistricts([]); setWards([]);
         }
     }, [isOpen]);
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-        if (['street'].includes(field)) {
-            setIsVerified(false);
-        }
+        if (['street'].includes(field)) setIsVerified(false);
     };
 
     const handleSelectAddressField = (fieldCode: string, fieldName: string, id: number, name: string) => {
@@ -63,18 +49,13 @@ export const useAddNewAddressController = (isOpen: boolean) => {
 
         if (fieldCode === 'provinceCode') {
             setFormData(prev => ({ ...prev, districtCode: 0, districtName: '', wardCode: 0, wardName: '' }));
-            setDistricts([]);
-            setWards([]);
-            userService.getDistricts(id)
-                .then(data => setDistricts(data))
-                .catch(err => console.error(err));
+            setDistricts([]); setWards([]);
+            userService.getDistricts(id).then(data => setDistricts(data));
         }
         else if (fieldCode === 'districtCode') {
             setFormData(prev => ({ ...prev, wardCode: 0, wardName: '' }));
             setWards([]);
-            userService.getWards(id)
-                .then(data => setWards(data))
-                .catch(err => console.error(err));
+            userService.getWards(id).then(data => setWards(data));
         }
     };
 
@@ -86,48 +67,48 @@ export const useAddNewAddressController = (isOpen: boolean) => {
         }
 
         setIsVerifying(true);
-
         setTimeout(() => {
-            const mockGeocodedLat = 10.7769;
-            const mockGeocodedLng = 106.7009;
-
-            setLocation([mockGeocodedLat, mockGeocodedLng]);
+            setLocation([10.7769, 106.7009]);
             setIsVerified(true);
             setIsVerifying(false);
         }, 1200);
     };
 
     const handleMarkerDragEnd = useCallback((e: any) => {
-        const marker = e.target;
-        const position = marker.getLatLng();
-        setLocation([position.lat, position.lng]);
+        setLocation([e.target.getLatLng().lat, e.target.getLatLng().lng]);
     }, []);
 
-    const handleSaveAddress = () => {
-        if (!isVerified || !location) return null;
+    const handleSaveAddress = async () => {
+        if (!isVerified || !location) return;
 
-        const fullAddress = `${formData.street}, ${formData.wardName}, ${formData.districtName}, ${formData.provinceName}`;
+        setIsSaving(true);
+        try {
+            const payload = {
+                ...formData,
+                fullAddress: `${formData.street}, ${formData.wardName}, ${formData.districtName}, ${formData.provinceName}`,
+                latitude: location[0],
+                longitude: location[1]
+            };
 
-        return {
-            ...formData,
-            fullAddress,
-            latitude: location[0],
-            longitude: location[1]
-        };
+            const res = await userService.addAddress(payload);
+            if (res.success) {
+                if (onSuccess) onSuccess();
+            } else {
+                alert(res.message || "Có lỗi xảy ra khi lưu địa chỉ");
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
+            alert("Có lỗi xảy ra khi lưu địa chỉ");
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return {
-        formData,
-        location,
-        isVerifying,
-        isVerified,
-        provinces,
-        districts,
-        wards,
-        handleInputChange,
-        handleSelectAddressField,
-        handleVerifyMap,
-        handleMarkerDragEnd,
-        handleSaveAddress
+        formData, location,
+        isVerifying, isVerified, isSaving,
+        provinces, districts, wards,
+        handleInputChange, handleSelectAddressField,
+        handleVerifyMap, handleMarkerDragEnd, handleSaveAddress
     };
 };

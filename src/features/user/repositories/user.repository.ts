@@ -11,6 +11,7 @@ export interface UserRepository {
     getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>>;
 
     getAddress(): Promise<ApiResponse<Address[]>>;
+    addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>>;
 
     getProvinces(): Promise<ProvinceModel[]>;
     getDistricts(provinceId: number): Promise<DistrictModel[]>;

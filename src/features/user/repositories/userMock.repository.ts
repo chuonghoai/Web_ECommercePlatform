@@ -131,6 +131,39 @@ const mockWishlistItems = [
     },
 ];
 
+const mockAddressDB = new Map<number, Address>([
+    [1, {
+        id: 1,
+        fullName: "manggia",
+        phoneNumber: "0123456789",
+        provinceCode: 1,
+        provinceName: "TPHCM",
+        districtCode: 1,
+        districtName: "Quận 1",
+        wardCode: 1,
+        wardName: "Phường Bến Thành",
+        street: "Số 227 Nguyễn Văn Cừ",
+        latitude: 10.88206144628933,
+        longitude: 106.76458444116837,
+        fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM"
+    }],
+    [2, {
+        id: 2,
+        fullName: "honghac",
+        phoneNumber: "654321",
+        provinceCode: 1,
+        provinceName: "TPHCM",
+        districtCode: 2,
+        districtName: "Quận 2",
+        wardCode: 1,
+        wardName: "Phường Nguyễn Huệ",
+        street: "Số 335 Nguyễn Trãi",
+        latitude: 10.8231,
+        longitude: 106.6297,
+        fullAddress: "Số 335 Nguyễn Trãi, Phường Nguyễn Huệ, Quận 2, TP.HCM"
+    }]
+]);
+
 export class UserMockRepository implements UserRepository {
     async getProfile(): Promise<ApiResponse<UserProfileResponse>> {
         return {
@@ -178,38 +211,19 @@ export class UserMockRepository implements UserRepository {
         return {
             success: true,
             message: "Lấy địa chỉ thành công",
-            data: [
-                {
-                    id: 1,
-                    fullName: "manggia",
-                    phoneNumber: "0123456789",
-                    provinceCode: 1,
-                    provinceName: "TPHCM",
-                    districtCode: 1,
-                    districtName: "Quận 1",
-                    wardCode: 1,
-                    wardName: "Phường Bến Thành",
-                    street: "Số 227 Nguyễn Văn Cừ",
-                    latitude: 10.88206144628933,
-                    longitude: 106.76458444116837,
-                    fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM"
-                },
-                {
-                    id: 2,
-                    fullName: "honghac",
-                    phoneNumber: "654321",
-                    provinceCode: 1,
-                    provinceName: "TPHCM",
-                    districtCode: 2,
-                    districtName: "Quận 2",
-                    wardCode: 1,
-                    wardName: "Phường Nguyễn Huệ",
-                    street: "Số 335 Nguyễn Trãi",
-                    latitude: 10.8231,
-                    longitude: 106.6297,
-                    fullAddress: "Số 335 Nguyễn Trãi, Phường Nguyễn Huệ, Quận 2, TP.HCM"
-                },
-            ],
+            data: Array.from(mockAddressDB.values()),
+        };
+    }
+
+    async addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        const currentIds = Array.from(mockAddressDB.keys());
+        const newId = currentIds.length > 0 ? Math.max(...currentIds) + 1 : 1;
+        const newAddress: Address = { ...data, id: newId };
+        mockAddressDB.set(newId, newAddress);
+        return {
+            success: true,
+            message: "Thêm địa chỉ mới thành công",
+            data: newAddress,
         };
     }
 

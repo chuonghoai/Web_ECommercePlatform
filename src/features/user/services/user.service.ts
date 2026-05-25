@@ -31,6 +31,10 @@ export class UserService {
         return this.userRepository.getAddress();
     }
 
+    async addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        return this.userRepository.addAddress(data);
+    }
+
     async getProvinces(): Promise<ProvinceModel[]> {
         return this.userRepository.getProvinces();
     }
