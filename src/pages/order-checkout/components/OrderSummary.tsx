@@ -56,7 +56,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     {/* Payment method button: open modal choosing payment method */}
                     <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                            <span className="material-symbols-outlined text-primary-container flex-shrink-0">
+                            <span className="material-symbols-outlined text-primary-container shrink-0">
                                 {selectedPaymentMethod === "COD" ? "local_shipping" : "account_balance"}
                             </span>
                             <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản ngân hàng"}>
@@ -65,7 +65,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                         </div>
                         <button
                             type="button"
-                            className="font-caption text-primary-container hover:underline flex-shrink-0 ml-1 whitespace-nowrap"
+                            className="font-caption text-primary-container hover:underline shrink-0 ml-1 whitespace-nowrap"
                             onClick={onOpenPaymentModal}
                         >
                             Thay đổi

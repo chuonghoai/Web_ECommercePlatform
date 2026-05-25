@@ -65,7 +65,7 @@ function CheckoutPage() {
                 </div>
             </header>
 
-            <main className="flex-grow py-8 md:py-12 px-6">
+            <main className="grow py-8 md:py-12 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col lg:flex-row gap-8">
 

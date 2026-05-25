@@ -32,12 +32,12 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                 }`}
                         >
                             {/* Product image */}
-                            <div className={`w-full sm:w-32 h-32 flex-shrink-0 bg-surface-container rounded-lg overflow-hidden ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
+                            <div className={`w-full sm:w-32 h-32 shrink-0 bg-surface-container rounded-lg overflow-hidden ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
                                 <img alt={item.product.name} className="w-full h-full object-cover" src={item.product.imageUrl} />
                             </div>
 
                             {/* Product details */}
-                            <div className="flex-grow flex flex-col justify-between">
+                            <div className="grow flex flex-col justify-between">
                                 <div>
                                     <h3 className={`font-subhead text-lg text-text-ink ${isInvalid ? 'line-through text-text-muted font-normal' : ''}`}>
                                         {item.product.name}
@@ -92,7 +92,7 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                             </div>
 
                             {/* Button remove items */}
-                            <div className="sm:flex-shrink-0 flex items-start justify-end pt-2 sm:pt-0">
+                            <div className="sm:shrink-0 flex items-start justify-end pt-2 sm:pt-0">
                                 <button
                                     type="button"
                                     aria-label="Remove item"

@@ -38,7 +38,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <div className="w-1.5 h-1.5 rounded-full bg-background-page -ml-1"></div>
                                     <div className="w-1.5 h-1.5 rounded-full bg-background-page -ml-1"></div>
                                 </div>
-                                <div className="pl-4 flex-grow">
+                                <div className="pl-4 grow">
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className="font-body font-bold text-primary-container">NEST200</span>
                                         {selectedVoucher === 'NEST200' && <span className="bg-tertiary-container text-on-tertiary-container font-caption text-[10px] px-1 py-0.5 rounded">Đã chọn</span>}
@@ -46,7 +46,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <p className="font-body-sm text-text-ink">Giảm 200K cho đơn từ 2M</p>
                                     <p className="font-caption text-text-muted mt-1">HSD: 30/12/2024</p>
                                 </div>
-                                <div className="flex-shrink-0 pt-1">
+                                <div className="shrink-0 pt-1">
                                     <input type="radio" name="voucher" checked={selectedVoucher === 'NEST200'} onChange={() => onSelectVoucher('NEST200')} className="w-4 h-4 text-primary-container" />
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <div className="w-1.5 h-1.5 rounded-full bg-background-page -ml-1"></div>
                                     <div className="w-1.5 h-1.5 rounded-full bg-background-page -ml-1"></div>
                                 </div>
-                                <div className="pl-4 flex-grow">
+                                <div className="pl-4 grow">
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className="font-body font-bold text-text-ink">FREESHIP</span>
                                         {selectedVoucher === 'FREESHIP' && <span className="bg-tertiary-container text-on-tertiary-container font-caption text-[10px] px-1 py-0.5 rounded">Đã chọn</span>}
@@ -66,7 +66,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <p className="font-body-sm text-text-ink">Miễn phí vận chuyển tối đa 30K</p>
                                     <p className="font-caption text-text-muted mt-1">HSD: 31/12/2024</p>
                                 </div>
-                                <div className="flex-shrink-0 pt-1">
+                                <div className="shrink-0 pt-1">
                                     <input type="radio" name="voucher" checked={selectedVoucher === 'FREESHIP'} onChange={() => onSelectVoucher('FREESHIP')} className="w-4 h-4 text-primary-container" />
                                 </div>
                             </div>
