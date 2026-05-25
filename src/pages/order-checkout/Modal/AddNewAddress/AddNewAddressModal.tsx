@@ -3,9 +3,9 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useAddNewAddressController } from './AddNewAddress.controller';
-import { DefaultIcon } from '../../ShippingForm/shippingForm.type';
 import { DraggableMarker } from './DraggableMarker';
 import { SearchableSelect } from './SearchableSelect';
+import { DefaultIcon } from '../../components/ShippingForm/shippingForm.type';
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
@@ -13,12 +13,13 @@ interface AddNewAddressModalProps {
     isOpen: boolean;
     onClose: () => void;
     onBack: () => void;
-    onSuccess?: () => void;
+    onSuccess?: (newAddress: any) => void;
 }
 
 export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, onClose, onBack, onSuccess }) => {
-    const handleSuccessCb = () => {
-        if (onSuccess) onSuccess();
+
+    const handleSuccessCb = (newAddress: any) => {
+        if (onSuccess) onSuccess(newAddress);
         onClose();
     }
 

@@ -1,10 +1,10 @@
 import { useCheckoutController } from './checkout.controller';
 import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
-import { VoucherModal } from './components/Modal/VoucherModal';
-import { PaymentMethodModal } from './components/Modal/PaymentMethodModal';
-import { AddressModal } from './components/Modal/AddressModal';
-import { AddNewAddressModal } from './components/Modal/AddNewAddress/AddNewAddressModal';
+import { VoucherModal } from './Modal/VoucherModal';
+import { PaymentMethodModal } from './Modal/PaymentMethodModal';
+import { AddressModal } from './Modal/AddressModal';
+import { AddNewAddressModal } from './Modal/AddNewAddress/AddNewAddressModal';
 import { Navigate, useLocation } from 'react-router-dom';
 import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
 import { ShippingForm } from './components/ShippingForm/ShippingForm';
@@ -146,6 +146,10 @@ function CheckoutPage() {
                 onBack={() => {
                     setIsAddNewAddressModalOpen(false);
                     setIsAddressModalOpen(true);
+                }}
+                onSuccess={(newAddress) => {
+                    handleSelectAddress(newAddress);
+                    setIsAddNewAddressModalOpen(false);
                 }}
             />
         </div>

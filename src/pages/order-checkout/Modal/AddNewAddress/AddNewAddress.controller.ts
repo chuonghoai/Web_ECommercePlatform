@@ -1,8 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-import { userService } from '../../../../../features/user/services/user.service';
-import type { ProvinceModel, DistrictModel, WardModel } from '../../../../../features/user/models/address.model';
+import { userService } from '../../../../features/user/services/user.service';
+import type { ProvinceModel, DistrictModel, WardModel } from '../../../../features/user/models/address.model';
+import { useToast } from '../../../../components/toast/toast';
 
-export const useAddNewAddressController = (isOpen: boolean, onSuccess?: () => void) => {
+export const useAddNewAddressController = (isOpen: boolean, onSuccess?: (newAddress: any) => void) => {
+    const { toast } = useToast();
+
     const [formData, setFormData] = useState({
         fullName: '', phoneNumber: '',
         provinceCode: 0, provinceName: '',
@@ -60,9 +63,9 @@ export const useAddNewAddressController = (isOpen: boolean, onSuccess?: () => vo
     };
 
     const handleVerifyMap = () => {
-        const { provinceName, districtName, wardName, street } = formData;
-        if (!provinceName || !districtName || !wardName || !street) {
-            alert("Vui lòng điền đầy đủ thông tin địa chỉ trước khi xác minh!");
+        const { fullName, phoneNumber, provinceName, districtName, wardName, street } = formData;
+        if (!fullName || !phoneNumber || !provinceName || !districtName || !wardName || !street) {
+            toast("Vui lòng điền đầy đủ thông tin địa chỉ trước khi xác minh!", 'warning');
             return;
         }
 
@@ -91,14 +94,14 @@ export const useAddNewAddressController = (isOpen: boolean, onSuccess?: () => vo
             };
 
             const res = await userService.addAddress(payload);
-            if (res.success) {
-                if (onSuccess) onSuccess();
+            if (res.success && res.data) {
+                if (onSuccess) onSuccess(res.data);
             } else {
-                alert(res.message || "Có lỗi xảy ra khi lưu địa chỉ");
+                toast(res.message || "Có lỗi xảy ra khi lưu địa chỉ", 'error');
             }
         } catch (error) {
             console.error("Lỗi:", error);
-            alert("Có lỗi xảy ra khi lưu địa chỉ");
+            toast("Có lỗi xảy ra khi lưu địa chỉ", 'error');
         } finally {
             setIsSaving(false);
         }

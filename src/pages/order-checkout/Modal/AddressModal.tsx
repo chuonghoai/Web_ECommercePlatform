@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import type { PrepareCheckoutModel } from '../../../../features/order/checkout/models/checkout.model';
-import { DefaultIcon } from '../ShippingForm/shippingForm.type';
-import { userService } from '../../../../features/user/services/user.service';
+import type { PrepareCheckoutModel } from '../../../features/order/checkout/models/checkout.model';
+import { userService } from '../../../features/user/services/user.service';
+import { DefaultIcon } from '../components/ShippingForm/shippingForm.type';
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
