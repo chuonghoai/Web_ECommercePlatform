@@ -4,16 +4,12 @@ import type { PrepareCheckoutModel } from '../../../features/order/checkout/mode
 interface OrderItemsListProps {
     items: PrepareCheckoutModel['items'];
     invalidItems: PrepareCheckoutModel['invalidItems'];
-    onIncrease: (productId: string) => void;
-    onDecrease: (productId: string) => void;
     onRemove: (productId: string) => void;
 }
 
 export const OrderItemsList: React.FC<OrderItemsListProps> = ({
     items,
     invalidItems,
-    onIncrease,
-    onDecrease,
     onRemove
 }) => {
     return (
@@ -50,27 +46,7 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                     ) : null}
                                 </div>
 
-                                <div className="flex items-center justify-between mt-2 sm:mt-0">
-                                    <div className={`flex items-center border border-border-medium rounded bg-surface ${isInvalid ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                        <button
-                                            aria-label="Decrease quantity"
-                                            disabled={isInvalid}
-                                            className={`px-2 py-1 transition-colors ${isInvalid ? 'text-text-muted' : 'text-text-muted hover:text-primary'}`}
-                                            onClick={() => onDecrease(item.product.id)}
-                                        >
-                                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>remove</span>
-                                        </button>
-                                        <span className="font-body-sm px-2 text-text-ink">{item.quantity}</span>
-                                        <button
-                                            aria-label="Increase quantity"
-                                            disabled={isInvalid}
-                                            className={`px-2 py-1 transition-colors ${isInvalid ? 'text-text-muted' : 'text-text-muted hover:text-primary'}`}
-                                            onClick={() => onIncrease(item.product.id)}
-                                        >
-                                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
-                                        </button>
-                                    </div>
-
+                                <div className="flex items-center justify-end mt-2 sm:mt-0">
                                     <div className="text-right">
                                         {isInvalid ? (
                                             <p className="font-body font-medium text-error">{invalidInfo.reason}</p>
@@ -79,7 +55,9 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                                 {item.product.originalPrice > item.product.price && (
                                                     <p className="font-caption text-text-muted line-through">{item.product.originalPrice.toLocaleString('vi-VN')}₫</p>
                                                 )}
-                                                <p className="font-body font-semibold text-text-ink">{item.product.price.toLocaleString('vi-VN')}₫</p>
+                                                <p className="font-body font-semibold text-text-ink">
+                                                    {item.product.price.toLocaleString('vi-VN')}₫ <span className="text-text-muted font-normal">x {item.quantity}</span>
+                                                </p>
                                                 <p className="font-body-sm font-semibold text-primary-container mt-1">Thành tiền: {(item.product.price * item.quantity).toLocaleString('vi-VN')}₫</p>
                                             </>
                                         )}

@@ -28,6 +28,13 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         }
     }, [store.fetchPrepareOrder, initialRequest]);
 
+    // ReInit data
+    const handleRetry = useCallback(() => {
+        if (initialRequest && initialRequest.length > 0) {
+            store.fetchPrepareOrder(initialRequest);
+        }
+    }, [initialRequest, store]);
+
     // Open edit address modal and set new address
     const handleSelectAddress = (address: any) => {
         if (store.data) {
@@ -35,42 +42,6 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         }
         setIsAddressModalOpen(false);
     };
-
-    // Increase item quantity
-    const handleIncreaseQuantity = useCallback((productId: string) => {
-        if (!store.data) return;
-        const updatedItems = store.data.items.map(item => {
-            if (item.product.id === productId) {
-                const newQty = item.quantity + 1;
-                return {
-                    ...item,
-                    quantity: newQty,
-                    amount: newQty * item.product.price
-                };
-            }
-            return item;
-        });
-
-        recalculateTotals(updatedItems);
-    }, [store]);
-
-    // Decrease item quantity
-    const handleDecreaseQuantity = useCallback((productId: string) => {
-        if (!store.data) return;
-        const updatedItems = store.data.items.map(item => {
-            if (item.product.id === productId && item.quantity > 1) {
-                const newQty = item.quantity - 1;
-                return {
-                    ...item,
-                    quantity: newQty,
-                    amount: newQty * item.product.price
-                };
-            }
-            return item;
-        });
-
-        recalculateTotals(updatedItems);
-    }, [store]);
 
     // Remove item
     const handleRemoveItem = useCallback((productId: string) => {
@@ -94,6 +65,11 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // Submit order
     const handleOrderSubmit = useCallback(async () => {
         if (!store.data) return;
+        if (store.data.invalidItems && store.data.invalidItems.length > 0) {
+            toast("Có sản phẩm không hợp lệ trong đơn hàng, vui lòng kiểm tra lại", "warning");
+            return;
+        }
+
         if (!store.data.address) {
             toast("Vui lòng chọn địa chỉ giao hàng", "warning");
             return;
@@ -147,10 +123,8 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         isAddNewAddressModalOpen,
         setIsAddNewAddressModalOpen,
 
-        handleIncreaseQuantity,
-        handleDecreaseQuantity,
         handleRemoveItem,
-
+        handleRetry,
         handleOrderSubmit
     };
 };
