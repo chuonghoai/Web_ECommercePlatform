@@ -3,6 +3,7 @@ import type { UpdateProfileRequest } from "../dto/updateProfile.type";
 import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
+import type { Address } from "../../order/checkout/models/checkout.model";
 
 const mockWishlistItems = [
     {
@@ -167,6 +168,45 @@ export class UserMockRepository implements UserRepository {
                 items
             },
             pagination: { page: page, pageSize: pageSize, totalItems: total, totalPages: totalPages },
+        };
+    }
+
+    async getAddress(): Promise<ApiResponse<Address[]>> {
+        return {
+            success: true,
+            message: "Lấy địa chỉ thành công",
+            data: [
+                {
+                    id: 1,
+                    fullName: "manggia",
+                    phoneNumber: "0123456789",
+                    provinceCode: "1",
+                    provinceName: "TPHCM",
+                    districtCode: "1",
+                    districtName: "Quận 1",
+                    wardCode: "1",
+                    wardName: "Phường Bến Thành",
+                    street: "Số 227 Nguyễn Văn Cừ",
+                    latitude: 10.8231,
+                    longitude: 106.6297,
+                    fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM"
+                },
+                {
+                    id: 2,
+                    fullName: "honghac",
+                    phoneNumber: "654321",
+                    provinceCode: "1",
+                    provinceName: "TPHCM",
+                    districtCode: "2",
+                    districtName: "Quận 2",
+                    wardCode: "1",
+                    wardName: "Phường Nguyễn Huệ",
+                    street: "Số 335 Nguyễn Trãi",
+                    latitude: 10.8231,
+                    longitude: 106.6297,
+                    fullAddress: "Số 335 Nguyễn Trãi, Phường Nguyễn Huệ, Quận 2, TP.HCM"
+                },
+            ],
         };
     }
 }

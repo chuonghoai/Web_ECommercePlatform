@@ -4,6 +4,7 @@ import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "../repositories/user.repository";
 import { UserApiRepository } from "../repositories/userApi.repository";
+import type { Address } from "../../order/checkout/models/checkout.model";
 
 export class UserService {
     private readonly userRepository: UserRepository;
@@ -20,8 +21,11 @@ export class UserService {
         return this.userRepository.updateProfile(data);
     }
 
-
     async getWishlist(page: number, pageSize: number): Promise<ApiResponse<WishlistResponse>> {
         return this.userRepository.getWishlist(page, pageSize);
+    }
+
+    async getAddress(): Promise<ApiResponse<Address[]>> {
+        return this.userRepository.getAddress();
     }
 }

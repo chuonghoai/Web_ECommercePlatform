@@ -4,6 +4,7 @@ import type { UpdateProfileRequest } from "../dto/updateProfile.type";
 import type { WishlistResponse } from "../models/wishlist.model";
 import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
+import type { Address } from "../../order/checkout/models/checkout.model";
 
 export class UserApiRepository implements UserRepository {
     /**
@@ -33,5 +34,13 @@ export class UserApiRepository implements UserRepository {
         return apiClient.get<ApiResponse<WishlistResponse>>("/users/me/wishlist", {
             params: { page, pageSize },
         });
+    }
+
+    /**
+     * GET /users/me/address
+     * @returns Address
+     */
+    async getAddress(): Promise<ApiResponse<Address[]>> {
+        return apiClient.get<ApiResponse<Address[]>>("/users/me/address");
     }
 }

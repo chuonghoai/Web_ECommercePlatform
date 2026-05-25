@@ -20,7 +20,7 @@ type CheckoutItem = {
  * Địa chỉ mặc định của người dùng
  * Nếu user chưa có địa chỉ, trả về null
  */
-type Address = {
+export type Address = {
     id: number;
 
     fullName: string;
