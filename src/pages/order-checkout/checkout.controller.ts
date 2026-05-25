@@ -5,12 +5,16 @@ import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod
 import { useToast } from "../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import type { CheckoutRequestDto } from "../../features/order/checkout/dto/checkoutRequest.dto";
+import { useCart } from "../../features/cart/contexts/CartContext";
+import { cartService } from "../../features/cart/services/cart.service";
 
 export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
     const hasFetched = useRef(false);
     const { toast } = useToast();
     const navigate = useNavigate();
+    const { loadCart } = useCart();
+
 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
@@ -89,6 +93,9 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         const result = await store.submitCheckout(payload);
 
         if (result) {
+            await loadCart();
+            await cartService.syncCartCount();
+
             if (result.paymentRequired && result.payUrl) {
                 window.location.href = result.payUrl;
             } else {
@@ -97,7 +104,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         } else if (store.error) {
             toast(store.error || "Có lỗi xảy ra, vui lòng thử lại", "error");
         }
-    }, [store, selectedPaymentMethod, navigate, toast]);
+    }, [store, selectedPaymentMethod, navigate, toast, loadCart]);
 
     return {
         data: store.data,
