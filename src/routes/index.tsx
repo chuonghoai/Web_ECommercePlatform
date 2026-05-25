@@ -26,14 +26,13 @@ function AppRoutes() {
             <Routes>
                 {/* MAIN */}
                 <Route path="/" element={
-                    <AuthGuard requireAuth={false} allowedRoles={[EUserRole.USER]}>
-                        <CartProvider>
-                            <MainLayout />
-                        </CartProvider>
-                    </AuthGuard>
+                    <CartProvider>
+                        <MainLayout />
+                    </CartProvider>
                 }>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
+
                     {/* CART */}
                     <Route path="cart" element={
                         <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
