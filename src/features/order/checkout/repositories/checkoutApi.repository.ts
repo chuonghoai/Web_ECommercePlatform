@@ -25,6 +25,9 @@ export class CheckoutApiRepository implements CheckoutRepository {
      *      => paymentRequired = false, orderId = id đơn hàng vừa tạo, payUrl = null
      *  - Nếu CheckoutRequestDto.paymentMethod là MOMO 
      *      => paymentRequired = true, orderId = id đơn hàng vừa tạo, payUrl = url để redirect user thanh toán
+     * 
+     *  - Trong backend, nếu thanh toán thành công, cần trừ đi các sản phẩm trong giỏ hàng nếu có 
+     *    (để handle trường hợp user thanh toán thành công nhưng user chưa xóa sản phẩm trong giỏ hàng)
      */
     async checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
         return apiClient.post<ApiResponse<CheckoutResponseDto>>("/orders/checkout", request);
