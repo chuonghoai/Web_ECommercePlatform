@@ -54,7 +54,7 @@ function CheckoutPage() {
     return (
         <div className="font-body text-body min-h-screen flex flex-col">
             <header className="w-full bg-background dark:bg-surface border-b border-subtle dark:border-outline-variant py-4 px-6">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                <div className="max-w-full mx-auto flex justify-between items-center">
                     <div className="font-display text-2xl md:text-3xl text-primary font-bold tracking-tight">
                         Artisan Market
                     </div>
@@ -66,7 +66,7 @@ function CheckoutPage() {
             </header>
 
             <main className="grow py-8 md:py-12 px-6">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-full mx-auto">
                     <div className="flex flex-col lg:flex-row gap-8">
 
                         <div className="w-full lg:w-2/3 space-y-8">

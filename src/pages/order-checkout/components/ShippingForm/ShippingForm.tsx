@@ -10,8 +10,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 export const ShippingForm: React.FC<ShippingFormProps> = ({ address }) => {
     const { position } = useShippingController(address.latitude, address.longitude);
 
-    // Class dùng chung cho các ô input bị disable
-    const disabledInputClass = "input-field w-full px-3 py-2 bg-surface-container-high text-text-muted border-dashed border-border-medium cursor-not-allowed opacity-75";
+    const disabledInputClass = "input-field w-full px-3 py-2 text-text-muted border-dashed border-border-medium cursor-not-allowed";
 
     return (
         <section className="w-full">
