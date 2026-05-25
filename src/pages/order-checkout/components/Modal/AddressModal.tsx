@@ -15,13 +15,15 @@ interface AddressModalProps {
     onClose: () => void;
     selectedAddressId?: number;
     onSelectAddress: (address: Address) => void;
+    onOpenAddNewAddress?: () => void;
 }
 
 export const AddressModal: React.FC<AddressModalProps> = ({
     isOpen,
     onClose,
     selectedAddressId,
-    onSelectAddress
+    onSelectAddress,
+    onOpenAddNewAddress
 }) => {
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [loading, setLoading] = useState(false);
@@ -123,8 +125,9 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                     <button
                         className="w-full sm:w-1/2 btn-secondary py-2.5 font-body flex items-center justify-center gap-2"
                         onClick={() => {
-                            // TODO
-                            console.log("Mở form thêm địa chỉ mới");
+                            if (onOpenAddNewAddress) {
+                                onOpenAddNewAddress();
+                            }
                         }}
                     >
                         <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add_location</span>

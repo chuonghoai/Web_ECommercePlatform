@@ -12,6 +12,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
     const [selectedVoucher, setSelectedVoucher] = useState("NEST200");
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+    const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] = useState(false);
 
     // Init data
     useEffect(() => {
@@ -108,6 +109,9 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         isAddressModalOpen,
         setIsAddressModalOpen,
         handleSelectAddress,
+
+        isAddNewAddressModalOpen,
+        setIsAddNewAddressModalOpen,
 
         handleIncreaseQuantity,
         handleDecreaseQuantity,
