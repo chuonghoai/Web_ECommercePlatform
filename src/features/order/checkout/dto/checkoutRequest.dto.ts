@@ -24,3 +24,15 @@ export interface CheckoutRequestDto {
 
     paymentMethod: PaymentMethod;
 }
+
+/**
+ * Response của API yêu cầu đặt đơn hàng
+ * Nếu paymentMethod === COD
+ *  => paymentRequired = false, payUrl = null
+ * Nếu paymentMethod === MOMO
+ *  => paymentRequired = true, payUrl = url để redirect user thanh toán
+ */
+export interface CheckoutResponseDto {
+    paymentRequired: boolean,
+    payUrl: string | null
+}
