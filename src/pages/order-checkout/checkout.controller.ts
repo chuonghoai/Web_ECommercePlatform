@@ -11,6 +11,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
     const [selectedVoucher, setSelectedVoucher] = useState("NEST200");
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
     // Init data
     useEffect(() => {
@@ -19,6 +20,14 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
             hasFetched.current = true;
         }
     }, [store.fetchPrepareOrder, initialRequest]);
+
+    // Open edit address modal and set new address
+    const handleSelectAddress = (address: any) => {
+        if (store.data) {
+            store.setData({ ...store.data, address });
+        }
+        setIsAddressModalOpen(false);
+    };
 
     // Increase item quantity
     const handleIncreaseQuantity = useCallback((productId: string) => {
@@ -85,17 +94,25 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         data: store.data,
         loading: store.loading,
         error: store.error,
+
         isVoucherModalOpen,
         setIsVoucherModalOpen,
+        selectedVoucher,
+        setSelectedVoucher,
+
         isPaymentModalOpen,
         setIsPaymentModalOpen,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
-        selectedVoucher,
-        setSelectedVoucher,
+
+        isAddressModalOpen,
+        setIsAddressModalOpen,
+        handleSelectAddress,
+
         handleIncreaseQuantity,
         handleDecreaseQuantity,
         handleRemoveItem,
+
         handleOrderSubmit
     };
 };

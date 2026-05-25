@@ -5,6 +5,7 @@ import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "../repositories/user.repository";
 import { UserApiRepository } from "../repositories/userApi.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
+import { UserMockRepository } from "../repositories/userMock.repository";
 
 export class UserService {
     private readonly userRepository: UserRepository;
@@ -29,3 +30,8 @@ export class UserService {
         return this.userRepository.getAddress();
     }
 }
+
+const useMock = true;
+export const userService = new UserService(
+    useMock ? new UserMockRepository() : undefined
+);

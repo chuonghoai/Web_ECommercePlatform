@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Marker, Tooltip } from 'react-leaflet'; 
-// Đã xóa useMapEvents vì không cần bắt sự kiện click nữa
+import { Marker, Tooltip, useMap } from 'react-leaflet';
 
 export const useShippingController = (initialLat: number, initialLng: number) => {
     const [position, setPosition] = useState<[number, number]>([initialLat, initialLng]);
@@ -15,12 +14,22 @@ export const useShippingController = (initialLat: number, initialLng: number) =>
     };
 };
 
-// Đã gỡ hàm setPosition khỏi props vì không còn cho phép đổi vị trí
 export const LocationSelector = ({
     position,
 }: {
     position: [number, number];
 }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (position) {
+            map.setView(position, map.getZoom(), {
+                animate: true,
+                duration: 0.5
+            });
+        }
+    }, [position, map]);
+
     return (
         <Marker position={position}>
             <Tooltip permanent direction="top" offset={[0, -40]}>

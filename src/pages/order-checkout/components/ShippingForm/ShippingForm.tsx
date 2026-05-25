@@ -7,7 +7,7 @@ import { LocationSelector, useShippingController } from './shippingForm.controll
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export const ShippingForm: React.FC<ShippingFormProps> = ({ address }) => {
+export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddressModal }) => {
     const { position } = useShippingController(address.latitude, address.longitude);
 
     const disabledInputClass = "input-field w-full px-3 py-2 text-text-muted border-dashed border-border-medium cursor-not-allowed";
@@ -19,6 +19,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ address }) => {
 
                 <button
                     type="button"
+                    onClick={onOpenAddressModal}
                     className="px-3 py-1.5 border border-border-medium rounded-lg font-body-sm text-primary hover:bg-surface-container-low transition-colors flex items-center gap-1"
                 >
                     <span className="material-symbols-outlined text-sm" style={{ fontSize: '18px' }}>edit</span>

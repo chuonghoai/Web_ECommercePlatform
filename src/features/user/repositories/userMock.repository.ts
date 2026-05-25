@@ -187,8 +187,8 @@ export class UserMockRepository implements UserRepository {
                     wardCode: "1",
                     wardName: "Phường Bến Thành",
                     street: "Số 227 Nguyễn Văn Cừ",
-                    latitude: 10.8231,
-                    longitude: 106.6297,
+                    latitude: 10.88206144628933,
+                    longitude: 106.76458444116837,
                     fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM"
                 },
                 {

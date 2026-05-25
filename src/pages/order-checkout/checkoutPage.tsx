@@ -3,6 +3,7 @@ import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
 import { VoucherModal } from './components/Modal/VoucherModal';
 import { PaymentMethodModal } from './components/Modal/PaymentMethodModal';
+import { AddressModal } from './components/Modal/AddressModal';
 import { Navigate, useLocation } from 'react-router-dom';
 import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
 import { ShippingForm } from './components/ShippingForm/ShippingForm';
@@ -19,10 +20,13 @@ function CheckoutPage() {
         setIsVoucherModalOpen,
         isPaymentModalOpen,
         setIsPaymentModalOpen,
+        isAddressModalOpen,
+        setIsAddressModalOpen,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
         selectedVoucher,
         setSelectedVoucher,
+        handleSelectAddress,
         handleIncreaseQuantity,
         handleDecreaseQuantity,
         handleRemoveItem,
@@ -71,7 +75,10 @@ function CheckoutPage() {
 
                         <div className="w-full lg:w-2/3 space-y-8">
                             {/* Component: Shipping info */}
-                            <ShippingForm address={data.address} />
+                            <ShippingForm 
+                                address={data.address} 
+                                onOpenAddressModal={() => setIsAddressModalOpen(true)}
+                            />
 
                             {/* Component: Order item list */}
                             <OrderItemsList
@@ -115,6 +122,14 @@ function CheckoutPage() {
                 onClose={() => setIsPaymentModalOpen(false)}
                 selectedPayment={selectedPaymentMethod}
                 onSelectPayment={setSelectedPaymentMethod}
+            />
+
+            {/* Modal: Choosing address */}
+            <AddressModal
+                isOpen={isAddressModalOpen}
+                onClose={() => setIsAddressModalOpen(false)}
+                selectedAddressId={data.address?.id}
+                onSelectAddress={handleSelectAddress}
             />
         </div>
     );
