@@ -46,6 +46,10 @@ export class UserService {
     async getWards(districtId: number): Promise<WardModel[]> {
         return this.userRepository.getWards(districtId);
     }
+
+    async getLocationFromAddress(address: string): Promise<{ latitude: number; longitude: number; }> {
+        return this.userRepository.getLocationFromAddress(address);
+    }
 }
 
 const useMock = true;

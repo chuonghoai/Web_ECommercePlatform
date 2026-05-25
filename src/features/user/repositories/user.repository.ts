@@ -16,4 +16,6 @@ export interface UserRepository {
     getProvinces(): Promise<ProvinceModel[]>;
     getDistricts(provinceId: number): Promise<DistrictModel[]>;
     getWards(districtId: number): Promise<WardModel[]>;
+
+    getLocationFromAddress(address: string): Promise<{ latitude: number, longitude: number }>;
 }

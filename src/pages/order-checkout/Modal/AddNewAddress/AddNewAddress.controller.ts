@@ -69,12 +69,16 @@ export const useAddNewAddressController = (isOpen: boolean, onSuccess?: (newAddr
             return;
         }
 
+        const fullAddress = `${street}, ${wardName}, ${districtName}, ${provinceName}`;
+
         setIsVerifying(true);
-        setTimeout(() => {
-            setLocation([10.7769, 106.7009]);
-            setIsVerified(true);
-            setIsVerifying(false);
-        }, 1200);
+        userService.getLocationFromAddress(fullAddress)
+            .then(data => {
+                setLocation([data.latitude, data.longitude]);
+                setIsVerified(true);
+            })
+            .catch(err => toast(err.message || "Lỗi khi xác minh địa chỉ", 'error'))
+            .finally(() => setIsVerifying(false));
     };
 
     const handleMarkerDragEnd = useCallback((e: any) => {

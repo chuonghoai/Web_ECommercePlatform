@@ -7,6 +7,7 @@ import type { Address } from "../../order/checkout/models/checkout.model";
 import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
 import { apiClient } from "../../../core/api/apiClient";
 import axios from "axios";
+import { ApiException } from "../../../core/exceptions/api.exception";
 
 const mockWishlistItems = [
     {
@@ -256,5 +257,23 @@ export class UserMockRepository implements UserRepository {
             id: item.ward_code || item.id,
             name: item.ward_name || item.name
         }));
+    }
+
+    async getLocationFromAddress(address: string): Promise<{ latitude: number; longitude: number; }> {
+        const res = await axios.get("https://nominatim.openstreetmap.org/search", {
+            params: {
+                q: address,
+                format: "json",
+                limit: 1,
+            },
+        })
+        const data = res.data?.data || res.data;
+
+        if (!data || data.length === 0) throw new ApiException("Không tìm thấy tọa độ", 404);
+
+        return {
+            latitude: Number(data[0].lat),
+            longitude: Number(data[0].lon),
+        }
     }
 }
