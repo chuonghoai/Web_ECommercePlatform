@@ -1,4 +1,5 @@
 import type { ApiResponse } from "../../../../core/api/apiResponse";
+import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
@@ -68,5 +69,16 @@ export class CheckoutMockRepository implements CheckoutRepository {
         };
 
         return Promise.resolve(response);
+    }
+
+    checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
+        return Promise.resolve({
+            success: true,
+            message: "Success",
+            data: {
+                paymentRequired: request.paymentMethod === "MOMO",
+                payUrl: request.paymentMethod === "MOMO" ? "https://example.com/pay" : null
+            }
+        });
     }
 }
