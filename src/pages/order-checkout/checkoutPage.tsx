@@ -5,18 +5,22 @@ import { VoucherModal } from './Modal/VoucherModal';
 import { PaymentMethodModal } from './Modal/PaymentMethodModal';
 import { AddressModal } from './Modal/AddressModal';
 import { AddNewAddressModal } from './Modal/AddNewAddress/AddNewAddressModal';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/prepareCheckout.dto';
 import { ShippingForm } from './components/ShippingForm/ShippingForm';
 
 function CheckoutPage() {
     const location = useLocation();
+    const routerNavigate = useNavigate();
     const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[];
 
     const {
         data,
         loading,
         error,
+        
+        isCheckingOut,
+
         isVoucherModalOpen,
         setIsVoucherModalOpen,
         isPaymentModalOpen,
@@ -30,9 +34,8 @@ function CheckoutPage() {
         selectedVoucher,
         setSelectedVoucher,
         handleSelectAddress,
-        handleIncreaseQuantity,
-        handleDecreaseQuantity,
         handleRemoveItem,
+        handleRetry,
         handleOrderSubmit
     } = useCheckoutController(checkoutItems || []);
 
@@ -50,8 +53,22 @@ function CheckoutPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-background">
-                <p className="font-body text-error font-semibold">{error}</p>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+                <p className="font-body text-error font-semibold text-lg">{error}</p>
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={handleRetry}
+                        className="px-6 py-2 bg-primary text-white rounded-lg font-body hover:bg-primary-dark transition-colors"
+                    >
+                        Thử lại
+                    </button>
+                    <button 
+                        onClick={() => routerNavigate('/cart')}
+                        className="px-6 py-2 border border-border-medium rounded-lg font-body text-text-ink hover:bg-surface transition-colors"
+                    >
+                        Quay về giỏ hàng
+                    </button>
+                </div>
             </div>
         );
     }
@@ -87,8 +104,6 @@ function CheckoutPage() {
                             <OrderItemsList
                                 items={data.items}
                                 invalidItems={data.invalidItems}
-                                onIncrease={handleIncreaseQuantity}
-                                onDecrease={handleDecreaseQuantity}
                                 onRemove={handleRemoveItem}
                             />
                         </div>
@@ -102,6 +117,7 @@ function CheckoutPage() {
                             onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
                             onOpenVoucherModal={() => setIsVoucherModalOpen(true)}
                             onOrderSubmit={handleOrderSubmit}
+                            isCheckingOut={isCheckingOut}
                         />
                     </div>
                 </div>

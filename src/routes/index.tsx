@@ -19,6 +19,7 @@ import { AdminLayout } from "../admin/layout/AdminLayout";
 import { DashboardPage } from "../admin/pages/overview/Dashboard";
 import { CartProvider } from "../features/cart/contexts/CartContext";
 import { EUserRole } from "../features/user/models/user.model";
+import CheckoutResultPage from "../pages/order-checkout-result/CheckoutResultPage";
 
 function AppRoutes() {
     return (
@@ -44,6 +45,11 @@ function AppRoutes() {
                     <Route path="order/checkout" element={
                         <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
                             <CheckoutPage />
+                        </AuthGuard>
+                    } />
+                    <Route path="order/checkout/result" element={
+                        <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
+                            <CheckoutResultPage />
                         </AuthGuard>
                     } />
 
