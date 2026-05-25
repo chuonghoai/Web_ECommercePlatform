@@ -15,4 +15,7 @@ export class CheckoutService {
     }
 }
 
-export const checkoutService = new CheckoutService(new CheckoutMockRepository());
+const useMock = true;
+export const checkoutService = new CheckoutService(
+    useMock ? new CheckoutMockRepository() : undefined
+);

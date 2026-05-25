@@ -4,8 +4,13 @@ import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
 import { VoucherModal } from './components/VoucherModal';
 import { PaymentMethodModal } from './components/PaymentMethodModal';
+import { Navigate, useLocation } from 'react-router-dom';
+import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
 
 function CheckoutPage() {
+    const location = useLocation();
+    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[];
+
     const {
         data,
         loading,
@@ -22,7 +27,11 @@ function CheckoutPage() {
         handleDecreaseQuantity,
         handleRemoveItem,
         handleOrderSubmit
-    } = useCheckoutController();
+    } = useCheckoutController(checkoutItems || []);
+
+    if (!checkoutItems || checkoutItems.length === 0) {
+        return <Navigate to="/cart" replace />;
+    }
 
     if (loading) {
         return (

@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
 import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/checkout.dto";
 
-export const useCheckoutController = () => {
+export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
+    const hasFetched = useRef(false);
 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
@@ -13,12 +14,11 @@ export const useCheckoutController = () => {
 
     // Init data
     useEffect(() => {
-        const initialRequest: PrepareCheckoutRequest[] = [
-            { productId: "1", quantity: 1 },
-            { productId: "2", quantity: 2 }
-        ];
-        store.fetchPrepareOrder(initialRequest);
-    }, [store.fetchPrepareOrder]);
+        if (initialRequest && initialRequest.length > 0 && !hasFetched.current) {
+            store.fetchPrepareOrder(initialRequest);
+            hasFetched.current = true;
+        }
+    }, [store.fetchPrepareOrder, initialRequest]);
 
     // Increase item quantity
     const handleIncreaseQuantity = useCallback((productId: string) => {

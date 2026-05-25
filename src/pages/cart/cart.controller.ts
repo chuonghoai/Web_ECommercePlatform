@@ -64,7 +64,13 @@ export const useCartController = () => {
   const selectedCount = selectedItemIds.length;
 
   const handleCheckout = () => {
-    navigate("/order/checkout", { state: { selectedItems: selectedItemIds } });
+    const checkoutItems = items
+      .filter(item => selectedItemIds.includes(item.product.id))
+      .map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity
+      }));
+    navigate("/order/checkout", { state: { checkoutItems } });
   };
 
   return {
