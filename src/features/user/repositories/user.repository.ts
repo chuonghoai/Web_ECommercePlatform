@@ -13,6 +13,6 @@ export interface UserRepository {
     getAddress(): Promise<ApiResponse<Address[]>>;
 
     getProvinces(): Promise<ProvinceModel[]>;
-    getDistricts(): Promise<DistrictModel[]>;
-    getWards(): Promise<WardModel[]>;
+    getDistricts(provinceId: number): Promise<DistrictModel[]>;
+    getWards(districtId: number): Promise<WardModel[]>;
 }

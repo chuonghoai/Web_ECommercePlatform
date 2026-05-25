@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
+import { userService } from '../../../../../features/user/services/user.service';
+import type { ProvinceModel, DistrictModel, WardModel } from '../../../../../features/user/models/address.model';
 
 export const useAddNewAddressController = (isOpen: boolean) => {
     const [formData, setFormData] = useState({
@@ -13,29 +15,66 @@ export const useAddNewAddressController = (isOpen: boolean) => {
         street: ''
     });
 
-    // Tọa độ hiện tại
     const [location, setLocation] = useState<[number, number] | null>(null);
-
-    // Các trạng thái của quá trình xác minh bản đồ
     const [isVerifying, setIsVerifying] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
 
-    // Reset lại form mỗi khi mở lại Modal
+    const [provinces, setProvinces] = useState<ProvinceModel[]>([]);
+    const [districts, setDistricts] = useState<DistrictModel[]>([]);
+    const [wards, setWards] = useState<WardModel[]>([]);
+
     useEffect(() => {
         if (isOpen) {
-            setFormData({ fullName: '', phoneNumber: '', provinceCode: 0, provinceName: '', districtCode: 0, districtName: '', wardCode: 0, wardName: '', street: '' });
+            setFormData({
+                fullName: '',
+                phoneNumber: '',
+                provinceCode: 0,
+                provinceName: '',
+                districtCode: 0,
+                districtName: '',
+                wardCode: 0,
+                wardName: '',
+                street: ''
+            });
             setLocation(null);
             setIsVerified(false);
             setIsVerifying(false);
+
+            userService.getProvinces()
+                .then(data => setProvinces(data))
+                .catch(err => console.error("Lỗi khi tải tỉnh thành:", err));
+        } else {
+            setProvinces([]);
+            setDistricts([]);
+            setWards([]);
         }
     }, [isOpen]);
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-
-        // Nếu thay đổi các trường địa chỉ (không phải tên/sdt) thì reset lại trạng thái xác minh
-        if (['provinceName', 'districtName', 'wardName', 'street'].includes(field)) {
+        if (['street'].includes(field)) {
             setIsVerified(false);
+        }
+    };
+
+    const handleSelectAddressField = (fieldCode: string, fieldName: string, id: number, name: string) => {
+        setFormData(prev => ({ ...prev, [fieldCode]: id, [fieldName]: name }));
+        setIsVerified(false);
+
+        if (fieldCode === 'provinceCode') {
+            setFormData(prev => ({ ...prev, districtCode: 0, districtName: '', wardCode: 0, wardName: '' }));
+            setDistricts([]);
+            setWards([]);
+            userService.getDistricts(id)
+                .then(data => setDistricts(data))
+                .catch(err => console.error(err));
+        }
+        else if (fieldCode === 'districtCode') {
+            setFormData(prev => ({ ...prev, wardCode: 0, wardName: '' }));
+            setWards([]);
+            userService.getWards(id)
+                .then(data => setWards(data))
+                .catch(err => console.error(err));
         }
     };
 
@@ -48,9 +87,7 @@ export const useAddNewAddressController = (isOpen: boolean) => {
 
         setIsVerifying(true);
 
-        // MOCK API GEOCODING: Giả lập thời gian gọi API chuyển Text -> Tọa độ
         setTimeout(() => {
-            // Trả về một tọa độ giả định (VD: Trung tâm HCM)
             const mockGeocodedLat = 10.7769;
             const mockGeocodedLng = 106.7009;
 
@@ -60,7 +97,6 @@ export const useAddNewAddressController = (isOpen: boolean) => {
         }, 1200);
     };
 
-    // Hàm cập nhật tọa độ khi người dùng kéo thả (drag) marker
     const handleMarkerDragEnd = useCallback((e: any) => {
         const marker = e.target;
         const position = marker.getLatLng();
@@ -72,7 +108,6 @@ export const useAddNewAddressController = (isOpen: boolean) => {
 
         const fullAddress = `${formData.street}, ${formData.wardName}, ${formData.districtName}, ${formData.provinceName}`;
 
-        // Return object địa chỉ để Modal cha xử lý
         return {
             ...formData,
             fullAddress,
@@ -86,7 +121,11 @@ export const useAddNewAddressController = (isOpen: boolean) => {
         location,
         isVerifying,
         isVerified,
+        provinces,
+        districts,
+        wards,
         handleInputChange,
+        handleSelectAddressField,
         handleVerifyMap,
         handleMarkerDragEnd,
         handleSaveAddress

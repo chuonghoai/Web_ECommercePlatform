@@ -35,12 +35,12 @@ export class UserService {
         return this.userRepository.getProvinces();
     }
 
-    async getDistricts(): Promise<DistrictModel[]> {
-        return this.userRepository.getDistricts();
+    async getDistricts(provinceId: number): Promise<DistrictModel[]> {
+        return this.userRepository.getDistricts(provinceId);
     }
 
-    async getWards(): Promise<WardModel[]> {
-        return this.userRepository.getWards();
+    async getWards(districtId: number): Promise<WardModel[]> {
+        return this.userRepository.getWards(districtId);
     }
 }
 

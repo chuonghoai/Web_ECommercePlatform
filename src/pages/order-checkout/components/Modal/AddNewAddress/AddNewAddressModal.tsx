@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -13,6 +13,7 @@ interface AddNewAddressModalProps {
     onBack: () => void;
 }
 
+// Sub-component xử lý Marker
 const DraggableMarker = ({ position, onDragEnd }: { position: [number, number], onDragEnd: (e: any) => void }) => {
     const markerRef = useRef<L.Marker>(null);
     const map = useMap();
@@ -37,13 +38,91 @@ const DraggableMarker = ({ position, onDragEnd }: { position: [number, number], 
     );
 };
 
+// Sub-component Input có tích hợp Dropdown và Search (Autocomplete)
+const SearchableSelect = ({
+    options,
+    value,
+    onSelect,
+    placeholder
+}: {
+    options: { id: number; name: string }[];
+    value: string;
+    onSelect: (id: number, name: string) => void;
+    placeholder: string;
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(value);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    // Cập nhật lại input hiển thị khi value từ prop truyền vào thay đổi (khi user chọn)
+    useEffect(() => {
+        setSearchTerm(value);
+    }, [value]);
+
+    // Lắng nghe sự kiện click ra ngoài để đóng dropdown
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+                // Nếu đang gõ dở nhưng bấm ra ngoài không chọn -> trả lại giá trị hợp lệ trước đó
+                setSearchTerm(value);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [value]);
+
+    const filteredOptions = options.filter(opt => opt.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    return (
+        <div ref={wrapperRef} className={`relative transition-all duration-300 ease-in-out ${isOpen ? 'z-50 mb-48' : 'z-10'}`}>
+            <input
+                type="text"
+                className="input-field w-full px-3 py-2 bg-surface relative z-10"
+                placeholder={placeholder}
+                value={searchTerm}
+                onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+            />
+            {isOpen && (
+                <ul className="absolute w-full bg-white border border-border-medium rounded-md shadow-xl max-h-48 overflow-y-auto top-full mt-1">
+                    {filteredOptions.length > 0 ? (
+                        filteredOptions.map(opt => (
+                            <li
+                                key={opt.id}
+                                className="px-3 py-2 hover:bg-surface-container-low cursor-pointer font-body-sm text-text-ink border-b border-subtle last:border-0"
+                                onClick={() => {
+                                    onSelect(opt.id, opt.name);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                {opt.name}
+                            </li>
+                        ))
+                    ) : (
+                        <li className="px-3 py-2 text-text-muted font-body-sm text-center">Không tìm thấy</li>
+                    )}
+                </ul>
+            )}
+        </div>
+    );
+};
+
+
 export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, onClose, onBack }) => {
     const {
         formData,
         location,
         isVerifying,
         isVerified,
+        provinces,
+        districts,
+        wards,
         handleInputChange,
+        handleSelectAddressField,
         handleVerifyMap,
         handleMarkerDragEnd,
         handleSaveAddress
@@ -72,7 +151,7 @@ export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, 
                     </button>
                 </div>
 
-                <div className="p-6 overflow-y-auto grow space-y-6">
+                <div className="p-6 overflow-y-auto grow space-y-6 relative z-20">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block font-body-sm text-text-muted mb-1">Họ và tên</label>
@@ -89,15 +168,30 @@ export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, 
 
                         <div>
                             <label className="block font-body-sm text-text-muted mb-1">Tỉnh/Thành phố</label>
-                            <input type="text" className="input-field w-full px-3 py-2 bg-surface" placeholder="Ví dụ: TP. Hồ Chí Minh" value={formData.provinceName} onChange={(e) => handleInputChange('provinceName', e.target.value)} />
+                            <SearchableSelect
+                                options={provinces}
+                                value={formData.provinceName}
+                                onSelect={(id, name) => handleSelectAddressField('provinceCode', 'provinceName', id, name)}
+                                placeholder="Chọn hoặc nhập Tỉnh/Thành phố"
+                            />
                         </div>
                         <div>
                             <label className="block font-body-sm text-text-muted mb-1">Quận/Huyện</label>
-                            <input type="text" className="input-field w-full px-3 py-2 bg-surface" placeholder="Ví dụ: Quận 1" value={formData.districtName} onChange={(e) => handleInputChange('districtName', e.target.value)} />
+                            <SearchableSelect
+                                options={districts}
+                                value={formData.districtName}
+                                onSelect={(id, name) => handleSelectAddressField('districtCode', 'districtName', id, name)}
+                                placeholder="Chọn hoặc nhập Quận/Huyện"
+                            />
                         </div>
                         <div>
                             <label className="block font-body-sm text-text-muted mb-1">Phường/Xã</label>
-                            <input type="text" className="input-field w-full px-3 py-2 bg-surface" placeholder="Ví dụ: Phường Bến Nghé" value={formData.wardName} onChange={(e) => handleInputChange('wardName', e.target.value)} />
+                            <SearchableSelect
+                                options={wards}
+                                value={formData.wardName}
+                                onSelect={(id, name) => handleSelectAddressField('wardCode', 'wardName', id, name)}
+                                placeholder="Chọn hoặc nhập Phường/Xã"
+                            />
                         </div>
                         <div>
                             <label className="block font-body-sm text-text-muted mb-1">Số nhà, tên đường</label>
@@ -132,8 +226,8 @@ export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, 
                             <button
                                 type="button"
                                 className={`px-4 py-2 rounded-lg font-body-sm flex items-center justify-center gap-2 transition-colors border ${isVerified
-                                        ? 'bg-surface text-primary border-primary-container hover:bg-primary-container/10'
-                                        : 'bg-primary text-on-primary border-primary hover:bg-primary/90'
+                                    ? 'bg-surface text-primary border-primary-container hover:bg-primary-container/10'
+                                    : 'bg-primary text-on-primary border-primary hover:bg-primary/90'
                                     }`}
                                 onClick={handleVerifyMap}
                                 disabled={isVerifying}
@@ -168,7 +262,7 @@ export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, 
                 </div>
 
                 {/* Footer - Actions */}
-                <div className="p-4 border-t border-subtle bg-surface-container shrink-0 flex flex-col sm:flex-row gap-3 justify-end">
+                <div className="p-4 border-t border-subtle bg-surface-container shrink-0 flex flex-col sm:flex-row gap-3 justify-end relative z-10">
                     <button
                         className="w-full sm:w-auto btn-secondary px-6 py-2.5 font-body font-semibold"
                         onClick={onClose}
@@ -177,15 +271,14 @@ export const AddNewAddressModal: React.FC<AddNewAddressModalProps> = ({ isOpen, 
                     </button>
                     <button
                         className={`w-full sm:w-auto px-6 py-2.5 rounded-sm font-body font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${isVerified
-                                ? 'bg-primary text-on-primary hover:bg-primary/90 active:bg-primary/80'
-                                : 'bg-surface-container-high text-text-muted cursor-not-allowed'
+                            ? 'bg-primary text-on-primary hover:bg-primary/90 active:bg-primary/80'
+                            : 'bg-surface-container-high text-text-muted cursor-not-allowed'
                             }`}
                         disabled={!isVerified}
                         onClick={() => {
                             const result = handleSaveAddress();
                             if (result) {
                                 console.log("Dữ liệu lưu địa chỉ mới:", result);
-                                // TODO: Gọi service lưu lên Database ở đây.
                                 onClose();
                             }
                         }}

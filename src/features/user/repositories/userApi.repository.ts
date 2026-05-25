@@ -6,6 +6,7 @@ import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
 import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
+import axios from "axios";
 
 export class UserApiRepository implements UserRepository {
     /**
@@ -48,18 +49,34 @@ export class UserApiRepository implements UserRepository {
     /**
      * Get open API province, district and ward
      */
-    async getDistricts(): Promise<DistrictModel[]> {
-        const res: any = apiClient.get<DistrictModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/province");
-        return res.data;
-    }
-
     async getProvinces(): Promise<ProvinceModel[]> {
-        const res: any = apiClient.get<ProvinceModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/district");
-        return res.data;
+        const res = await axios.get("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/province");
+        const data = res.data?.data || res.data;
+        return data.map((item: any) => ({
+            id: item.province_id || item.id,
+            name: item.province_name || item.name
+        }));
     }
 
-    async getWards(): Promise<WardModel[]> {
-        const res: any = apiClient.get<WardModel[]>("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/district");
-        return res.data;
+    async getDistricts(provinceId: number): Promise<DistrictModel[]> {
+        const res = await axios.get("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/district", {
+            params: { province_id: provinceId }
+        });
+        const data = res.data?.data || res.data;
+        return data.map((item: any) => ({
+            id: item.district_id || item.id,
+            name: item.district_name || item.name
+        }));
+    }
+
+    async getWards(districtId: number): Promise<WardModel[]> {
+        const res = await axios.get("https://fe-online-gateway.ghn.vn/shiip/public-api/masterdata/ward", {
+            params: { district_id: districtId }
+        });
+        const data = res.data?.data || res.data;
+        return data.map((item: any) => ({
+            id: item.ward_code || item.id,
+            name: item.ward_name || item.name
+        }));
     }
 }
