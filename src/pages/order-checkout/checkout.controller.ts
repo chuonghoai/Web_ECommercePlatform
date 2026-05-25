@@ -3,11 +3,14 @@ import { useCheckoutStore } from "./checkout.store";
 import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
 import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod.enum";
 import { useToast } from "../../components/toast/toast";
+import { useNavigate } from "react-router-dom";
+import type { CheckoutRequestDto } from "../../features/order/checkout/dto/checkoutRequest.dto";
 
 export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
     const hasFetched = useRef(false);
     const { toast } = useToast();
+    const navigate = useNavigate();
 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
@@ -89,15 +92,43 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     };
 
     // Submit order
-    const handleOrderSubmit = useCallback(() => {
+    const handleOrderSubmit = useCallback(async () => {
         if (!store.data) return;
-        alert(`Đặt hàng thành công!\nTổng tiền: ${store.data.totalAmount.toLocaleString('vi-VN')}₫\nPhương thức: ${selectedPaymentMethod}`);
-    }, [store.data, selectedPaymentMethod]);
+        if (!store.data.address) {
+            toast("Vui lòng chọn địa chỉ giao hàng", "warning");
+            return;
+        }
+
+        const payload: CheckoutRequestDto = {
+            items: store.data.items.map(item => ({
+                productId: item.product.id,
+                quantity: item.quantity
+            })),
+            addressId: store.data.address.id,
+            paymentMethod: selectedPaymentMethod,
+            // voucherIds: selectedVoucher ? [selectedVoucher] : undefined // Tạm thời chưa phát triển voucher
+        };
+
+        // Gọi API
+        const result = await store.submitCheckout(payload);
+
+        if (result) {
+            if (result.paymentRequired && result.payUrl) {
+                window.location.href = result.payUrl;
+            } else {
+                navigate(`/order/checkout/result?orderId=${result.orderId}`);
+            }
+        } else if (store.error) {
+            toast(store.error || "Có lỗi xảy ra, vui lòng thử lại", "error");
+        }
+    }, [store, selectedPaymentMethod, navigate, toast]);
 
     return {
         data: store.data,
         loading: store.loading,
         error: store.error,
+
+        isCheckingOut: store.isCheckingOut,
 
         isVoucherModalOpen,
         setIsVoucherModalOpen,

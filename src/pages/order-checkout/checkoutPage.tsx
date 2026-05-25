@@ -17,6 +17,9 @@ function CheckoutPage() {
         data,
         loading,
         error,
+        
+        isCheckingOut,
+
         isVoucherModalOpen,
         setIsVoucherModalOpen,
         isPaymentModalOpen,
@@ -102,6 +105,7 @@ function CheckoutPage() {
                             onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
                             onOpenVoucherModal={() => setIsVoucherModalOpen(true)}
                             onOrderSubmit={handleOrderSubmit}
+                            isCheckingOut={isCheckingOut}
                         />
                     </div>
                 </div>

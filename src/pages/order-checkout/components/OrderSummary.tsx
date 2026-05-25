@@ -9,6 +9,7 @@ interface OrderSummaryProps {
     onOpenPaymentModal: () => void;
     onOpenVoucherModal: () => void;
     onOrderSubmit: () => void;
+    isCheckingOut?: boolean;
 }
 
 export const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -18,7 +19,8 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
     selectedPaymentMethod,
     onOpenPaymentModal,
     onOpenVoucherModal,
-    onOrderSubmit
+    onOrderSubmit,
+    isCheckingOut
 }) => {
     return (
         <aside className="w-full lg:w-1/3">
@@ -83,9 +85,19 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     </div>
 
                     <div className="pt-2 space-y-3">
-                        <button className="w-full btn-primary py-2 font-body font-semibold tracking-wide flex justify-center items-center gap-2" onClick={onOrderSubmit}>
-                            <span className="material-symbols-outlined">check_circle</span>
-                            Đặt hàng
+                        <button
+                            disabled={isCheckingOut}
+                            className="w-full btn-primary py-2 font-body font-semibold tracking-wide flex justify-center items-center gap-2"
+                            onClick={onOrderSubmit}
+                        >
+                            {isCheckingOut ? (
+                                <span className="font-body-sm animate-pulse">Đang xử lý...</span>
+                            ) : (
+                                <>
+                                    <span className="material-symbols-outlined">check_circle</span>
+                                    Đặt hàng
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>

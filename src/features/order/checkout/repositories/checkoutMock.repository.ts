@@ -1,6 +1,7 @@
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
+import { PaymentMethod } from "../enums/paymentMethod.enum";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
 
@@ -76,8 +77,9 @@ export class CheckoutMockRepository implements CheckoutRepository {
             success: true,
             message: "Success",
             data: {
-                paymentRequired: request.paymentMethod === "MOMO",
-                payUrl: request.paymentMethod === "MOMO" ? "https://example.com/pay" : null
+                paymentRequired: request.paymentMethod === PaymentMethod.MOMO,
+                orderId: "1",
+                payUrl: request.paymentMethod === PaymentMethod.MOMO ? "https://example.com/pay" : null
             }
         });
     }
