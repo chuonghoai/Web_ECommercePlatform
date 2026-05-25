@@ -6,7 +6,7 @@ import { PaymentMethodModal } from './Modal/PaymentMethodModal';
 import { AddressModal } from './Modal/AddressModal';
 import { AddNewAddressModal } from './Modal/AddNewAddress/AddNewAddressModal';
 import { Navigate, useLocation } from 'react-router-dom';
-import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkoutRequest.dto';
+import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/prepareCheckout.dto';
 import { ShippingForm } from './components/ShippingForm/ShippingForm';
 
 function CheckoutPage() {

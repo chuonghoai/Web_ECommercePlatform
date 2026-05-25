@@ -1,4 +1,4 @@
-import type { PrepareCheckoutRequest } from "../dto/checkoutRequest.dto";
+import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import type { CheckoutRepository } from "../repositories/checkout.repository";
 import { CheckoutApiRepository } from "../repositories/checkoutApi.repository";
 import { CheckoutMockRepository } from "../repositories/checkoutMock.repository";

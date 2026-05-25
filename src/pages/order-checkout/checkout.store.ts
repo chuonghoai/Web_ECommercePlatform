@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { checkoutService } from "../../features/order/checkout/services/checkout.service";
 import type { PrepareCheckoutModel } from "../../features/order/checkout/models/checkout.model";
-import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/checkoutRequest.dto";
+import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
 
 export const useCheckoutStore = () => {
     const [data, setData] = useState<PrepareCheckoutModel | null>(null);
