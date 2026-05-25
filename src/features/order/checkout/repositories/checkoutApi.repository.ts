@@ -22,9 +22,9 @@ export class CheckoutApiRepository implements CheckoutRepository {
      * 
      * Mô tả:
      *  - Nếu CheckoutRequestDto.paymentMethod là COD 
-     *      => paymentRequired = false, payUrl = null
+     *      => paymentRequired = false, orderId = id đơn hàng vừa tạo, payUrl = null
      *  - Nếu CheckoutRequestDto.paymentMethod là MOMO 
-     *      => paymentRequired = true, payUrl = url để redirect user thanh toán
+     *      => paymentRequired = true, orderId = id đơn hàng vừa tạo, payUrl = url để redirect user thanh toán
      */
     async checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
         return apiClient.post<ApiResponse<CheckoutResponseDto>>("/orders/checkout", request);
