@@ -13,8 +13,6 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFBF5] font-sans pb-24">
-      {/* Header Placeholder */}
-
       <main className="w-full px-4 sm:px-8 lg:px-12 pt-12">
         <header className="mb-10">
           <h1 className="text-4xl font-serif text-gray-900 mb-3">Giỏ hàng của bạn</h1>
@@ -24,23 +22,43 @@ const CartPage: React.FC = () => {
 
           {/* Items */}
           <div className="flex-1 w-full">
-            {/* Item List */}
-            <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 sm:p-10 space-y-10 shadow-sm">
-              {controller.items.map((item, index) => (
-                <div key={item.product.id}>
-                  <CartItemCard
-                    item={item}
-                    isLoading={controller.isLoading}
-                    onUpdateQuantity={controller.updateQuantity}
-                    onRemove={controller.removeItem}
-                    formatMoney={controller.formatMoney}
-                  />
-                  {/* Decorative dashed divider */}
-                  {index < controller.items.length - 1 && (
-                    <div className="w-full border-t border-dashed border-[#D6D3D1] mt-10"></div>
-                  )}
-                </div>
-              ))}
+            {/* Background wrapper */}
+            <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 sm:p-10 shadow-sm">
+              
+              {/* Select All Checkbox */}
+              <div className="flex items-center pb-6 border-b border-[#E7E5E4] mb-8">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={controller.isAllSelected}
+                  onChange={controller.toggleSelectAll}
+                  className="w-5 h-5 text-market-primary border-[#D6D3D1] rounded focus:ring-market-primary cursor-pointer"
+                />
+                <label htmlFor="selectAll" className="ml-3 font-medium text-gray-900 cursor-pointer select-none">
+                  Chọn tất cả ({controller.items.length} sản phẩm)
+                </label>
+              </div>
+
+              {/* Item List */}
+              <div className="space-y-10">
+                {controller.items.map((item, index) => (
+                  <div key={item.product.id}>
+                    <CartItemCard
+                      item={item}
+                      isSelected={controller.selectedItemIds.includes(item.product.id)}
+                      onToggleSelect={() => controller.toggleSelection(item.product.id)}
+                      isLoading={controller.isLoading}
+                      onUpdateQuantity={controller.updateQuantity}
+                      onRemove={controller.removeItem}
+                      formatMoney={controller.formatMoney}
+                    />
+                    {index < controller.items.length - 1 && (
+                      <div className="w-full border-t border-dashed border-[#D6D3D1] mt-10"></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
             </div>
           </div>
 
@@ -48,6 +66,7 @@ const CartPage: React.FC = () => {
           <div className="w-full lg:w-[380px] shrink-0">
             <CartSummary
               finalTotal={controller.finalTotal}
+              selectedCount={controller.selectedCount}
               onCheckout={controller.handleCheckout}
               formatMoney={controller.formatMoney}
             />
@@ -55,7 +74,6 @@ const CartPage: React.FC = () => {
 
         </div>
       </main>
-
     </div>
   );
 };

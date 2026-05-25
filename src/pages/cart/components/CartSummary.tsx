@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 
 interface Props {
   finalTotal: number;
+  selectedCount: number;
   onCheckout: () => void;
   formatMoney: (val: number) => string;
 }
 
-export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMoney }) => {
+export const CartSummary: React.FC<Props> = ({ finalTotal, selectedCount, onCheckout, formatMoney }) => {
   return (
     <div className="sticky top-8 bg-white border border-[#E7E5E4] rounded-lg p-6 flex flex-col font-sans">
       <h2 className="text-xl font-serif text-gray-900 mb-6 pb-4 border-b border-[#E7E5E4]">Tóm tắt đơn hàng</h2>
@@ -23,14 +24,15 @@ export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMon
 
       {/* Action Buttons */}
       <div className="space-y-3">
-        <button 
+        <button
           onClick={onCheckout}
-          className="w-full py-3.5 bg-market-primary hover:bg-market-primary/90 active:bg-market-primary/80 text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-market-primary/20"
+          disabled={selectedCount === 0}
+          className="w-full py-3.5 bg-market-primary hover:bg-market-primary/90 active:bg-market-primary/80 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-market-primary/20"
         >
-          Tiến hành thanh toán
+          Tiến hành thanh toán ({selectedCount})
         </button>
-        <Link 
-          to="/marketplace" 
+        <Link
+          to="/marketplace"
           className="w-full flex items-center justify-center py-3.5 border border-[#D6D3D1] text-gray-700 hover:border-gray-400 hover:bg-white bg-[#FFFBF5] rounded-[4px] font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400/20"
         >
           Tiếp tục mua sắm
@@ -52,8 +54,6 @@ export const CartSummary: React.FC<Props> = ({ finalTotal, onCheckout, formatMon
           <p className="text-xs text-gray-600 leading-relaxed">Đổi trả miễn phí trong vòng 7 ngày đối với sản phẩm lỗi do nhà sản xuất.</p>
         </div>
       </div>
-
-
 
       {/* Support Info */}
       <div className="mt-6 pt-6 border-t border-[#E7E5E4]">

@@ -6,9 +6,12 @@ import { useToast } from '../../components/toast/toast';
 import { userStorageService } from '../../features/user/services/userStorage.service';
 
 export const useCartController = () => {
-  const { items, totalPrice, updateQuantity, removeItem, isLoading, loadCart } = useCart();
+  const { items, updateQuantity, removeItem, isLoading, loadCart } = useCart();
 
   const [coupon, setCoupon] = useState("");
+
+  const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+  const [hasInitializedSelection, setHasInitializedSelection] = useState(false);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -23,23 +26,61 @@ export const useCartController = () => {
     }
   }, [navigate, toast, loadCart]);
 
-  const finalTotal = totalPrice;
+  useEffect(() => {
+    if (items.length > 0 && !hasInitializedSelection) {
+      setSelectedItemIds(items.map(item => item.product.id));
+      setHasInitializedSelection(true);
+    } else if (items.length > 0) {
+      setSelectedItemIds(prev => prev.filter(id => items.some(item => item.product.id === id)));
+    } else if (items.length === 0) {
+      setHasInitializedSelection(false);
+      setSelectedItemIds([]);
+    }
+  }, [items, hasInitializedSelection]);
+
+  const toggleSelection = (productId: string) => {
+    setSelectedItemIds(prev =>
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedItemIds.length === items.length) {
+      setSelectedItemIds([]);
+    } else {
+      setSelectedItemIds(items.map(i => i.product.id));
+    }
+  };
+
+  const finalTotal = items
+    .filter(item => selectedItemIds.includes(item.product.id))
+    .reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
   const totalMakers = new Set(items.map(item => item.product.id)).size;
 
+  const isAllSelected = items.length > 0 && selectedItemIds.length === items.length;
+  const selectedCount = selectedItemIds.length;
+
   const handleCheckout = () => {
-    navigate("/order/checkout")
+    navigate("/order/checkout", { state: { selectedItems: selectedItemIds } });
   };
 
   return {
     items,
-    totalPrice,
     finalTotal,
     totalMakers,
     isLoading,
     coupon,
+    selectedItemIds,
+    isAllSelected,
+    selectedCount,
     setCoupon,
     updateQuantity,
     removeItem,
+    toggleSelection,
+    toggleSelectAll,
     handleCheckout,
     formatMoney: formatVND
   };
