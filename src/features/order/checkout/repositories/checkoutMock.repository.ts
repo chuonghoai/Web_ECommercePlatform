@@ -20,8 +20,8 @@ export class CheckoutMockRepository implements CheckoutRepository {
                     wardCode: "123",
                     wardName: "Ward 1",
                     street: "Street 1",
-                    latitude: 123,
-                    longitude: 123,
+                    latitude: 10.88206144628933,
+                    longitude: 106.76458444116837,
                     fullAddress: "Address 1",
                 },
 

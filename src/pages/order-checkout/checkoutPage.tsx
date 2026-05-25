@@ -1,9 +1,9 @@
 import { useCheckoutController } from './checkout.controller';
-import { ShippingDetailForm } from './components/ShippingDetailForm';
+import { ShippingForm } from './components/ShippingDetailForm/ShippingForm';
 import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
-import { VoucherModal } from './components/VoucherModal';
-import { PaymentMethodModal } from './components/PaymentMethodModal';
+import { VoucherModal } from './components/Modal/VoucherModal';
+import { PaymentMethodModal } from './components/Modal/PaymentMethodModal';
 import { Navigate, useLocation } from 'react-router-dom';
 import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
 
@@ -71,7 +71,7 @@ function CheckoutPage() {
 
                         <div className="w-full lg:w-2/3 space-y-8">
                             {/* Component: Shipping info */}
-                            <ShippingDetailForm address={data.address} />
+                            <ShippingForm address={data.address} />
 
                             {/* Component: Order item list */}
                             <OrderItemsList
