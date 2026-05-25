@@ -80,6 +80,7 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                                     <p className="font-caption text-text-muted line-through">{item.product.originalPrice.toLocaleString('vi-VN')}₫</p>
                                                 )}
                                                 <p className="font-body font-semibold text-text-ink">{item.product.price.toLocaleString('vi-VN')}₫</p>
+                                                <p className="font-body-sm font-semibold text-primary-container mt-1">Thành tiền: {(item.product.price * item.quantity).toLocaleString('vi-VN')}₫</p>
                                             </>
                                         )}
                                     </div>

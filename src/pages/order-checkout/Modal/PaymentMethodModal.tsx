@@ -1,10 +1,11 @@
 import React from 'react';
+import { PaymentMethod } from '../../../features/order/checkout/enums/paymentMethod.enum';
 
 interface PaymentMethodModalProps {
     isOpen: boolean;
     onClose: () => void;
-    selectedPayment: string;
-    onSelectPayment: (method: string) => void;
+    selectedPayment: PaymentMethod;
+    onSelectPayment: (paymentMethod: PaymentMethod) => void;
 }
 
 export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
@@ -26,7 +27,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                     </button>
                 </div>
                 <div className="p-4 space-y-3 overflow-y-auto">
-                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer ${selectedPayment === 'COD' ? 'border-primary-container bg-surface-container-low' : 'border-border-medium'}`}>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer ${selectedPayment === PaymentMethod.COD ? 'border-primary-container bg-surface-container-low' : 'border-border-medium'}`}>
                         <div className="flex items-center gap-4">
                             <span className="material-symbols-outlined text-primary-container text-2xl">local_shipping</span>
                             <div>
@@ -34,9 +35,9 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                                 <p className="font-caption text-text-muted">Thanh toán bằng tiền mặt khi nhận hàng</p>
                             </div>
                         </div>
-                        <input type="radio" name="payment" checked={selectedPayment === 'COD'} onChange={() => onSelectPayment('COD')} className="w-4 h-4 text-primary-container" />
+                        <input type="radio" name="payment" checked={selectedPayment === PaymentMethod.COD} onChange={() => onSelectPayment(PaymentMethod.COD)} className="w-4 h-4 text-primary-container" />
                     </label>
-                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer ${selectedPayment === 'BANK' ? 'border-primary-container bg-surface-container-low' : 'border-border-medium'}`}>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer ${selectedPayment === PaymentMethod.MOMO ? 'border-primary-container bg-surface-container-low' : 'border-border-medium'}`}>
                         <div className="flex items-center gap-4">
                             <span className="material-symbols-outlined text-text-muted text-2xl">account_balance</span>
                             <div>
@@ -44,7 +45,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                                 <p className="font-caption text-text-muted">Quét mã QR qua ứng dụng ngân hàng</p>
                             </div>
                         </div>
-                        <input type="radio" name="payment" checked={selectedPayment === 'BANK'} onChange={() => onSelectPayment('BANK')} className="w-4 h-4 text-primary-container" />
+                        <input type="radio" name="payment" checked={selectedPayment === PaymentMethod.MOMO} onChange={() => onSelectPayment(PaymentMethod.MOMO)} className="w-4 h-4 text-primary-container" />
                     </label>
                 </div>
                 <div className="p-4 border-t border-subtle bg-surface-container flex gap-4">

@@ -47,7 +47,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <p className="font-caption text-text-muted mt-1">HSD: 30/12/2024</p>
                                 </div>
                                 <div className="shrink-0 pt-1">
-                                    <input type="radio" name="voucher" checked={selectedVoucher === 'NEST200'} onChange={() => onSelectVoucher('NEST200')} className="w-4 h-4 text-primary-container" />
+                                    <input type="radio" name="voucher" checked={selectedVoucher === 'NEST200'} onChange={() => alert('Tính năng chọn Voucher đang được phát triển')} className="w-4 h-4 text-primary-container" />
                                 </div>
                             </div>
                         </label>
@@ -67,7 +67,7 @@ export const VoucherModal: React.FC<VoucherModalProps> = ({
                                     <p className="font-caption text-text-muted mt-1">HSD: 31/12/2024</p>
                                 </div>
                                 <div className="shrink-0 pt-1">
-                                    <input type="radio" name="voucher" checked={selectedVoucher === 'FREESHIP'} onChange={() => onSelectVoucher('FREESHIP')} className="w-4 h-4 text-primary-container" />
+                                    <input type="radio" name="voucher" checked={selectedVoucher === 'FREESHIP'} onChange={() => alert('Tính năng chọn Voucher đang được phát triển')} className="w-4 h-4 text-primary-container" />
                                 </div>
                             </div>
                         </label>

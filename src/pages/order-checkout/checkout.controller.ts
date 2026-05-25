@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
 import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
+import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod.enum";
 
 export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
@@ -9,8 +10,8 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
-    const [selectedVoucher, setSelectedVoucher] = useState("NEST200");
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>(PaymentMethod.COD);
+    const [selectedVoucher, setSelectedVoucher] = useState("");
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] = useState(false);
 
