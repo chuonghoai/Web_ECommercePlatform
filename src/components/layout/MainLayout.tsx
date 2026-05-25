@@ -7,7 +7,7 @@ export const MainLayout = () => {
         <div className="min-h-screen flex flex-col bg-market-background font-['Open_Sans',sans-serif]">
             <Header />
 
-            <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-8 py-8">
+            <main className="flex-1 w-full max-w-400 mx-auto px-4 md:px-8 py-8">
                 <Outlet />
             </main>
 

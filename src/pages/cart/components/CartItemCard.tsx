@@ -4,14 +4,23 @@ import { QuantitySelector } from './QuantitySelector';
 
 interface Props {
   item: CartItem;
-
+  isSelected: boolean;
+  onToggleSelect: () => void;
   isLoading: boolean;
   onUpdateQuantity: (id: string, qty: number) => void;
   onRemove: (id: string) => void;
   formatMoney: (val: number) => string;
 }
 
-export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantity, onRemove, formatMoney }) => {
+export const CartItemCard: React.FC<Props> = ({ 
+  item, 
+  isSelected, 
+  onToggleSelect, 
+  isLoading, 
+  onUpdateQuantity, 
+  onRemove, 
+  formatMoney 
+}) => {
   const { product, quantity } = item;
   
   const makerName = product.seller?.name || "Artisan Maker";
@@ -20,6 +29,17 @@ export const CartItemCard: React.FC<Props> = ({ item, isLoading, onUpdateQuantit
   
   return (
     <div className="flex flex-col sm:flex-row gap-6 group">
+      
+      {/* Item Checkbox */}
+      <div className="flex items-center pt-2 sm:pt-4">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={onToggleSelect}
+          className="w-5 h-5 text-market-primary border-[#D6D3D1] rounded focus:ring-market-primary cursor-pointer"
+        />
+      </div>
+
       {/* Product Image */}
       <div className="sm:w-[160px] shrink-0">
         <div className="aspect-[4/5] bg-[#E7E5E4] rounded-lg overflow-hidden border border-[#E7E5E4]">

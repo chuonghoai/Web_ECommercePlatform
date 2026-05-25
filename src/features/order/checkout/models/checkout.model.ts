@@ -20,19 +20,19 @@ type CheckoutItem = {
  * Địa chỉ mặc định của người dùng
  * Nếu user chưa có địa chỉ, trả về null
  */
-type Address = {
+export type Address = {
     id: number;
 
     fullName: string;
     phoneNumber: string;
 
-    provinceCode: string;
+    provinceCode: number;
     provinceName: string;   // Ví dụ: TPHCM
 
-    districtCode: string;
+    districtCode: number;
     districtName: string;   // Ví dụ: Quận 1
 
-    wardCode: string;
+    wardCode: number;
     wardName: string;       // Ví dụ: Phường Bến Thành
 
     street: string;         // Ví dụ: Số 227 Nguyễn Văn Cừ

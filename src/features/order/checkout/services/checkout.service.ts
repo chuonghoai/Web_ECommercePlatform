@@ -1,4 +1,4 @@
-import type { PrepareCheckoutRequest } from "../dto/checkout.dto";
+import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import type { CheckoutRepository } from "../repositories/checkout.repository";
 import { CheckoutApiRepository } from "../repositories/checkoutApi.repository";
 import { CheckoutMockRepository } from "../repositories/checkoutMock.repository";
@@ -15,4 +15,7 @@ export class CheckoutService {
     }
 }
 
-export const checkoutService = new CheckoutService(new CheckoutMockRepository());
+const useMock = true;
+export const checkoutService = new CheckoutService(
+    useMock ? new CheckoutMockRepository() : undefined
+);

@@ -26,8 +26,9 @@
   --color-surface-card: #FFFFFF;
   --color-surface-container-low: #faf2eb;
   --color-surface-container: #f4ede6;
+  --color-surface-container-high: #e1e1e17d;
   --color-text-ink: #1C1917;
-  --color-text-muted: #A8A29E;
+  --color-text-muted: #78726f;
   --color-border-subtle: #E7E5E4;
   --color-border-medium: #D6D3D1;
   --color-on-surface-variant: #59413a;
@@ -70,6 +71,10 @@
     border-radius: 0.25rem;
     background-color: var(--color-surface-card);
     transition: all 0.2s ease;
+  }
+
+  .input-field:disabled {
+    background-color: var(--color-surface-container-high);
   }
 
   .input-field:focus {

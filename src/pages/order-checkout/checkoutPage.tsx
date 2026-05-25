@@ -1,11 +1,18 @@
 import { useCheckoutController } from './checkout.controller';
-import { ShippingDetailForm } from './components/ShippingDetailForm';
 import { OrderItemsList } from './components/OrderItemsList';
 import { OrderSummary } from './components/OrderSummary';
-import { VoucherModal } from './components/VoucherModal';
-import { PaymentMethodModal } from './components/PaymentMethodModal';
+import { VoucherModal } from './Modal/VoucherModal';
+import { PaymentMethodModal } from './Modal/PaymentMethodModal';
+import { AddressModal } from './Modal/AddressModal';
+import { AddNewAddressModal } from './Modal/AddNewAddress/AddNewAddressModal';
+import { Navigate, useLocation } from 'react-router-dom';
+import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/prepareCheckout.dto';
+import { ShippingForm } from './components/ShippingForm/ShippingForm';
 
 function CheckoutPage() {
+    const location = useLocation();
+    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[];
+
     const {
         data,
         loading,
@@ -14,15 +21,24 @@ function CheckoutPage() {
         setIsVoucherModalOpen,
         isPaymentModalOpen,
         setIsPaymentModalOpen,
+        isAddressModalOpen,
+        setIsAddressModalOpen,
+        isAddNewAddressModalOpen,
+        setIsAddNewAddressModalOpen,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
         selectedVoucher,
         setSelectedVoucher,
+        handleSelectAddress,
         handleIncreaseQuantity,
         handleDecreaseQuantity,
         handleRemoveItem,
         handleOrderSubmit
-    } = useCheckoutController();
+    } = useCheckoutController(checkoutItems || []);
+
+    if (!checkoutItems || checkoutItems.length === 0) {
+        return <Navigate to="/cart" replace />;
+    }
 
     if (loading) {
         return (
@@ -45,7 +61,7 @@ function CheckoutPage() {
     return (
         <div className="font-body text-body min-h-screen flex flex-col">
             <header className="w-full bg-background dark:bg-surface border-b border-subtle dark:border-outline-variant py-4 px-6">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                <div className="max-w-full mx-auto flex justify-between items-center">
                     <div className="font-display text-2xl md:text-3xl text-primary font-bold tracking-tight">
                         Artisan Market
                     </div>
@@ -56,13 +72,16 @@ function CheckoutPage() {
                 </div>
             </header>
 
-            <main className="flex-grow py-8 md:py-12 px-6">
-                <div className="max-w-7xl mx-auto">
+            <main className="grow py-8 md:py-12 px-6">
+                <div className="max-w-full mx-auto">
                     <div className="flex flex-col lg:flex-row gap-8">
 
                         <div className="w-full lg:w-2/3 space-y-8">
                             {/* Component: Shipping info */}
-                            <ShippingDetailForm address={data.address} />
+                            <ShippingForm
+                                address={data.address}
+                                onOpenAddressModal={() => setIsAddressModalOpen(true)}
+                            />
 
                             {/* Component: Order item list */}
                             <OrderItemsList
@@ -106,6 +125,32 @@ function CheckoutPage() {
                 onClose={() => setIsPaymentModalOpen(false)}
                 selectedPayment={selectedPaymentMethod}
                 onSelectPayment={setSelectedPaymentMethod}
+            />
+
+            {/* Modal: Choosing address */}
+            <AddressModal
+                isOpen={isAddressModalOpen}
+                onClose={() => setIsAddressModalOpen(false)}
+                selectedAddressId={data.address?.id}
+                onSelectAddress={handleSelectAddress}
+                onOpenAddNewAddress={() => {
+                    setIsAddressModalOpen(false);
+                    setIsAddNewAddressModalOpen(true);
+                }}
+            />
+
+            {/* Modal: Add new address */}
+            <AddNewAddressModal
+                isOpen={isAddNewAddressModalOpen}
+                onClose={() => setIsAddNewAddressModalOpen(false)}
+                onBack={() => {
+                    setIsAddNewAddressModalOpen(false);
+                    setIsAddressModalOpen(true);
+                }}
+                onSuccess={(newAddress) => {
+                    handleSelectAddress(newAddress);
+                    setIsAddNewAddressModalOpen(false);
+                }}
             />
         </div>
     );

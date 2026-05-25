@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../../../../core/api/apiResponse";
-import type { PrepareCheckoutRequest } from "../dto/checkout.dto";
+import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
 
@@ -13,15 +13,15 @@ export class CheckoutMockRepository implements CheckoutRepository {
                     id: 1,
                     fullName: "John Doe",
                     phoneNumber: "1234567890",
-                    provinceCode: "123",
+                    provinceCode: 123,
                     provinceName: "Province 1",
-                    districtCode: "123",
+                    districtCode: 123,
                     districtName: "District 1",
-                    wardCode: "123",
+                    wardCode: 123,
                     wardName: "Ward 1",
                     street: "Street 1",
-                    latitude: 123,
-                    longitude: 123,
+                    latitude: 10.88206144628933,
+                    longitude: 106.76458444116837,
                     fullAddress: "Address 1",
                 },
 

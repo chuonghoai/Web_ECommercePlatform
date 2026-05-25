@@ -1,24 +1,37 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
-import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/checkout.dto";
+import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
+import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod.enum";
+import { useToast } from "../../components/toast/toast";
 
-export const useCheckoutController = () => {
+export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();
+    const hasFetched = useRef(false);
+    const { toast } = useToast();
 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
-    const [selectedVoucher, setSelectedVoucher] = useState("NEST200");
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>(PaymentMethod.COD);
+    const [selectedVoucher, setSelectedVoucher] = useState("");
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+    const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] = useState(false);
 
     // Init data
     useEffect(() => {
-        const initialRequest: PrepareCheckoutRequest[] = [
-            { productId: "1", quantity: 1 },
-            { productId: "2", quantity: 2 }
-        ];
-        store.fetchPrepareOrder(initialRequest);
-    }, [store.fetchPrepareOrder]);
+        if (initialRequest && initialRequest.length > 0 && !hasFetched.current) {
+            store.fetchPrepareOrder(initialRequest);
+            hasFetched.current = true;
+        }
+    }, [store.fetchPrepareOrder, initialRequest]);
+
+    // Open edit address modal and set new address
+    const handleSelectAddress = (address: any) => {
+        if (store.data) {
+            store.setData({ ...store.data, address });
+        }
+        setIsAddressModalOpen(false);
+    };
 
     // Increase item quantity
     const handleIncreaseQuantity = useCallback((productId: string) => {
@@ -85,17 +98,28 @@ export const useCheckoutController = () => {
         data: store.data,
         loading: store.loading,
         error: store.error,
+
         isVoucherModalOpen,
         setIsVoucherModalOpen,
+        selectedVoucher,
+        setSelectedVoucher,
+
         isPaymentModalOpen,
         setIsPaymentModalOpen,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
-        selectedVoucher,
-        setSelectedVoucher,
+
+        isAddressModalOpen,
+        setIsAddressModalOpen,
+        handleSelectAddress,
+
+        isAddNewAddressModalOpen,
+        setIsAddNewAddressModalOpen,
+
         handleIncreaseQuantity,
         handleDecreaseQuantity,
         handleRemoveItem,
+
         handleOrderSubmit
     };
 };
