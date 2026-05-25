@@ -4,8 +4,11 @@ export const useAddNewAddressController = (isOpen: boolean) => {
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber: '',
+        provinceCode: 0,
         provinceName: '',
+        districtCode: 0,
         districtName: '',
+        wardCode: 0,
         wardName: '',
         street: ''
     });
@@ -20,7 +23,7 @@ export const useAddNewAddressController = (isOpen: boolean) => {
     // Reset lại form mỗi khi mở lại Modal
     useEffect(() => {
         if (isOpen) {
-            setFormData({ fullName: '', phoneNumber: '', provinceName: '', districtName: '', wardName: '', street: '' });
+            setFormData({ fullName: '', phoneNumber: '', provinceCode: 0, provinceName: '', districtCode: 0, districtName: '', wardCode: 0, wardName: '', street: '' });
             setLocation(null);
             setIsVerified(false);
             setIsVerifying(false);

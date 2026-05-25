@@ -26,13 +26,13 @@ export type Address = {
     fullName: string;
     phoneNumber: string;
 
-    provinceCode: string;
+    provinceCode: number;
     provinceName: string;   // Ví dụ: TPHCM
 
-    districtCode: string;
+    districtCode: number;
     districtName: string;   // Ví dụ: Quận 1
 
-    wardCode: string;
+    wardCode: number;
     wardName: string;       // Ví dụ: Phường Bến Thành
 
     street: string;         // Ví dụ: Số 227 Nguyễn Văn Cừ
