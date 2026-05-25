@@ -1,6 +1,6 @@
 import { apiClient } from "../../../../core/api/apiClient";
 import type { ApiResponse } from "../../../../core/api/apiResponse";
-import type { PrepareCheckoutRequest } from "../dto/checkout.dto";
+import type { PrepareCheckoutRequest } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
 

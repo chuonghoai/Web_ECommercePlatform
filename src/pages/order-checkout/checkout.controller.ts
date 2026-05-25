@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
-import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/checkout.dto";
+import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/checkoutRequest.dto";
 
 export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
     const store = useCheckoutStore();

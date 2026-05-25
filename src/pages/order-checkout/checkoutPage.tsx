@@ -6,7 +6,7 @@ import { PaymentMethodModal } from './Modal/PaymentMethodModal';
 import { AddressModal } from './Modal/AddressModal';
 import { AddNewAddressModal } from './Modal/AddNewAddress/AddNewAddressModal';
 import { Navigate, useLocation } from 'react-router-dom';
-import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkout.dto';
+import type { PrepareCheckoutRequest } from '../../features/order/checkout/dto/checkoutRequest.dto';
 import { ShippingForm } from './components/ShippingForm/ShippingForm';
 
 function CheckoutPage() {
@@ -78,8 +78,8 @@ function CheckoutPage() {
 
                         <div className="w-full lg:w-2/3 space-y-8">
                             {/* Component: Shipping info */}
-                            <ShippingForm 
-                                address={data.address} 
+                            <ShippingForm
+                                address={data.address}
                                 onOpenAddressModal={() => setIsAddressModalOpen(true)}
                             />
 
