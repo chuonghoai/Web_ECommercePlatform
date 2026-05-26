@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useCheckoutStore } from "./checkout.store";
 import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
-import { PaymentMethod } from "../../features/order/checkout/enums/paymentMethod.enum";
+import { EPaymentMethod } from "../../features/order/enums/paymentMethod.enum";
 import { useToast } from "../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import type { CheckoutRequestDto } from "../../features/order/checkout/dto/checkoutRequest.dto";
@@ -19,7 +19,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>(PaymentMethod.COD);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<EPaymentMethod>(EPaymentMethod.COD);
     const [selectedVoucher, setSelectedVoucher] = useState("");
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] = useState(false);

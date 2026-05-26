@@ -1,0 +1,12 @@
+import type { EPaymentMethod } from "../../enums/paymentMethod.enum";
+import type { EPaymentStatus } from "../../enums/paymentStatus.enum";
+
+export interface CheckoutResultDto {
+    orderId: string;
+    paymentStatus: EPaymentStatus;
+    paymentMethod: EPaymentMethod;
+    createAt: Date;
+    totalAmount: number;
+    shippingAddress: string;
+    orderStatus: string;
+}

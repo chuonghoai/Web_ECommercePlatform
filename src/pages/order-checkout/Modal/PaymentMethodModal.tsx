@@ -1,11 +1,11 @@
 import React from 'react';
-import { PaymentMethod } from '../../../features/order/checkout/enums/paymentMethod.enum';
+import { EPaymentMethod } from '../../../features/order/enums/paymentMethod.enum';
 
 interface PaymentMethodModalProps {
     isOpen: boolean;
     onClose: () => void;
-    selectedPayment: PaymentMethod;
-    onSelectPayment: (paymentMethod: PaymentMethod) => void;
+    selectedPayment: EPaymentMethod;
+    onSelectPayment: (paymentMethod: EPaymentMethod) => void;
 }
 
 export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
@@ -15,7 +15,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     onSelectPayment: originalOnSelectPayment
 }) => {
 
-    const onSelectPayment = (method: PaymentMethod) => {
+    const onSelectPayment = (method: EPaymentMethod) => {
         originalOnSelectPayment(method);
         onClose();
     };
@@ -34,7 +34,7 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                 </div>
 
                 <div className="p-4 space-y-3 overflow-y-auto">
-                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === PaymentMethod.COD ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === EPaymentMethod.COD ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
                         <div className="flex items-center gap-4">
                             <span className="material-symbols-outlined text-primary-container text-3xl">local_shipping</span>
                             <div>
@@ -45,12 +45,12 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                         <input
                             type="radio"
                             name="payment"
-                            checked={selectedPayment === PaymentMethod.COD}
-                            onChange={() => onSelectPayment(PaymentMethod.COD)}
+                            checked={selectedPayment === EPaymentMethod.COD}
+                            onChange={() => onSelectPayment(EPaymentMethod.COD)}
                             className="w-4 h-4 text-primary-container cursor-pointer"
                         />
                     </label>
-                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === PaymentMethod.MOMO ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === EPaymentMethod.MOMO ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
                         <div className="flex items-center gap-4">
                             <img
                                 src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square-1024x1024.png"
@@ -65,8 +65,8 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                         <input
                             type="radio"
                             name="payment"
-                            checked={selectedPayment === PaymentMethod.MOMO}
-                            onChange={() => onSelectPayment(PaymentMethod.MOMO)}
+                            checked={selectedPayment === EPaymentMethod.MOMO}
+                            onChange={() => onSelectPayment(EPaymentMethod.MOMO)}
                             className="w-4 h-4 text-primary-container cursor-pointer"
                         />
                     </label>

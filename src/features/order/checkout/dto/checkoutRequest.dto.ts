@@ -1,4 +1,4 @@
-import type { PaymentMethod } from "../enums/paymentMethod.enum";
+import type { EPaymentMethod } from "../../enums/paymentMethod.enum";
 
 /**
  * Mua sản phẩm productId với số lượng quantity
@@ -22,7 +22,7 @@ export interface CheckoutRequestDto {
 
     voucherIds?: string[];
 
-    paymentMethod: PaymentMethod;
+    paymentMethod: EPaymentMethod;
 }
 
 /**

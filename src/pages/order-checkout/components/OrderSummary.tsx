@@ -1,11 +1,11 @@
 import React from 'react';
-import { PaymentMethod } from '../../../features/order/checkout/enums/paymentMethod.enum';
+import { EPaymentMethod } from '../../../features/order/enums/paymentMethod.enum';
 
 interface OrderSummaryProps {
     subTotal: number;
     shippingFee: number;
     totalAmount: number;
-    selectedPaymentMethod: PaymentMethod; // Đổi type sang enum
+    selectedPaymentMethod: EPaymentMethod; // Đổi type sang enum
     onOpenPaymentModal: () => void;
     onOpenVoucherModal: () => void;
     onOrderSubmit: () => void;
@@ -59,7 +59,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     {/* Payment method button: open modal choosing payment method */}
                     <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                            {selectedPaymentMethod === PaymentMethod.COD ? (
+                            {selectedPaymentMethod === EPaymentMethod.COD ? (
                                 <span className="material-symbols-outlined text-primary-container shrink-0 text-xl">
                                     local_shipping
                                 </span>
@@ -71,8 +71,8 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                                 />
                             )}
 
-                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === PaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}>
-                                {selectedPaymentMethod === PaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}
+                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === EPaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}>
+                                {selectedPaymentMethod === EPaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}
                             </span>
                         </div>
                         <button
