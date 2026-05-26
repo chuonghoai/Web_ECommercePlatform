@@ -22,7 +22,7 @@ export class CheckoutService {
     }
 }
 
-const useMock = true;
+const useMock = false;
 export const checkoutService = new CheckoutService(
     useMock ? new CheckoutMockRepository() : undefined
 );
