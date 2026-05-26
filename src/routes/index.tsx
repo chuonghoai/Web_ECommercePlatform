@@ -16,7 +16,7 @@ import ProfilePage from "../pages/profile/profilePage";
 import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
 import { AdminLayout } from "../admin/layout/AdminLayout";
-import { DashboardPage } from "../admin/pages/overview/Dashboard";
+import { DashboardPage } from "../admin/pages/overview/DashboardPage";
 import { CartProvider } from "../features/cart/contexts/CartContext";
 import { EUserRole } from "../features/user/models/user.model";
 

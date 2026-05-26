@@ -30,7 +30,7 @@ const initialState: DashboardState = {
     productPerformance: [],
     productPage: 1,
     productTotalPages: 1,
-    period: '30d',
+    period: '7d',
     loading: false,
     error: null,
 };
@@ -75,8 +75,8 @@ export const useDashboardStore = () => {
 
     const periodLabel = useMemo(() => {
         const labels: Record<DashboardPeriod, string> = {
+            '7d': '1 tuần qua',
             '30d': '30 ngày qua',
-            '90d': '90 ngày qua',
             '1y': '1 năm qua',
         };
         return labels[state.period];

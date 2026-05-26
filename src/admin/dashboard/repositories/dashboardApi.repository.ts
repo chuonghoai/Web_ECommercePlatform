@@ -1,3 +1,4 @@
+import { apiClient } from '../../../core/api/apiClient';
 import type { ApiResponse } from '../../../core/api/apiResponse';
 import type {
     CategoryStat,
@@ -7,24 +8,18 @@ import type {
     RevenueDataPoint,
     TrendingProduct,
 } from '../models/dashboard.model';
-import type { DashboardRepository } from '../repositories/dashboard.repository';
-import { DashboardApiRepository } from '../repositories/dashboardApi.repository';
-import { DashboardMockRepository } from '../repositories/dashboardMock.repository';
+import type { DashboardRepository } from './dashboard.repository';
 
-export class DashboardService {
-    private readonly repository: DashboardRepository;
-
-    constructor(repository?: DashboardRepository) {
-        this.repository = repository ?? new DashboardApiRepository();
-    }
-
+export class DashboardApiRepository implements DashboardRepository {
     /**
      * GET /api/v1/admin/dashboard/kpi
      * @query period: DashboardPeriod
      * @returns ApiResponse<KpiStats>
      */
     getKpiStats(period: DashboardPeriod): Promise<ApiResponse<KpiStats>> {
-        return this.repository.getKpiStats(period);
+        return apiClient.get<ApiResponse<KpiStats>>('/api/v1/admin/dashboard/kpi', {
+            params: { period },
+        });
     }
 
     /**
@@ -33,7 +28,9 @@ export class DashboardService {
      * @returns ApiResponse<RevenueDataPoint[]>
      */
     getRevenueChart(period: DashboardPeriod): Promise<ApiResponse<RevenueDataPoint[]>> {
-        return this.repository.getRevenueChart(period);
+        return apiClient.get<ApiResponse<RevenueDataPoint[]>>('/api/v1/admin/dashboard/revenue-chart', {
+            params: { period },
+        });
     }
 
     /**
@@ -42,7 +39,9 @@ export class DashboardService {
      * @returns ApiResponse<CategoryStat[]>
      */
     getTopCategories(period: DashboardPeriod, limit?: number): Promise<ApiResponse<CategoryStat[]>> {
-        return this.repository.getTopCategories(period, limit);
+        return apiClient.get<ApiResponse<CategoryStat[]>>('/api/v1/admin/dashboard/top-categories', {
+            params: { period, limit },
+        });
     }
 
     /**
@@ -51,7 +50,9 @@ export class DashboardService {
      * @returns ApiResponse<TrendingProduct[]>
      */
     getTrendingProducts(limit?: number): Promise<ApiResponse<TrendingProduct[]>> {
-        return this.repository.getTrendingProducts(limit);
+        return apiClient.get<ApiResponse<TrendingProduct[]>>('/api/v1/admin/dashboard/trending-products', {
+            params: { limit },
+        });
     }
 
     /**
@@ -64,11 +65,8 @@ export class DashboardService {
         pageSize: number,
         period: DashboardPeriod
     ): Promise<ApiResponse<ProductPerformanceItem[]>> {
-        return this.repository.getProductPerformance(page, pageSize, period);
+        return apiClient.get<ApiResponse<ProductPerformanceItem[]>>('/api/v1/admin/dashboard/product-performance', {
+            params: { page, pageSize, period },
+        });
     }
 }
-
-const useMock = true;
-export const dashboardService = new DashboardService(
-    useMock ? new DashboardMockRepository() : undefined
-);

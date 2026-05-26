@@ -2,12 +2,12 @@ import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { HeaderOptions } from '../../layout/AdminLayout';
 import type { DashboardPeriod, KpiStats, ProductPerformanceItem, StockStatus } from '../../dashboard/models/dashboard.model';
-import { useDashboardStore } from './dashboard.store';
+import { useDashboardController } from './dashboard.controller';
 
 const PERIOD_OPTIONS: { label: string; value: DashboardPeriod }[] = [
-    { label: '30 ngày qua', value: '30d' },
-    { label: '90 ngày qua', value: '90d' },
-    { label: '1 năm qua', value: '1y' },
+    { label: '1 tuần', value: '7d' },
+    { label: '30 ngày', value: '30d' },
+    { label: '1 năm', value: '1y' },
 ];
 
 const STOCK_STATUS_MAP: Record<StockStatus, { label: string; className: string }> = {
@@ -86,7 +86,7 @@ const BarChart = ({ data }: { data: { label: string; revenue: number }[] }) => {
                         />
                     ))}
 
-                    <div className="absolute inset-0 flex items-end justify-around gap-2 px-1">
+                    <div className="absolute inset-0 flex items-stretch justify-around gap-2 px-1">
                         {data.map((d) => {
                             const heightPct = (d.revenue / maxRevenue) * 100;
                             return (
@@ -158,9 +158,9 @@ export const DashboardPage = () => {
         periodLabel,
         loading,
         error,
-        setPeriod,
+        handlePeriodChange,
         fetchAll,
-    } = useDashboardStore();
+    } = useDashboardController();
 
     useEffect(() => {
         setHeaderOptions({
@@ -201,7 +201,7 @@ export const DashboardPage = () => {
                         {PERIOD_OPTIONS.map((opt) => (
                             <button
                                 key={opt.value}
-                                onClick={() => setPeriod(opt.value)}
+                                onClick={() => handlePeriodChange(opt.value)}
                                 className={`font-body text-xs font-semibold px-3 py-1.5 rounded-md transition-all duration-200 focus-visible:ring-2 focus-visible:ring-primary-container focus-visible:outline-none ${
                                     period === opt.value
                                         ? 'bg-primary-container text-on-primary-container shadow-sm'

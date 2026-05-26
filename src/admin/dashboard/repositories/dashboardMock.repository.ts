@@ -16,11 +16,11 @@ const KPI_BY_PERIOD: Record<DashboardPeriod, KpiStats> = {
         conversionRate: { value: 3.4, changePercent: -1.1, trend: 'down' },
         returningUserRate: { value: 42.0, changePercent: 5.4, trend: 'up' },
     },
-    '90d': {
-        totalRevenue: { value: 378200000, changePercent: 9.8, trend: 'up' },
-        totalOrders: { value: 3710, changePercent: 6.5, trend: 'up' },
-        conversionRate: { value: 3.7, changePercent: 0.3, trend: 'up' },
-        returningUserRate: { value: 39.5, changePercent: 2.1, trend: 'up' },
+    '7d': {
+        totalRevenue: { value: 28600000, changePercent: 5.3, trend: 'up' },
+        totalOrders: { value: 287, changePercent: 3.1, trend: 'up' },
+        conversionRate: { value: 3.2, changePercent: -0.4, trend: 'down' },
+        returningUserRate: { value: 40.1, changePercent: 1.8, trend: 'up' },
     },
     '1y': {
         totalRevenue: { value: 1542000000, changePercent: 22.3, trend: 'up' },
@@ -39,13 +39,14 @@ const REVENUE_CHART_BY_PERIOD: Record<DashboardPeriod, RevenueDataPoint[]> = {
         { label: 'T5', revenue: 27400000, orders: 265 },
         { label: 'T6', revenue: 35200000, orders: 340 },
     ],
-    '90d': [
-        { label: 'T10', revenue: 42000000, orders: 410 },
-        { label: 'T11', revenue: 55000000, orders: 530 },
-        { label: 'T12', revenue: 61000000, orders: 590 },
-        { label: 'T1', revenue: 48000000, orders: 460 },
-        { label: 'T2', revenue: 70000000, orders: 680 },
-        { label: 'T3', revenue: 78000000, orders: 750 },
+    '7d': [
+        { label: 'T2', revenue: 3200000, orders: 32 },
+        { label: 'T3', revenue: 4100000, orders: 41 },
+        { label: 'T4', revenue: 3800000, orders: 38 },
+        { label: 'T5', revenue: 5200000, orders: 52 },
+        { label: 'T6', revenue: 6300000, orders: 63 },
+        { label: 'T7', revenue: 4900000, orders: 49 },
+        { label: 'CN', revenue: 2100000, orders: 21 },
     ],
     '1y': [
         { label: 'T1', revenue: 98000000, orders: 920 },

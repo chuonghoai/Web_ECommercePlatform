@@ -46,4 +46,4 @@ export interface ProductPerformanceItem {
     stockStatus: StockStatus;
 }
 
-export type DashboardPeriod = '30d' | '90d' | '1y';
+export type DashboardPeriod = '7d' | '30d' | '1y';
