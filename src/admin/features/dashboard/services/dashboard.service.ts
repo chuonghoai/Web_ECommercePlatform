@@ -68,7 +68,7 @@ export class DashboardService {
     }
 }
 
-// const useMock = false;
-// export const dashboardService = new DashboardService(
-//     useMock ? new DashboardMockRepository() : undefined
-// );
+const useMock = false;
+export const dashboardService = new DashboardService(
+    useMock ? new DashboardMockRepository() : undefined
+);
