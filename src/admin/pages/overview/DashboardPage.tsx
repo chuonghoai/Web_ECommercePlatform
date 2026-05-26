@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { HeaderOptions } from '../../layout/AdminLayout';
-import type { DashboardPeriod, KpiStats, ProductPerformanceItem, StockStatus } from '../../dashboard/models/dashboard.model';
+import type { DashboardPeriod, KpiStats, ProductPerformanceItem, StockStatus } from '../../features/dashboard/models/dashboard.model';
 import { useDashboardController } from './dashboard.controller';
 
 const PERIOD_OPTIONS: { label: string; value: DashboardPeriod }[] = [

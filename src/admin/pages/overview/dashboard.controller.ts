@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { DashboardPeriod } from '../../dashboard/models/dashboard.model';
+import type { DashboardPeriod } from '../../features/dashboard/models/dashboard.model';
 import { useDashboardStore } from './dashboard.store';
 
 export const useDashboardController = () => {

@@ -1,4 +1,4 @@
-import type { ApiResponse } from '../../../core/api/apiResponse';
+import type { ApiResponse } from '../../../../core/api/apiResponse';
 import type {
     CategoryStat,
     DashboardPeriod,

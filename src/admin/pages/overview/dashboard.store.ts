@@ -6,8 +6,8 @@ import type {
     ProductPerformanceItem,
     RevenueDataPoint,
     TrendingProduct,
-} from '../../dashboard/models/dashboard.model';
-import { dashboardService } from '../../dashboard/services/dashboard.service';
+} from '../../features/dashboard/models/dashboard.model';
+import { dashboardService } from '../../features//dashboard/services/dashboard.service';
 
 interface DashboardState {
     kpi: KpiStats | null;

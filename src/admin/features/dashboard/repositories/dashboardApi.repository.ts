@@ -1,5 +1,5 @@
-import { apiClient } from '../../../core/api/apiClient';
-import type { ApiResponse } from '../../../core/api/apiResponse';
+import { apiClient } from '../../../../core/api/apiClient';
+import type { ApiResponse } from '../../../../core/api/apiResponse';
 import type {
     CategoryStat,
     DashboardPeriod,
