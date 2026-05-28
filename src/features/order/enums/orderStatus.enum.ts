@@ -1,6 +1,6 @@
 export const EOrderStatus = {
     PENDING: 'PENDING',
-    PAID: 'PAID',
+    SUCCESS: 'SUCCESS',
     SHIPPED: 'SHIPPED',
     DELIVERED: 'DELIVERED',
     CANCELLED: 'CANCELLED',
