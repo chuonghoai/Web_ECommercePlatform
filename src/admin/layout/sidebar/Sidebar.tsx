@@ -1,18 +1,33 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { userStorageService } from "../../../features/user/services/userStorage.service";
+import { EUserRole, type User } from "../../../features/user/models/user.model";
 
 export const Sidebar = () => {
+    const [user, setUser] = useState<User | null>(null);
     const location = useLocation();
 
+    useEffect(() => {
+        const loadUser = () => {
+            const currentUser = userStorageService.getUser();
+            setUser(currentUser);
+        }
+
+        loadUser();
+        window.addEventListener("auth_changed", loadUser);
+
+        return () => {
+            window.removeEventListener("auth_changed", loadUser);
+        }
+    }, []);
+
     const navItems = [
-        { path: "/admin", icon: "dashboard", label: "Overview" },
-        { path: "/admin/orders", icon: "shopping_cart", label: "Orders" },
-        { path: "/admin/products", icon: "inventory_2", label: "Products" },
-        { path: "/admin/customers", icon: "group", label: "Customers" },
-        { path: "/admin/analytics", icon: "analytics", label: "Analytics" },
-        { path: "/admin/trends", icon: "trending_up", label: "Trends" },
-        { path: "/admin/marketing", icon: "campaign", label: "Marketing" },
-        { path: "/admin/inventory", icon: "warehouse", label: "Inventory" },
-        { path: "/admin/settings", icon: "settings", label: "Settings" },
+        { path: "/admin", icon: "dashboard", label: "Tổng quan" },
+        { path: "/admin/orders", icon: "shopping_cart", label: "Đơn hàng" },
+        { path: "/admin/products", icon: "inventory_2", label: "Sản phẩm" },
+        { path: "/admin/staff", icon: "people", label: "Nhân viên" },
+        { path: "/admin/inventory", icon: "warehouse", label: "Kho hàng" },
+        { path: "/admin/settings", icon: "settings", label: "Cài đặt" },
     ];
 
     return (
@@ -28,7 +43,7 @@ export const Sidebar = () => {
                         <li key={item.path}>
                             <Link
                                 to={item.path}
-                                className={`flex items-center gap-4 px-4 py-2 rounded-lg hover:translate-y-[-2px] transition-transform duration-200 ${isActive ? 'text-primary-container bg-surface-container font-bold' : 'text-text-muted hover:text-text-ink'}`}
+                                className={`flex items-center gap-4 px-4 py-2 rounded-lg hover:-translate-y-0.5 transition-transform duration-200 ${isActive ? 'text-primary-container bg-surface-container font-bold' : 'text-text-muted hover:text-text-ink'}`}
                             >
                                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{item.icon}</span>
                                 <span className="font-body text-sm font-semibold">{item.label}</span>
@@ -40,23 +55,27 @@ export const Sidebar = () => {
             <div className="mt-auto pt-4 border-t-[1.5px] border-border-subtle">
                 <ul className="flex flex-col gap-1">
                     <li>
-                        <Link to="/admin/support" className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:translate-y-[-2px] transition-transform duration-200">
+                        <button className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:-translate-y-0.5 transition-transform duration-200">
                             <span className="material-symbols-outlined">help</span>
-                            <span className="font-body text-sm font-semibold">Support</span>
-                        </Link>
+                            <span className="font-body text-sm font-semibold">Hỗ trợ</span>
+                        </button>
                     </li>
                     <li>
-                        <Link to="/admin/documentation" className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:translate-y-[-2px] transition-transform duration-200">
+                        <button className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:-translate-y-0.5 transition-transform duration-200">
                             <span className="material-symbols-outlined">description</span>
-                            <span className="font-body text-sm font-semibold">Documentation</span>
-                        </Link>
+                            <span className="font-body text-sm font-semibold">Tài liệu</span>
+                        </button>
                     </li>
                 </ul>
                 <div className="mt-4 flex items-center gap-4 px-4">
-                    <img alt="User profile" className="w-8 h-8 rounded-full border-[1.5px] border-border-medium object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbO_7Cc4RxMzu8jEJy7FNBRbAFJb8j0ygsoayljk-lOxADi51uZNmAaEpmkv7SeXke9h-Td1PMOW63NLYTjh6VP0W8UQ2--Bpzg-to4hMVEUvNf4DBRpyTqMG5Qqcste76Y5i44XYDH54CiocAqehTI3WpOEGD09q9ibglFE0rooDUYryZZ6U2uz7Wfnw831FEH_G_Op7USb6kCtK5ZzyCudghuv1GIgQ9G_ui24JFxHI1IX6hD8p525UidrtmXDRxd30bcYbK5dmq" />
+                    <img
+                        alt="User profile"
+                        className="w-8 h-8 rounded-full border-[1.5px] border-border-medium object-cover"
+                        src={user?.avatarUrl || ""}
+                    />
                     <div>
-                        <p className="font-body text-sm font-semibold text-text-ink">Eleanor Vance</p>
-                        <p className="font-body text-[10px] text-text-muted">Artisan Director</p>
+                        <span className="font-body text-sm font-semibold text-text-ink">{user?.fullName}</span>
+                        <p className="font-body text-[10px] text-text-muted">{user?.role === EUserRole.ADMIN ? "Quản trị viên" : "Nhân viên"}</p>
                     </div>
                 </div>
             </div>

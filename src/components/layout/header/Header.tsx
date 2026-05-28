@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userStorageService } from "../../../features/user/services/userStorage.service";
-import type { User } from "../../../features/user/models/user.model";
+import { EUserRole, type User } from "../../../features/user/models/user.model";
 import { useToast } from "../../toast/toast";
 import { authService } from "../../../features/auth/services/auth.service";
 import { cartService } from "../../../features/cart/services/cart.service";
@@ -47,11 +47,15 @@ export const Header = () => {
   };
 
   const handleNavigateProfile = () => {
-    navigate("/profile");
+    if (!user) return;
+    const navPath = user.role === EUserRole.ADMIN ? "/admin" : "/profile";
+    navigate(navPath);
   };
 
   const handleNavigateOrder = () => {
-    navigate("/orders");
+    if (!user) return;
+    const navPath = user.role === EUserRole.ADMIN ? "/admin/orders" : "/orders";
+    navigate(navPath);
   };
 
   return (
@@ -87,8 +91,8 @@ export const Header = () => {
 
           <div className="flex items-center gap-5 border-l border-[#E7E5E4] pl-6">
             {/* Cart button */}
-            <Link 
-              to="/cart" 
+            <Link
+              to="/cart"
               onClick={(e) => {
                 const currentUser = userStorageService.getUser();
                 if (!currentUser) {
@@ -96,7 +100,7 @@ export const Header = () => {
                   toast("Bạn cần đăng nhập để sử dụng chức năng này", "warning");
                   navigate("/login");
                 }
-              }} 
+              }}
               className="relative text-[#57534E] hover:text-market-primary transition-colors"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
