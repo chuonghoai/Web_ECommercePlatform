@@ -1,4 +1,5 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
+import { USE_MOCK } from "../../../core/config/useMock.config";
 import type { FilterState } from "../../../pages/marketplace/components/filter/filter.type";
 import type { ProductItem } from "../models/product.model";
 import type { ProductDetail } from "../models/productDetail.model";
@@ -26,7 +27,4 @@ export class ProductService {
     }
 }
 
-const useMock = false;
-export const productService = new ProductService(
-    useMock ? new ProductMockRepository() : undefined
-);
+export const productService = new ProductService(USE_MOCK ? new ProductMockRepository() : undefined);

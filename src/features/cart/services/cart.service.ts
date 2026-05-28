@@ -3,6 +3,7 @@ import type { CartRepository } from "../repositories/cart.repository";
 import { CartApiRepository } from "../repositories/cartApi.repository";
 import { CartMockRepository } from "../repositories/cartMock.repository";
 import type { CartItem } from "../models/cart-item.model";
+import { USE_MOCK } from "../../../core/config/useMock.config";
 
 export class CartService {
     private readonly cartRepository: CartRepository;
@@ -92,7 +93,4 @@ export const formatVND = (value: number) =>
 export const calcTotal = (items: CartItem[]) =>
     items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
-const useMock = false;
-export const cartService = new CartService(
-    useMock ? new CartMockRepository() : undefined
-);
+export const cartService = new CartService(USE_MOCK ? new CartMockRepository() : undefined);

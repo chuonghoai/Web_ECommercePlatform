@@ -7,6 +7,7 @@ import { UserApiRepository } from "../repositories/userApi.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
 import { UserMockRepository } from "../repositories/userMock.repository";
 import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
+import { USE_MOCK } from "../../../core/config/useMock.config";
 
 export class UserService {
     private readonly userRepository: UserRepository;
@@ -52,7 +53,4 @@ export class UserService {
     }
 }
 
-const useMock = false;
-export const userService = new UserService(
-    useMock ? new UserMockRepository() : undefined
-);
+export const userService = new UserService(USE_MOCK ? new UserMockRepository() : undefined);

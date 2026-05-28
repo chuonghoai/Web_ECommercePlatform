@@ -1,4 +1,5 @@
 import type { ApiResponse } from '../../../../core/api/apiResponse';
+import { USE_MOCK } from '../../../../core/config/useMock.config';
 import type {
     CategoryStat,
     DashboardPeriod,
@@ -68,7 +69,4 @@ export class DashboardService {
     }
 }
 
-const useMock = false;
-export const dashboardService = new DashboardService(
-    useMock ? new DashboardMockRepository() : undefined
-);
+export const dashboardService = new DashboardService(USE_MOCK ? new DashboardMockRepository() : undefined);

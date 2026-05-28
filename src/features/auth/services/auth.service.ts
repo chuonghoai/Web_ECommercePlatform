@@ -7,6 +7,7 @@ import { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "../repositories/auth.repository";
 import { AuthApiRepository } from "../repositories/authApi.repository";
 import { AuthMockRepository } from "../repositories/authMock.repository";
+import { USE_MOCK } from "../../../core/config/useMock.config";
 
 export class AuthService {
     private readonly authRepository: AuthRepository;
@@ -52,7 +53,4 @@ export class AuthService {
     }
 }
 
-const useMock = false;
-export const authService = new AuthService(
-    useMock ? new AuthMockRepository() : undefined
-);
+export const authService = new AuthService(USE_MOCK ? new AuthMockRepository() : undefined);
