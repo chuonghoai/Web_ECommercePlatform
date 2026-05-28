@@ -98,6 +98,7 @@ function CheckoutPage() {
                             <ShippingForm
                                 address={data.address}
                                 onOpenAddressModal={() => setIsAddressModalOpen(true)}
+                                onOpenAddNewAddressModal={() => setIsAddNewAddressModalOpen(true)}
                             />
 
                             {/* Component: Order item list */}
