@@ -1,48 +1,127 @@
 import React from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useCheckoutResultController } from './checkoutResult.controller';
+import { EPaymentMethod } from '../../features/order/enums/paymentMethod.enum';
+import { EPaymentStatus } from '../../features/order/enums/paymentStatus.enum';
 
 const CheckoutResultPage: React.FC = () => {
-    const [searchParams] = useSearchParams();
-    const orderId = searchParams.get("orderId");
+    const { result, isLoading, error } = useCheckoutResultController();
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-background px-4">
-            <div className="max-w-md w-full bg-surface-card card-border rounded-xl p-8 text-center shadow-lg space-y-6">
-
-                {/* Icon Success */}
-                <div className="w-20 h-20 mx-auto rounded-full bg-primary-container/20 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary-container" style={{ fontSize: '40px' }}>
-                        check_circle
-                    </span>
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background px-4">
+                <div className="flex flex-col items-center space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary"></div>
+                    <p className="font-body text-text-muted animate-pulse">Đang tải thông tin đơn hàng...</p>
                 </div>
+            </div>
+        );
+    }
 
-                {/* Content */}
-                <div>
-                    <h1 className="font-headline text-2xl text-text-ink mb-2">Đặt hàng thành công!</h1>
-                    <p className="font-body text-text-muted">
-                        Cảm ơn bạn đã mua sắm tại Artisan Market. Đơn hàng của bạn đang được xử lý.
-                    </p>
-                </div>
-
-                {/* Order ID Box */}
-                {orderId && (
-                    <div className="bg-surface-container-low p-4 rounded-lg border border-border-medium border-dashed">
-                        <p className="font-caption text-text-muted mb-1 uppercase tracking-wider">Mã đơn hàng</p>
-                        <p className="font-display text-xl text-primary font-bold">#{orderId}</p>
+    if (error || !result) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background px-4">
+                <div className="max-w-md w-full bg-surface-card card-border rounded-xl p-8 text-center shadow-lg">
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-red-500 text-4xl">error</span>
                     </div>
-                )}
-
-                {/* Actions */}
-                <div className="pt-4 space-y-3">
-                    <Link to="/orders/history" className="w-full block btn-primary py-2.5 font-body font-semibold">
-                        Xem lịch sử đơn hàng
-                    </Link>
-                    <Link to="/marketplace" className="w-full block btn-secondary py-2.5 font-body">
-                        Tiếp tục mua sắm
+                    <h1 className="font-headline text-2xl text-text-ink mb-2">Đã xảy ra lỗi!</h1>
+                    <p className="font-body text-text-muted">{error}</p>
+                    <Link to="/" className="mt-6 w-full block btn-primary py-2.5 font-body font-semibold">
+                        Quay về trang chủ
                     </Link>
                 </div>
             </div>
-        </div>
+        );
+    }
+
+    let title = "Đơn hàng đang xử lý";
+    let message = "Cảm ơn đã đặt hàng.";
+    let subMessage = "Đơn hàng của bạn đang được hệ thống ghi nhận";
+    let iconName = "hourglass_empty";
+    let iconColorClass = "text-yellow-600";
+    let bgIconClass = "bg-yellow-100";
+    let animationClass = "animate-pulse";
+
+    if (result.paymentMethod === EPaymentMethod.COD && result.paymentStatus === EPaymentStatus.PENDING) {
+        title = "Đặt hàng thành công!";
+        message = "Đơn hàng đã được đặt.";
+        subMessage = "Bạn sẽ thanh toán khi nhận được hàng.";
+        iconName = "local_shipping";
+        iconColorClass = "text-blue-500";
+        bgIconClass = "bg-blue-100";
+        animationClass = "animate-bounce";
+    } else if (result.paymentMethod === EPaymentMethod.MOMO && result.paymentStatus === EPaymentStatus.PAID) {
+        title = "Thanh toán thành công!";
+        message = "Thanh toán thành công.";
+        subMessage = "Đơn hàng sẽ sớm được giao.";
+        iconName = "check_circle";
+        iconColorClass = "text-green-500";
+        bgIconClass = "bg-green-100";
+        animationClass = "animate-[pulse_1.5s_ease-in-out_infinite]";
+    }
+
+    return (
+        <>
+            <style>
+                {`
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(40px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    .animate-fade-in-up {
+                        animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    }
+                `}
+            </style>
+
+            <div className="flex-1 min-h-[45vh] py-12 flex items-center justify-center">
+                <div className="max-w-md w-full bg-surface-card card-border rounded-xl p-8 text-center shadow-lg space-y-6 hover:shadow-xl transition-shadow duration-300 animate-fade-in-up">
+
+                    <div className={`w-24 h-24 mx-auto rounded-full ${bgIconClass} flex items-center justify-center shadow-inner transition-transform duration-300 hover:scale-110`}>
+                        <span
+                            className={`material-symbols-outlined ${iconColorClass} ${animationClass}`}
+                            style={{ fontSize: '48px' }}
+                        >
+                            {iconName}
+                        </span>
+                    </div>
+
+                    <div>
+                        <h1 className="font-headline text-2xl text-text-ink mb-2">{title}</h1>
+                        <p>
+                            <span className="font-body text-text-muted leading-relaxed">
+                                {message}
+                            </span> <br />
+                            <span className="font-body text-text-muted leading-relaxed">
+                                {subMessage}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div className="pt-4 space-y-3">
+                        <Link
+                            to="/"
+                            className="w-full block btn-primary py-2.5 font-body font-semibold transition-transform hover:-translate-y-0.5"
+                        >
+                            Quay về trang chủ
+                        </Link>
+                        <Link
+                            to="/orders/history"
+                            className="w-full block btn-secondary py-2.5 font-body transition-transform hover:-translate-y-0.5 bg-surface-container-low hover:bg-surface-container"
+                        >
+                            Đơn hàng đã mua
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 

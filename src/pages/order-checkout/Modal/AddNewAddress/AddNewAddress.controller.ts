@@ -77,7 +77,12 @@ export const useAddNewAddressController = (isOpen: boolean, onSuccess?: (newAddr
                 setLocation([data.latitude, data.longitude]);
                 setIsVerified(true);
             })
-            .catch(err => toast(err.message || "Lỗi khi xác minh địa chỉ", 'error'))
+            .catch(_err => {
+                toast("Không thể tự động tìm vị trí. Vui lòng kéo thả ghim trên bản đồ để chọn tọa độ chính xác.", 'warning');
+
+                setLocation([10.8231, 106.6297]);
+                setIsVerified(true);
+            })
             .finally(() => setIsVerifying(false));
     };
 

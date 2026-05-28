@@ -5,8 +5,9 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 export interface ShippingFormProps {
-    address: PrepareCheckoutModel['address'];
+    address: PrepareCheckoutModel['address'] | null;
     onOpenAddressModal: () => void;
+    onOpenAddNewAddressModal: () => void;
 }
 
 export const DefaultIcon = L.icon({

@@ -15,7 +15,6 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const navigate = useNavigate();
     const { loadCart } = useCart();
 
-
     // UI Local States
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -43,6 +42,23 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const handleSelectAddress = (address: any) => {
         if (store.data) {
             store.setData({ ...store.data, address });
+
+            const currentRequest: PrepareCheckoutRequest[] = store.data.items.map(item => ({
+                productId: item.product.id,
+                quantity: item.quantity
+            }));
+
+            if (store.data.invalidItems && store.data.invalidItems.length > 0) {
+                store.data.invalidItems.forEach(invalidItem => {
+                    const original = initialRequest.find(req => req.productId === invalidItem.productId);
+                    currentRequest.push({
+                        productId: invalidItem.productId,
+                        quantity: original ? original.quantity : 1
+                    });
+                });
+            }
+
+            store.fetchPrepareOrder(currentRequest);
         }
         setIsAddressModalOpen(false);
     };
@@ -51,20 +67,29 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const handleRemoveItem = useCallback((productId: string) => {
         if (!store.data) return;
         const updatedItems = store.data.items.filter(item => item.product.id !== productId);
-        recalculateTotals(updatedItems);
-    }, [store]);
 
-    // Recalculate total amount locally when UI changes quantity
-    const recalculateTotals = (updatedItems: any[]) => {
-        if (!store.data) return;
-        const subTotal = updatedItems.reduce((acc, item) => acc + item.amount, 0);
-        store.setData({
-            ...store.data,
-            items: updatedItems,
-            subTotal,
-            totalAmount: subTotal + store.data.shippingFee
-        });
-    };
+        const updatedInvalidItems = store.data.invalidItems?.filter(invalid => invalid.productId !== productId) || [];
+
+        const remainingRequest: PrepareCheckoutRequest[] = [
+            ...updatedItems.map(item => ({ productId: item.product.id, quantity: item.quantity })),
+            ...updatedInvalidItems.map(invalid => {
+                const original = initialRequest.find(req => req.productId === invalid.productId);
+                return { productId: invalid.productId, quantity: original ? original.quantity : 1 };
+            })
+        ];
+
+        if (remainingRequest.length > 0) {
+            store.fetchPrepareOrder(remainingRequest);
+        } else {
+            store.setData({
+                ...store.data,
+                items: updatedItems,
+                invalidItems: updatedInvalidItems,
+                subTotal: 0,
+                totalAmount: 0
+            });
+        }
+    }, [store, initialRequest]);
 
     // Submit order
     const handleOrderSubmit = useCallback(async () => {
@@ -86,7 +111,6 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
             })),
             addressId: store.data.address.id,
             paymentMethod: selectedPaymentMethod,
-            // voucherIds: selectedVoucher ? [selectedVoucher] : undefined // Tạm thời chưa phát triển voucher
         };
 
         // Gọi API
