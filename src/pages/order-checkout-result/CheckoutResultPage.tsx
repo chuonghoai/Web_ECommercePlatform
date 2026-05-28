@@ -81,7 +81,7 @@ const CheckoutResultPage: React.FC = () => {
                 `}
             </style>
 
-            <div className="min-h-screen flex items-center justify-center bg-background px-4">
+            <div className="flex-1 min-h-[45vh] py-12 flex items-center justify-center">
                 <div className="max-w-md w-full bg-surface-card card-border rounded-xl p-8 text-center shadow-lg space-y-6 hover:shadow-xl transition-shadow duration-300 animate-fade-in-up">
 
                     <div className={`w-24 h-24 mx-auto rounded-full ${bgIconClass} flex items-center justify-center shadow-inner transition-transform duration-300 hover:scale-110`}>
