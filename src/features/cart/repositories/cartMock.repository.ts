@@ -24,7 +24,14 @@ export class CartMockRepository implements CartRepository {
                     id: productId,
                     name: pData?.name || `Sản phẩm thủ công #${productId.substring(0, 4)}`,
                     imageUrl: pData?.imageUrl || `https://picsum.photos/seed/${productId}/300/400`,
-                    price: pData?.price || Math.floor(Math.random() * 3 + 1) * 150000
+                    price: pData?.price || Math.floor(Math.random() * 3 + 1) * 150000,
+                    seller: {
+                        id: "1bc",
+                        avatarUrl: "https://example.jpg",
+                        name: "John Doe",
+                        averageRating: 4.5
+                    },
+                    description: ""
                 },
                 quantity
             });
