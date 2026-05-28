@@ -4,6 +4,8 @@ import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import { EPaymentMethod } from "../../enums/paymentMethod.enum";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
+import type { CheckoutResultDto } from "../models/checkoutResult.dto";
+import { EOrderStatus } from "../../enums/orderStatus.enum";
 
 export class CheckoutMockRepository implements CheckoutRepository {
     prepareOrder(request: PrepareCheckoutRequest[]): Promise<ApiResponse<PrepareCheckoutModel>> {
@@ -72,7 +74,7 @@ export class CheckoutMockRepository implements CheckoutRepository {
         return Promise.resolve(response);
     }
 
-    checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
+    async checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
         return Promise.resolve({
             success: true,
             message: "Success",
@@ -80,6 +82,18 @@ export class CheckoutMockRepository implements CheckoutRepository {
                 paymentRequired: request.paymentMethod === EPaymentMethod.MOMO,
                 orderId: "1",
                 payUrl: request.paymentMethod === EPaymentMethod.MOMO ? "https://example.com/pay" : null
+            }
+        });
+    }
+
+    async getOrderResult(orderId: string): Promise<ApiResponse<CheckoutResultDto>> {
+        return Promise.resolve({
+            success: true,
+            message: "Success",
+            data: {
+                orderId,
+                paymentMethod: EPaymentMethod.MOMO,
+                orderStatus: EOrderStatus.PAID
             }
         });
     }

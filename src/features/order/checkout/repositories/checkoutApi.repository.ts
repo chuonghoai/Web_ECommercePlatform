@@ -3,6 +3,7 @@ import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
+import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 import type { CheckoutRepository } from "./checkout.repository";
 
 export class CheckoutApiRepository implements CheckoutRepository {
@@ -31,5 +32,18 @@ export class CheckoutApiRepository implements CheckoutRepository {
      */
     async checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>> {
         return apiClient.post<ApiResponse<CheckoutResponseDto>>("/orders/checkout", request);
+    }
+
+    /**
+     * GET /orders/checkout/result
+     * @param orderId
+     * @returns CheckoutResultDto
+     */
+    async getOrderResult(orderId: string): Promise<ApiResponse<CheckoutResultDto>> {
+        return apiClient.get<ApiResponse<CheckoutResultDto>>("/orders/checkout/result", {
+            params: {
+                orderId
+            }
+        });
     }
 }
