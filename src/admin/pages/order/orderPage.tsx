@@ -31,14 +31,6 @@ export const OrderPage = () => {
                 loading={controller.loading}
                 error={controller.error}
             />
-
-            {!controller.loading && controller.filteredOrders.length > 0 && (
-                <div className="mt-8 flex justify-center">
-                    <button className="bg-transparent border-[1.5px] border-border-medium text-[#57534E] font-body text-[14px] h-10.5 px-6 rounded-sm hover:bg-[#FDF6EC] transition-colors">
-                        Tải thêm đơn hàng
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
