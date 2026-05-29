@@ -1,41 +1,49 @@
 import { useState, useCallback } from 'react';
 import type { OrderItem } from '../../features/order/model/orderItem.model';
+import type { OrderStatusCount } from '../../features/order/model/orderStatusCount.model';
 import { orderService } from '../../features/order/services/order.service';
 import type { EOrderStatus } from '../../../features/order/enums/orderStatus.enum';
 
-interface OrderState {
-    orders: OrderItem[];
-    loading: boolean;
-    error: string | null;
-}
-
 export const useOrderStore = () => {
-    const [state, setState] = useState<OrderState>({
-        orders: [],
-        loading: false,
-        error: null,
-    });
+    const [orders, setOrders] = useState<OrderItem[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [ordersCount, setOrdersCount] = useState<OrderStatusCount | null>(null);
 
     const fetchOrders = useCallback(async (status?: EOrderStatus) => {
-        setState(prev => ({ ...prev, loading: true, error: null }));
+        setLoading(true);
+        setError(null);
         try {
             const response = await orderService.getOrdersByStatus(status);
             if (response.success) {
-                setState(prev => ({ ...prev, orders: response.data || [], loading: false }));
+                setOrders(response.data || []);
             } else {
-                setState(prev => ({ ...prev, error: response.message, loading: false }));
+                setError(response.message);
             }
-        } catch (error) {
-            setState(prev => ({
-                ...prev,
-                error: 'Không thể tải danh sách đơn hàng. Vui lòng thử lại.',
-                loading: false
-            }));
+        } catch {
+            setError('Không thể tải danh sách đơn hàng. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const fetchOrdersCount = useCallback(async () => {
+        try {
+            const response = await orderService.getOrderStatusCount();
+            if (response.success) {
+                setOrdersCount(response.data || null);
+            }
+        } catch {
+            // ordersCount giữ nguyên null nếu lỗi
         }
     }, []);
 
     return {
-        ...state,
+        orders,
+        loading,
+        error,
+        ordersCount,
         fetchOrders,
+        fetchOrdersCount,
     };
 };

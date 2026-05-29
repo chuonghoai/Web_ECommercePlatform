@@ -20,7 +20,11 @@ export const OrderPage = () => {
                 <OrderSearchBar value={controller.searchQuery} onChange={controller.setSearchQuery} />
             </div>
 
-            <OrderFilterTabs activeTab={controller.activeTab} onTabChange={controller.handleTabChange} />
+            <OrderFilterTabs
+                activeTab={controller.activeTab}
+                onTabChange={controller.handleTabChange}
+                orderStatusCount={controller.ordersCount ?? { all: 0, pending: 0, preparing: 0, shipping: 0, success: 0, cancelled: 0 }}
+            />
 
             <OrderList
                 orders={controller.filteredOrders}

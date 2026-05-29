@@ -17,15 +17,15 @@ export const useOrderController = () => {
         store.fetchOrders(statusToFetch);
     }, [activeTab, store.fetchOrders]);
 
+    useEffect(() => {
+        store.fetchOrdersCount();
+    }, [store.fetchOrdersCount]);
+
     /**
      * Chuyển tab trạng thái đơn hàng
      */
     const handleTabChange = useCallback((tab: TabValue) => {
-        if (tab === 'ALL') {
-            searchParams.delete('status');
-        } else {
-            searchParams.set('status', tab);
-        }
+        searchParams.set('status', tab);
         setSearchParams(searchParams);
     }, [searchParams, setSearchParams]);
 
@@ -45,6 +45,7 @@ export const useOrderController = () => {
     return {
         loading: store.loading,
         error: store.error,
+        ordersCount: store.ordersCount,
         activeTab,
         searchQuery,
         setSearchQuery,
