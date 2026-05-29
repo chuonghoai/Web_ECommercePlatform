@@ -7,7 +7,7 @@ export const OrderPage = () => {
     const controller = useOrderController();
 
     return (
-        <div className="w-full max-w-7xl mx-auto pb-12">
+        <div className="w-full max-w-650 mx-auto pb-88 -mt-1">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
                 <div>
                     <h1 className="font-headline text-[36px] font-semibold text-text-ink tracking-tight">
