@@ -3,6 +3,7 @@ import { EOrderStatus } from "../../../../features/order/enums/orderStatus.enum"
 import { EPaymentMethod } from "../../../../features/order/enums/paymentMethod.enum";
 import { EPaymentStatus } from "../../../../features/order/enums/paymentStatus.enum";
 import type { OrderItem } from "../model/orderItem.model";
+import type { OrderStatusCount } from "../model/orderStatusCount.model";
 import type { OrderRepository } from "./order.repository";
 
 const mockOrder: OrderItem[] = [
@@ -89,6 +90,27 @@ export class OrderMockRepository implements OrderRepository {
             success: true,
             message: "Success",
             data: orders
+        })
+    }
+
+    async getOrderStatusCounts(): Promise<ApiResponse<OrderStatusCount>> {
+        const pending = mockOrder.filter(order => order.orderStatus === EOrderStatus.PENDING).length
+        const preparing = mockOrder.filter(order => order.orderStatus === EOrderStatus.PREPARING).length
+        const shipping = mockOrder.filter(order => order.orderStatus === EOrderStatus.SHIPPING).length
+        const success = mockOrder.filter(order => order.orderStatus === EOrderStatus.SUCCESS).length
+        const cancelled = mockOrder.filter(order => order.orderStatus === EOrderStatus.CANCELLED).length
+        let statusCount: OrderStatusCount = {
+            all: pending + preparing + shipping,
+            pending,
+            preparing,
+            shipping,
+            success,
+            cancelled
+        }
+        return Promise.resolve({
+            success: true,
+            message: "Success",
+            data: statusCount
         })
     }
 }

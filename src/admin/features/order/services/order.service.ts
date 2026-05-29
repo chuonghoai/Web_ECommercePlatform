@@ -5,6 +5,7 @@ import type { ApiResponse } from "../../../../core/api/apiResponse";
 import { OrderMockRepository } from "../repositories/orderMock.repository";
 import { OrderApiRepository } from "../repositories/orderApi.repository";
 import { USE_MOCK } from "../../../../core/config/useMock.config";
+import type { OrderStatusCount } from "../model/orderStatusCount.model";
 
 export class OrderService {
     private readonly orderRepository: OrderRepository;
@@ -15,6 +16,10 @@ export class OrderService {
 
     getOrdersByStatus(status?: EOrderStatus): Promise<ApiResponse<OrderItem[]>> {
         return this.orderRepository.getOrdersByStatus(status);
+    }
+
+    getOrderStatusCount(): Promise<ApiResponse<OrderStatusCount>> {
+        return this.orderRepository.getOrderStatusCounts();
     }
 }
 

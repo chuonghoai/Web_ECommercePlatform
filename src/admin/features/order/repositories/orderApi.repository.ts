@@ -2,6 +2,7 @@ import { apiClient } from "../../../../core/api/apiClient";
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { EOrderStatus } from "../../../../features/order/enums/orderStatus.enum";
 import type { OrderItem } from "../model/orderItem.model";
+import type { OrderStatusCount } from "../model/orderStatusCount.model";
 import type { OrderRepository } from "./order.repository";
 
 export class OrderApiRepository implements OrderRepository {
@@ -19,5 +20,17 @@ export class OrderApiRepository implements OrderRepository {
         return apiClient.get("/admin/order", {
             params: status
         })
+    }
+
+    /**
+     * GET /admin/order/status-count
+     * @returns OrderStatusCount
+     * 
+     * Mô tả:
+     *  - Lấy số lượng đơn hàng theo từng trạng thái trong model OrderStatusCount
+     *  - trong đó, all = pending + preparing + shipping 
+     */
+    async getOrderStatusCounts(): Promise<ApiResponse<OrderStatusCount>> {
+        return apiClient.get("/admin/order/status-count")
     }
 }
