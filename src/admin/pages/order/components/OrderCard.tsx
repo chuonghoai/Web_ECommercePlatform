@@ -6,7 +6,7 @@ import { PAYMENT_METHOD_LABEL } from '../types/paymentMethodLabel';
 import { formatCurrency, formatDate } from '../utils/formatters';
 
 export const OrderCard = ({ order }: { order: OrderItem }) => (
-    <div className="bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium transition-colors flex flex-col md:flex-row gap-6">
+    <div className="cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium transition-colors flex flex-col md:flex-row gap-6">
         <div className="w-24 h-24 shrink-0 rounded-sm border border-border-subtle overflow-hidden bg-[#FFFBF5]">
             <img src={order.firstProductImageUrl} alt="Sản phẩm" className="w-full h-full object-cover" />
         </div>
@@ -62,7 +62,7 @@ export const OrderCard = ({ order }: { order: OrderItem }) => (
                     {PAYMENT_METHOD_LABEL[order.paymentMethod]}
                 </span>
             </div>
-            <button className="w-full md:w-auto flex items-center justify-center gap-1 bg-transparent border-[1.5px] border-market-primary text-market-primary font-body text-[14px] font-semibold h-10.5 px-6 rounded-sm hover:bg-[#FDF6EC] transition-colors">
+            <button className="cursor-pointer w-full md:w-auto flex items-center justify-center gap-1 bg-transparent border-[1.5px] border-market-primary text-market-primary font-body text-[14px] font-semibold h-10.5 px-6 rounded-sm hover:bg-[#FDF6EC] transition-colors">
                 Chi tiết <ChevronRight size={16} />
             </button>
         </div>

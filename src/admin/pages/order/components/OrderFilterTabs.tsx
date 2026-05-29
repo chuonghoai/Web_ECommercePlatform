@@ -28,15 +28,17 @@ export const OrderFilterTabs = ({
                     <button
                         key={tab.value}
                         onClick={() => onTabChange(tab.value as TabValue)}
-                        className={`flex items-center gap-1.5 h-8 px-3.5 rounded-sm font-body text-[14px] transition-colors ${isActive
-                            ? 'bg-market-primary text-[#FFFFFF] border border-market-primary'
-                            : 'bg-transparent text-[#57534E] border border-border-medium hover:bg-[#FDF6EC]'
-                            }`}
+                        className={`cursor-pointer flex items-center gap-1.5 h-8 px-3.5 rounded-sm font-body text-[14px] transition-colors ${
+                            isActive
+                                ? 'bg-market-primary text-[#FFFFFF] border border-market-primary'
+                                : 'bg-transparent text-[#57534E] border border-border-medium hover:bg-[#FDF6EC]'
+                        }`}
                     >
                         {tab.label}
                         {tab.showCount && (
-                            <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-full leading-none ${isActive ? 'bg-white/20 text-white' : 'bg-border-subtle text-text-muted'
-                                }`}>
+                            <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-full leading-none ${
+                                isActive ? 'bg-white/20 text-white' : 'bg-border-subtle text-text-muted'
+                            }`}>
                                 {tab.count}
                             </span>
                         )}
