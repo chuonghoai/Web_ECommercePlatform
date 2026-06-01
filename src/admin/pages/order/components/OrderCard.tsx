@@ -10,7 +10,7 @@ export const OrderCard = ({ order }: { order: OrderItem }) => {
     return (
         <Link
             to={`/admin/orders/${order.id}`}
-            className="group cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium transition-colors flex flex-col md:flex-row gap-6"
+            className="group cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium hover:-translate-y-1 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out flex flex-col md:flex-row gap-6"
         >
             <div className="w-24 h-24 shrink-0 rounded-sm border border-border-subtle overflow-hidden bg-[#FFFBF5]">
                 <img src={order.firstProductImageUrl} alt="Sản phẩm" className="w-full h-full object-cover" />
