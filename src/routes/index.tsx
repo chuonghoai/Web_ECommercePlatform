@@ -21,6 +21,7 @@ import { CartProvider } from "../features/cart/contexts/CartContext";
 import { EUserRole } from "../features/user/models/user.model";
 import CheckoutResultPage from "../pages/order-checkout-result/CheckoutResultPage";
 import OrderPage from "../admin/pages/order/orderPage";
+import OrderDetailPage from "../admin/pages/orderDetail/orderDetailPage";
 
 function AppRoutes() {
     return (
@@ -71,6 +72,7 @@ function AppRoutes() {
                     <Route index element={<Navigate to="/admin/overview" replace />} />
                     <Route path="overview" element={<DashboardPage />} />
                     <Route path="orders" element={<OrderPage />} />
+                    <Route path="orders/:id" element={<OrderDetailPage />} />
                 </Route>
 
                 {/* AUTH */}
