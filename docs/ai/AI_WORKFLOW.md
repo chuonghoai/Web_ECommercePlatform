@@ -1,3 +1,7 @@
+IMPORTANT:
+
+For any UI-related task, AI must load and apply the globally installed Taste Skill before generating any TSX, JSX, component, layout, page, modal, table, form or dashboard code.
+
 # AI Agent Workflow
 
 Tài liệu này định nghĩa quy trình làm việc (workflow) BẮT BUỘC dành cho AI Agent trước khi thực hiện bất kỳ thay đổi nào trong source code của dự án E-Commerce Platform.
@@ -8,6 +12,108 @@ Ngay khi bắt đầu một task mới, AI phải thực hiện các bước sau
 1. **Đọc tài liệu kiến trúc**: Đọc các file trong `docs/architecture/` (đặc biệt là `ARCHITECTURE_OVERVIEW.md` và `ARCHITECTURE_RULES.md`) để hiểu quy tắc của dự án.
 2. **Xác định Feature**: Phân tích yêu cầu để xác định xem thay đổi sẽ diễn ra ở Feature nào (trong `src/features/`) hay Page nào (trong `src/pages/`), hay cần tạo mới.
 3. **Tìm module tương đương**: Tìm kiếm và đọc code của một module đã hoàn thiện trong codebase (ví dụ: `features/products` hoặc `pages/cart`) để lấy đó làm mốc tham chiếu cho phong cách code.
+
+## 1.1 UI / Design Workflow (BẮT BUỘC với mọi task liên quan giao diện)
+
+Nếu task có liên quan đến:
+
+* Tạo mới giao diện (.tsx)
+* Chỉnh sửa layout
+* Chỉnh sửa component UI
+* Dashboard
+* Admin Page
+* Landing Page
+* Form
+* Table
+* Modal
+* Drawer
+* Responsive Design
+
+AI PHẢI thực hiện thêm các bước sau trước khi code:
+
+### Step 1 - Load Taste Skill
+
+Đọc và áp dụng Global Taste Skill đã được cài đặt trên môi trường AI Agent.
+
+Ưu tiên sử dụng:
+
+* taste-skill v2
+* output-skill
+
+Nếu task là redesign giao diện hiện có:
+
+* redesign-skill
+
+### Step 2 - Design Analysis
+
+Trước khi sinh code, AI phải tự phân tích:
+
+* Mục tiêu của màn hình là gì?
+* Người dùng chính là ai?
+* Hành động chính (Primary Action) là gì?
+* Thông tin nào quan trọng nhất?
+* Có thể giảm số lượng component hoặc section không cần thiết không?
+
+### Step 3 - Taste Validation
+
+Trước khi viết code UI, AI phải tự kiểm tra:
+
+* Có đang tạo giao diện "generic AI dashboard" không?
+* Có đang tạo 3 card giống hệt nhau chỉ để lấp chỗ không?
+* Có đang thêm gradient, badge hoặc decoration không phục vụ nghiệp vụ không?
+* Layout có phản ánh đúng mục đích nghiệp vụ không?
+* Có đang hy sinh UX để làm giao diện đẹp hơn không?
+
+### Step 4 - Output Skill Validation
+
+Không được:
+
+* để TODO
+* để placeholder component
+* để fake data hardcode trong UI component
+* để phần "implement later"
+
+Mọi component được tạo phải ở trạng thái hoàn chỉnh và có thể sử dụng được.
+
+### Step 5 - Business First Rule
+
+Đối với Admin Dashboard và E-Commerce Management:
+
+Ưu tiên:
+
+1. Khả năng thao tác
+2. Khả năng đọc dữ liệu
+3. Hiệu suất làm việc của admin
+4. Tính nhất quán với design system hiện có
+
+KHÔNG ưu tiên:
+
+* animation phức tạp
+* gradient trang trí
+* visual effect không mang giá trị nghiệp vụ
+
+Admin UI phải được thiết kế theo hướng:
+
+"Data-first, Action-first, Business-first"
+thay vì
+"Marketing-first".
+
+## 1.2 Small UI interactions
+Component
+→ Component Controller
+→ Existing Service
+→ Repository
+
+Store is NOT required when:
+- state is local to a component
+- state does not need sharing
+- state lifecycle only exists during one interaction
+
+Examples:
+- action buttons
+- confirm dialogs
+- status updates
+- delete actions
 
 ## 2. Architecture Validation Workflow
 

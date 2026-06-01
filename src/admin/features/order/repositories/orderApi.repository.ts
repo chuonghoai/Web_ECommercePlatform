@@ -4,6 +4,7 @@ import type { EOrderStatus } from "../../../../features/order/enums/orderStatus.
 import type { OrderItem } from "../model/orderItem.model";
 import type { OrderStatusCount } from "../model/orderStatusCount.model";
 import type { OrderDetail } from "../model/orderDetail.model";
+import type { UpdateOrderStatusRequest } from "../dto/updateOrderStatus.request";
 import type { OrderRepository } from "./order.repository";
 
 export class OrderApiRepository implements OrderRepository {
@@ -42,5 +43,17 @@ export class OrderApiRepository implements OrderRepository {
      */
     async getOrderDetailById(orderId: string): Promise<ApiResponse<OrderDetail>> {
         return apiClient.get(`/admin/order/${orderId}`);
+    }
+
+    /**
+     * PATCH /admin/order/:id/status
+     * @param UpdateOrderStatusRequest
+     * @returns OrderDetail
+     */
+    async updateOrderStatus(request: UpdateOrderStatusRequest): Promise<ApiResponse<OrderDetail>> {
+        return apiClient.patch(`/admin/order/${request.orderId}/status`, {
+            status: request.status,
+            note: request.note
+        });
     }
 }

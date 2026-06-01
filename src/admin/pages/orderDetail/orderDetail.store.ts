@@ -31,6 +31,8 @@ export const useOrderDetailStore = () => {
 
     return {
         orderDetail,
+        setOrderDetail,
+
         loading,
         error,
         fetchOrderDetail,

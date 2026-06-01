@@ -44,6 +44,20 @@ class ApiClient {
 
         return response.data;
     }
+    async patch<T>(
+        url: string,
+        data?: unknown,
+        config?: AxiosRequestConfig
+    ): Promise<T> {
+        const response =
+            await axiosInstance.patch<T>(
+                url,
+                data,
+                config
+            );
+
+        return response.data;
+    }
 
     async delete<T>(
         url: string,

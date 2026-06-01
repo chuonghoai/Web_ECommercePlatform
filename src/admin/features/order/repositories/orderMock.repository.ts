@@ -5,6 +5,7 @@ import { EPaymentStatus } from "../../../../features/order/enums/paymentStatus.e
 import type { OrderItem } from "../model/orderItem.model";
 import type { OrderStatusCount } from "../model/orderStatusCount.model";
 import type { OrderDetail, OrderStatusHistory } from "../model/orderDetail.model";
+import type { UpdateOrderStatusRequest } from "../dto/updateOrderStatus.request";
 import type { OrderRepository } from "./order.repository";
 
 const mockOrder: OrderItem[] = [
@@ -197,5 +198,14 @@ export class OrderMockRepository implements OrderRepository {
             message: "Success",
             data: mockDetail
         });
+    }
+
+    async updateOrderStatus(request: UpdateOrderStatusRequest): Promise<ApiResponse<OrderDetail>> {
+        const orderIndex = mockOrder.findIndex(o => o.id === request.orderId);
+        if (orderIndex !== -1) {
+            mockOrder[orderIndex].orderStatus = request.status;
+        }
+
+        return this.getOrderDetailById(request.orderId);
     }
 }

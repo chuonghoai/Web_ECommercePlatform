@@ -7,6 +7,7 @@ import { OrderApiRepository } from "../repositories/orderApi.repository";
 import { USE_MOCK } from "../../../../core/config/useMock.config";
 import type { OrderStatusCount } from "../model/orderStatusCount.model";
 import type { OrderDetail } from "../model/orderDetail.model";
+import type { UpdateOrderStatusRequest } from "../dto/updateOrderStatus.request";
 
 export class OrderService {
     private readonly orderRepository: OrderRepository;
@@ -25,6 +26,10 @@ export class OrderService {
 
     getOrderDetail(id: string): Promise<ApiResponse<OrderDetail>> {
         return this.orderRepository.getOrderDetailById(id);
+    }
+
+    updateOrderStatus(request: UpdateOrderStatusRequest): Promise<ApiResponse<OrderDetail>> {
+        return this.orderRepository.updateOrderStatus(request);
     }
 }
 
