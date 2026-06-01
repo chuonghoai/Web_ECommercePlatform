@@ -3,6 +3,7 @@ import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { EOrderStatus } from "../../../../features/order/enums/orderStatus.enum";
 import type { OrderItem } from "../model/orderItem.model";
 import type { OrderStatusCount } from "../model/orderStatusCount.model";
+import type { OrderDetail } from "../model/orderDetail.model";
 import type { OrderRepository } from "./order.repository";
 
 export class OrderApiRepository implements OrderRepository {
@@ -32,5 +33,14 @@ export class OrderApiRepository implements OrderRepository {
      */
     async getOrderStatusCounts(): Promise<ApiResponse<OrderStatusCount>> {
         return apiClient.get("/admin/order/status-count")
+    }
+
+    /**
+     * GET /admin/order/:id
+     * @param orderId
+     * @returns OrderDetail
+     */
+    async getOrderDetailById(orderId: string): Promise<ApiResponse<OrderDetail>> {
+        return apiClient.get(`/admin/order/${orderId}`);
     }
 }

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { MapPin, Phone, Calendar, Package, ChevronRight } from 'lucide-react';
 import type { OrderItem } from '../../../features/order/model/orderItem.model';
 import { STATUS_CONFIG } from '../types/statusConfig';
@@ -7,8 +8,8 @@ import { formatCurrency, formatDate } from '../utils/formatters';
 
 export const OrderCard = ({ order }: { order: OrderItem }) => {
     return (
-        <div
-            onClick={() => { }}
+        <Link
+            to={`/admin/orders/${order.id}`}
             className="group cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium transition-colors flex flex-col md:flex-row gap-6"
         >
             <div className="w-24 h-24 shrink-0 rounded-sm border border-border-subtle overflow-hidden bg-[#FFFBF5]">
@@ -75,6 +76,6 @@ export const OrderCard = ({ order }: { order: OrderItem }) => {
                     Chi tiết <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
