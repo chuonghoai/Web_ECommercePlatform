@@ -24,6 +24,7 @@ export interface OrderItemTracking {
     totalProductQuantity: number;
 
     firstProductImageUrl: string;
+    firstProductName: string;
 
     paymentMethod: EPaymentMethod;
     paymentStaus: EPaymentStatus;
