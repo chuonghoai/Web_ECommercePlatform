@@ -20,6 +20,10 @@ import { DashboardPage } from "../admin/pages/overview/DashboardPage";
 import { CartProvider } from "../features/cart/contexts/CartContext";
 import { EUserRole } from "../features/user/models/user.model";
 import CheckoutResultPage from "../pages/order-checkout-result/CheckoutResultPage";
+import { ProductsPage } from "../admin/pages/products/ProductsPage";
+import { CreateProductPage } from "../admin/pages/products/CreateProductPage";
+import { EditProductPage } from "../admin/pages/products/EditProductPage";
+import { ProductDetailPage } from "../admin/pages/products/ProductDetailPage";
 import OrderPage from "../admin/pages/order/orderPage";
 import OrderDetailPage from "../admin/pages/orderDetail/orderDetailPage";
 
@@ -71,6 +75,10 @@ function AppRoutes() {
                 }>
                     <Route index element={<Navigate to="/admin/overview" replace />} />
                     <Route path="overview" element={<DashboardPage />} />
+                    <Route path="products" element={<ProductsPage />} />
+                    <Route path="products/create" element={<CreateProductPage />} />
+                    <Route path="products/:id" element={<ProductDetailPage />} />
+                    <Route path="products/:id/edit" element={<EditProductPage />} />
                     <Route path="orders" element={<OrderPage />} />
                     <Route path="orders/:id" element={<OrderDetailPage />} />
                 </Route>
