@@ -38,7 +38,6 @@ export const ProfileInformationCard = ({
     onSave,
     onCancel,
 }: ProfileInformationCardProps) => {
-    // Shared classes
     const labelClass = "block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5";
     const readonlyFieldClass =
         "h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl text-stone-900 text-sm font-medium select-none";
@@ -52,7 +51,6 @@ export const ProfileInformationCard = ({
 
     return (
         <div className="bg-white border border-border-subtle rounded-2xl shadow-sm overflow-hidden">
-            {/* Header */}
             <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
                 <h2 className="font-['Lora',serif] text-lg font-bold text-stone-900">
                     Thông tin cá nhân
@@ -70,9 +68,7 @@ export const ProfileInformationCard = ({
                 )}
             </div>
 
-            {/* Body */}
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* Email — luôn readonly */}
                 <div>
                     <label className={labelClass}>Email</label>
                     <div className={readonlyFieldClass}>
@@ -83,7 +79,6 @@ export const ProfileInformationCard = ({
                     </div>
                 </div>
 
-                {/* Họ và tên */}
                 <div>
                     <label htmlFor="pi-fullname" className={labelClass}>Họ và tên</label>
                     {isEditMode ? (
@@ -103,7 +98,6 @@ export const ProfileInformationCard = ({
                     )}
                 </div>
 
-                {/* Số điện thoại */}
                 <div>
                     <label htmlFor="pi-phone" className={labelClass}>Số điện thoại</label>
                     {isEditMode ? (
@@ -123,7 +117,6 @@ export const ProfileInformationCard = ({
                     )}
                 </div>
 
-                {/* Ngày sinh */}
                 <div>
                     <label htmlFor="pi-dob" className={labelClass}>Ngày sinh</label>
                     {isEditMode ? (
@@ -144,7 +137,6 @@ export const ProfileInformationCard = ({
                     )}
                 </div>
 
-                {/* Giới tính */}
                 <div>
                     <label htmlFor="pi-gender" className={labelClass}>Giới tính</label>
                     {isEditMode ? (
@@ -178,7 +170,6 @@ export const ProfileInformationCard = ({
                 </div>
             </div>
 
-            {/* Footer — chỉ hiển thị khi edit mode */}
             {isEditMode && (
                 <div className="px-6 py-4 border-t border-stone-100 flex justify-end gap-3 bg-stone-50/60">
                     <button

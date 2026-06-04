@@ -11,6 +11,7 @@ Dự án được tổ chức thành các thư mục chính trong `src/`:
 - **`pages/`**: Chứa UI logic, các trang và component đặc thù của trang đó, cùng với State Management (Controller/Store).
 - **`admin/`**: Tương tự như một ứng dụng độc lập thu nhỏ dành cho Admin, bên trong cũng chia thành `features`, `layout`, `pages`.
 - **`components/`**: Các UI Component dùng chung trên toàn hệ thống (VD: Layout, Toast).
+- **`cpnController/`**: Các controller của UI dùng để điều khiển component, dùng cho trường hợp một giao diện có nhiều component có các logic khác nhau (ví dụ profile có main layout là sidebar, mỗi menu option là 1 compontent, mỗi component có logic khác nhau)
 - **`routes/`**: Chứa định nghĩa và cấu hình routing của toàn bộ ứng dụng.
 - **`utils/`**: Các hàm utility helper dùng chung.
 
