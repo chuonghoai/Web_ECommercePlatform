@@ -25,8 +25,10 @@ export const useProfileController = () => {
         };
     }, [searchParams]);
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+    // Snapshot formData khi bắt đầu edit để có thể Hủy
+    const [formDataSnapshot, setFormDataSnapshot] = useState<UpdateProfileRequest | null>(null);
 
     useEffect(() => {
         loadProfile();
@@ -40,26 +42,26 @@ export const useProfileController = () => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
+    const handleEnterEdit = () => {
+        // Lưu snapshot để Hủy có thể restore
+        setFormDataSnapshot({ ...formData });
+        setIsEditMode(true);
+    };
+
+    const handleCancelEdit = () => {
+        // Restore về snapshot trước khi edit
+        if (formDataSnapshot) {
+            setFormData(() => formDataSnapshot);
+        }
+        setIsEditMode(false);
+        setFormDataSnapshot(null);
+    };
+
     const handleSaveProfile = async () => {
         const success = await saveProfile();
         if (success) {
-            setIsEditModalOpen(false);
-        }
-    };
-
-    const handleEditClick = () => {
-        setIsEditModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsEditModalOpen(false);
-        if (user) {
-            setFormData({
-                fullName: user.fullName,
-                phone: formData.phone,
-                gender: formData.gender,
-                dateOfBirth: formData.dateOfBirth,
-            });
+            setIsEditMode(false);
+            setFormDataSnapshot(null);
         }
     };
 
@@ -87,12 +89,12 @@ export const useProfileController = () => {
         wishlistPagination,
         wishlistPage: currentUrlState.page,
         isLoadingWishlist,
-        isEditModalOpen,
+        isEditMode,
         isChangePasswordOpen,
         handleFieldChange,
+        handleEnterEdit,
+        handleCancelEdit,
         handleSaveProfile,
-        handleEditClick,
-        handleCloseModal,
         handleOpenChangePassword,
         handleCloseChangePassword,
         handleWishlistPageChange,

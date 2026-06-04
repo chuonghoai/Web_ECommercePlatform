@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useProfileController } from "./profile.controller";
 import { UserInfoSidebar } from "./components/userInfoSidebar";
 import { WishlistTab } from "./components/wishlistTab";
-import { EditProfileModal } from "./components/editProfileModal";
+import { ProfileInformationCard } from "./components/ProfileInformationCard";
 import { ChangePasswordModal } from "./components/changePasswordModal";
 
 function ProfilePage() {
@@ -14,12 +14,12 @@ function ProfilePage() {
         wishlistPagination,
         wishlistPage,
         isLoadingWishlist,
-        isEditModalOpen,
+        isEditMode,
         isChangePasswordOpen,
         handleFieldChange,
+        handleEnterEdit,
+        handleCancelEdit,
         handleSaveProfile,
-        handleEditClick,
-        handleCloseModal,
         handleOpenChangePassword,
         handleCloseChangePassword,
         handleWishlistPageChange,
@@ -29,108 +29,104 @@ function ProfilePage() {
     const wishlistSectionRef = useRef<HTMLDivElement>(null);
 
     const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
-        ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
+    const avatarInitial = user?.fullName?.charAt(0)?.toUpperCase() ?? "U";
+
     return (
-        <div className="w-full px-[5%] py-8 mx-auto min-h-screen bg-stone-50/50">
-            <div className="mb-8">
-                <h1 className="font-['Lora',serif] text-[32px] font-semibold text-[#1C1917] leading-tight">
-                    Hồ sơ cá nhân
-                </h1>
-                <p className="text-[15px] text-[#57534E] mt-1">
-                    Quản lý thông tin và sản phẩm yêu thích của bạn.
-                </p>
-            </div>
+        <div className="w-full min-h-screen bg-stone-50/50">
 
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-                <div className="w-full lg:w-[280px] xl:w-[300px] shrink-0 lg:sticky lg:top-[100px]">
-                    <UserInfoSidebar
-                        user={user}
-                        formData={formData}
-                        onEditClick={handleEditClick}
-                        onChangePasswordClick={handleOpenChangePassword}
-                        onScrollToInfo={() => scrollToSection(infoSectionRef)}
-                        onScrollToWishlist={() => scrollToSection(wishlistSectionRef)}
-                    />
-                </div>
+            {/* Hero section */}
+            <div className="relative w-full overflow-hidden bg-linear-to-br from-stone-100 via-stone-50 to-white border-b border-stone-200">
+                <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-market-primary/5 pointer-events-none" />
+                <div className="absolute -bottom-8 left-1/3 w-48 h-48 rounded-full bg-market-secondary/5 pointer-events-none" />
 
-                <div className="flex-1 min-w-0 flex flex-col gap-8">
-                    <div
-                        ref={infoSectionRef}
-                        className="bg-white border border-[#E7E5E4] rounded-[16px] p-6 lg:p-8 shadow-sm"
-                    >
-                        <h2 className="font-['Lora',serif] text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-                            Thông tin cá nhân
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Họ và tên</span>
-                                <div className="h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-stone-900 text-sm font-medium">
-                                    {formData.fullName || "Chưa cập nhật"}
+                <div className="max-w-400 mx-auto px-6 lg:px-10 py-10">
+                    <div className="flex items-center gap-6">
+                        {/* Avatar */}
+                        <div className="shrink-0 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] bg-stone-100">
+                            {user?.avatarUrl ? (
+                                <img
+                                    src={user.avatarUrl}
+                                    alt="Avatar"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-market-secondary flex items-center justify-center text-white font-bold text-4xl select-none">
+                                    {avatarInitial}
                                 </div>
-                            </div>
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Email</span>
-                                <div className="h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-stone-900 text-sm font-medium">
-                                    {user?.email || "Chưa cập nhật"}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Số điện thoại</span>
-                                <div className="h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-stone-900 text-sm font-medium">
-                                    {formData.phone || "Chưa cập nhật"}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Ngày sinh</span>
-                                <div className="h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-stone-900 text-sm font-medium">
-                                    {formData.dateOfBirth
-                                        ? new Intl.DateTimeFormat("vi-VN").format(new Date(formData.dateOfBirth))
-                                        : "Chưa cập nhật"}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Giới tính</span>
-                                <div className="h-11 px-4 flex items-center bg-stone-50 border border-stone-200 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-stone-900 text-sm font-medium">
-                                    {formData.gender === "male"
-                                        ? "Nam"
-                                        : formData.gender === "female"
-                                        ? "Nữ"
-                                        : formData.gender === "other"
-                                        ? "Khác"
-                                        : "Chưa cập nhật"}
-                                </div>
+                            )}
+                        </div>
+
+                        {/* Info */}
+                        <div className="min-w-0">
+                            <h1 className="font-['Lora',serif] text-2xl lg:text-3xl font-bold text-stone-900 leading-tight truncate">
+                                {user?.fullName || "Người dùng"}
+                            </h1>
+                            <p className="text-stone-500 text-sm mt-1 truncate">{user?.email}</p>
+                            <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+                                {user?.role && (
+                                    <span className="inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-semibold bg-market-primary/10 text-market-primary border border-market-primary/20">
+                                        {user.role === "ADMIN" ? "Quản trị viên" : user.role === "STAFF" ? "Nhân viên" : "Khách hàng"}
+                                    </span>
+                                )}
+                                <span className="inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200">
+                                    Hồ sơ cá nhân
+                                </span>
                             </div>
                         </div>
                     </div>
-
-                    <div
-                        ref={wishlistSectionRef}
-                        className="bg-white border border-[#E7E5E4] rounded-[16px] p-6 lg:p-8 shadow-sm"
-                    >
-                        <h2 className="font-['Lora',serif] text-xl font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
-                            Danh sách yêu thích
-                        </h2>
-                        <WishlistTab
-                            items={wishlistItems}
-                            isLoading={isLoadingWishlist}
-                            pagination={wishlistPagination}
-                            currentPage={wishlistPage}
-                            onPageChange={handleWishlistPageChange}
-                        />
-                    </div>
                 </div>
             </div>
 
-            <EditProfileModal
-                isOpen={isEditModalOpen}
-                onClose={handleCloseModal}
-                formData={formData}
-                isSaving={isSaving}
-                onFieldChange={handleFieldChange}
-                onSave={handleSaveProfile}
-            />
+            <div className="max-w-400 mx-auto px-6 lg:px-10 py-8">
+                <div className="flex flex-col lg:flex-row gap-6 items-start">
+
+                    {/* Sidebar */}
+                    <div className="w-full lg:w-65 xl:w-70 shrink-0 lg:sticky lg:top-22">
+                        <UserInfoSidebar
+                            user={user}
+                            onChangePasswordClick={handleOpenChangePassword}
+                            onScrollToInfo={() => scrollToSection(infoSectionRef)}
+                            onScrollToWishlist={() => scrollToSection(wishlistSectionRef)}
+                        />
+                    </div>
+
+                    {/* Main info */}
+                    <div className="flex-1 min-w-0 flex flex-col gap-6">
+
+                        <div ref={infoSectionRef}>
+                            <ProfileInformationCard
+                                user={user}
+                                formData={formData}
+                                isEditMode={isEditMode}
+                                isSaving={isSaving}
+                                onFieldChange={handleFieldChange}
+                                onEnterEdit={handleEnterEdit}
+                                onSave={handleSaveProfile}
+                                onCancel={handleCancelEdit}
+                            />
+                        </div>
+
+                        <div
+                            ref={wishlistSectionRef}
+                            className="bg-white border border-border-subtle rounded-2xl p-6 shadow-sm"
+                        >
+                            <h2 className="font-['Lora',serif] text-lg font-bold text-stone-900 mb-6 border-b border-stone-100 pb-4">
+                                Danh sách yêu thích
+                            </h2>
+                            <WishlistTab
+                                items={wishlistItems}
+                                isLoading={isLoadingWishlist}
+                                pagination={wishlistPagination}
+                                currentPage={wishlistPage}
+                                onPageChange={handleWishlistPageChange}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <ChangePasswordModal
                 isOpen={isChangePasswordOpen}

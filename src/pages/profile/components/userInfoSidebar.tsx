@@ -1,10 +1,7 @@
 import type { User } from "../../../features/user/models/user.model";
-import type { UpdateProfileRequest } from "../../../features/user/dto/updateProfile.type";
 
 interface UserInfoSidebarProps {
     user: User | null;
-    formData: UpdateProfileRequest;
-    onEditClick: () => void;
     onChangePasswordClick: () => void;
     onScrollToInfo: () => void;
     onScrollToWishlist: () => void;
@@ -20,7 +17,6 @@ type MenuItem = {
 
 export const UserInfoSidebar = ({
     user,
-    onEditClick,
     onChangePasswordClick,
     onScrollToInfo,
     onScrollToWishlist,
@@ -35,16 +31,6 @@ export const UserInfoSidebar = ({
                 </svg>
             ),
             action: onScrollToInfo,
-        },
-        {
-            id: "edit-profile",
-            label: "Chỉnh sửa thông tin cá nhân",
-            icon: (
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-            ),
-            action: onEditClick,
         },
         {
             id: "wishlist",
@@ -64,7 +50,7 @@ export const UserInfoSidebar = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
             ),
-            action: () => {},
+            action: () => { },
         },
         {
             id: "address",
@@ -75,7 +61,7 @@ export const UserInfoSidebar = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
             ),
-            action: () => {},
+            action: () => { },
         },
         {
             id: "password",
@@ -95,16 +81,16 @@ export const UserInfoSidebar = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
             ),
-            action: () => {},
+            action: () => { },
             isDestructive: true,
         },
     ];
 
     return (
-        <div className="bg-white border border-[#E7E5E4] rounded-[16px] overflow-hidden shadow-sm">
+        <div className="bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm">
             <div className="p-6 flex flex-col items-center border-b border-stone-100">
                 <div className="relative mb-4">
-                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] bg-stone-100">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] bg-stone-100">
                         {user?.avatarUrl ? (
                             <img
                                 src={user.avatarUrl}
@@ -112,13 +98,13 @@ export const UserInfoSidebar = ({
                                 className="w-full h-full object-cover"
                             />
                         ) : (
-                            <div className="w-full h-full bg-market-secondary flex items-center justify-center text-white font-bold text-4xl">
+                            <div className="w-full h-full bg-market-secondary flex items-center justify-center text-white font-bold text-3xl">
                                 {user?.fullName?.charAt(0)?.toUpperCase() ?? "U"}
                             </div>
                         )}
                     </div>
                 </div>
-                <h2 className="text-lg font-bold text-stone-900 text-center leading-tight">{user?.fullName || "Người dùng"}</h2>
+                <h2 className="text-base font-bold text-stone-900 text-center leading-tight">{user?.fullName || "Người dùng"}</h2>
                 <p className="text-stone-400 text-xs mt-0.5 text-center">{user?.email}</p>
             </div>
 
