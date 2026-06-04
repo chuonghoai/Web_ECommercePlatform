@@ -5,7 +5,7 @@ import { EPaymentMethod } from "../../enums/paymentMethod.enum";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
 import type { CheckoutResultDto } from "../models/checkoutResult.dto";
-import { EOrderStatus } from "../../enums/orderStatus.enum";
+import { EPaymentStatus } from "../../enums/paymentStatus.enum";
 
 export class CheckoutMockRepository implements CheckoutRepository {
     prepareOrder(request: PrepareCheckoutRequest[]): Promise<ApiResponse<PrepareCheckoutModel>> {
@@ -63,10 +63,10 @@ export class CheckoutMockRepository implements CheckoutRepository {
                 totalAmount: 290000 + 30000,
 
                 invalidItems: [
-                    {
-                        productId: "1",
-                        reason: "Hết hàng"
-                    }
+                    // {
+                    //     productId: "1",
+                    //     reason: "Hết hàng"
+                    // }
                 ],
             },
         };
@@ -92,8 +92,8 @@ export class CheckoutMockRepository implements CheckoutRepository {
             message: "Success",
             data: {
                 orderId,
-                paymentMethod: EPaymentMethod.MOMO,
-                orderStatus: EOrderStatus.PAID
+                paymentMethod: EPaymentMethod.COD,
+                paymentStatus: EPaymentStatus.PENDING
             }
         });
     }

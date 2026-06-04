@@ -66,17 +66,19 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                             </div>
 
                             {/* Button remove items */}
-                            <div className="sm:shrink-0 flex items-start justify-end pt-2 sm:pt-0">
-                                <button
-                                    type="button"
-                                    aria-label="Remove item"
-                                    className="transition-colors flex items-center gap-1 rounded-lg font-caption py-1.5 px-3 text-text-muted hover:text-error"
-                                    onClick={() => onRemove(item.product.id)}
-                                >
-                                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
-                                    <span>Xóa</span>
-                                </button>
-                            </div>
+                            {isInvalid && (
+                                <div className="sm:shrink-0 flex items-start justify-end pt-2 sm:pt-0">
+                                    <button
+                                        type="button"
+                                        aria-label="Remove item"
+                                        className="transition-colors flex items-center gap-1 rounded-lg font-caption py-1.5 px-3 text-text-muted hover:text-error"
+                                        onClick={() => onRemove(item.product.id)}
+                                    >
+                                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+                                        <span>Xóa</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     );
                 })}

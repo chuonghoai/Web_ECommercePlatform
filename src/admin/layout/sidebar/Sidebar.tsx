@@ -1,18 +1,57 @@
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { userStorageService } from "../../../features/user/services/userStorage.service";
+import { EUserRole, type User } from "../../../features/user/models/user.model";
+import { authService } from "../../../features/auth/services/auth.service";
 
 export const Sidebar = () => {
+    const [user, setUser] = useState<User | null>(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const loadUser = () => {
+            const currentUser = userStorageService.getUser();
+            setUser(currentUser);
+        }
+
+        loadUser();
+        window.addEventListener("auth_changed", loadUser);
+
+        return () => {
+            window.removeEventListener("auth_changed", loadUser);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await authService.logout();
+        } catch (error) {
+            console.error("Lỗi đăng xuất:", error);
+        } finally {
+            navigate('/login');
+        }
+    };
 
     const navItems = [
-        { path: "/admin", icon: "dashboard", label: "Overview" },
-        { path: "/admin/orders", icon: "shopping_cart", label: "Orders" },
-        { path: "/admin/products", icon: "inventory_2", label: "Products" },
-        { path: "/admin/customers", icon: "group", label: "Customers" },
-        { path: "/admin/analytics", icon: "analytics", label: "Analytics" },
-        { path: "/admin/trends", icon: "trending_up", label: "Trends" },
-        { path: "/admin/marketing", icon: "campaign", label: "Marketing" },
-        { path: "/admin/inventory", icon: "warehouse", label: "Inventory" },
-        { path: "/admin/settings", icon: "settings", label: "Settings" },
+        { path: "/admin", icon: "dashboard", label: "Tổng quan" },
+        { path: "/admin/orders", icon: "shopping_cart", label: "Đơn hàng" },
+        { path: "/admin/products", icon: "inventory_2", label: "Sản phẩm" },
+        { path: "/admin/staff", icon: "people", label: "Nhân viên" },
+        { path: "/admin/inventory", icon: "warehouse", label: "Kho hàng" },
+        { path: "/admin/settings", icon: "settings", label: "Cài đặt" },
     ];
 
     return (
@@ -28,7 +67,7 @@ export const Sidebar = () => {
                         <li key={item.path}>
                             <Link
                                 to={item.path}
-                                className={`flex items-center gap-4 px-4 py-2 rounded-lg hover:translate-y-[-2px] transition-transform duration-200 ${isActive ? 'text-primary-container bg-surface-container font-bold' : 'text-text-muted hover:text-text-ink'}`}
+                                className={`flex items-center gap-4 px-4 py-2 rounded-lg hover:-translate-y-0.5 transition-transform duration-200 ${isActive ? 'text-primary-container bg-surface-container font-bold' : 'text-text-muted hover:text-text-ink'}`}
                             >
                                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{item.icon}</span>
                                 <span className="font-body text-sm font-semibold">{item.label}</span>
@@ -37,28 +76,66 @@ export const Sidebar = () => {
                     );
                 })}
             </ul>
-            <div className="mt-auto pt-4 border-t-[1.5px] border-border-subtle">
-                <ul className="flex flex-col gap-1">
-                    <li>
-                        <Link to="/admin/support" className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:translate-y-[-2px] transition-transform duration-200">
-                            <span className="material-symbols-outlined">help</span>
-                            <span className="font-body text-sm font-semibold">Support</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/documentation" className="flex items-center gap-4 px-4 py-2 text-text-muted hover:text-text-ink hover:translate-y-[-2px] transition-transform duration-200">
-                            <span className="material-symbols-outlined">description</span>
-                            <span className="font-body text-sm font-semibold">Documentation</span>
-                        </Link>
-                    </li>
-                </ul>
-                <div className="mt-4 flex items-center gap-4 px-4">
-                    <img alt="User profile" className="w-8 h-8 rounded-full border-[1.5px] border-border-medium object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbO_7Cc4RxMzu8jEJy7FNBRbAFJb8j0ygsoayljk-lOxADi51uZNmAaEpmkv7SeXke9h-Td1PMOW63NLYTjh6VP0W8UQ2--Bpzg-to4hMVEUvNf4DBRpyTqMG5Qqcste76Y5i44XYDH54CiocAqehTI3WpOEGD09q9ibglFE0rooDUYryZZ6U2uz7Wfnw831FEH_G_Op7USb6kCtK5ZzyCudghuv1GIgQ9G_ui24JFxHI1IX6hD8p525UidrtmXDRxd30bcYbK5dmq" />
-                    <div>
-                        <p className="font-body text-sm font-semibold text-text-ink">Eleanor Vance</p>
-                        <p className="font-body text-[10px] text-text-muted">Artisan Director</p>
-                    </div>
+
+            <div className="mt-auto pt-4 border-t-[1.5px] border-border-subtle relative" ref={menuRef}>
+                {/* Pop up menu */}
+                <div
+                    className={`absolute bottom-full left-0 w-full mb-2 bg-surface-card border-[1.5px] border-border-subtle rounded-lg shadow-lg overflow-hidden z-50 flex flex-col transform transition-all duration-300 ease-in-out origin-bottom ${isMenuOpen
+                        ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
+                        : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
+                        }`}
+                >
+                    <button className="flex items-center gap-3 px-4 py-2.5 text-text-muted hover:text-text-ink hover:bg-surface-container transition-colors w-full text-left">
+                        <span className="material-symbols-outlined text-[18px]">help</span>
+                        <span className="font-body text-sm font-semibold">Hỗ trợ</span>
+                    </button>
+                    <button className="flex items-center gap-3 px-4 py-2.5 text-text-muted hover:text-text-ink hover:bg-surface-container transition-colors w-full text-left">
+                        <span className="material-symbols-outlined text-[18px]">description</span>
+                        <span className="font-body text-sm font-semibold">Tài liệu</span>
+                    </button>
+                    <Link
+                        to="/admin/settings"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-text-muted hover:text-text-ink hover:bg-surface-container transition-colors w-full text-left"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">settings</span>
+                        <span className="font-body text-sm font-semibold">Cài đặt</span>
+                    </Link>
+
+                    <div className="w-full h-px bg-border-subtle my-1"></div>
+
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-4 py-2.5 text-error hover:bg-[#fee2e2] transition-colors w-full text-left"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">logout</span>
+                        <span className="font-body text-sm font-semibold">Đăng xuất</span>
+                    </button>
                 </div>
+
+                {/* Avatar */}
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="w-full flex items-center justify-between px-4 py-2 hover:bg-surface-container rounded-lg transition-colors cursor-pointer text-left focus:outline-none"
+                >
+                    <div className="flex items-center gap-4 overflow-hidden">
+                        <img
+                            alt="User profile"
+                            className="w-8 h-8 rounded-full border-[1.5px] border-border-medium object-cover shrink-0"
+                            src={user?.avatarUrl || ""}
+                        />
+                        <div className="overflow-hidden">
+                            <span className="block font-body text-sm font-semibold text-text-ink truncate">{user?.fullName}</span>
+                            <p className="block font-body text-[10px] text-text-muted truncate">{user?.role === EUserRole.ADMIN ? "Quản trị viên" : "Nhân viên"}</p>
+                        </div>
+                    </div>
+                    <span
+                        className={`material-symbols-outlined text-text-muted text-[20px] shrink-0 transform transition-transform duration-300 ${isMenuOpen ? 'rotate-180' : 'rotate-0'
+                            }`}
+                    >
+                        expand_less
+                    </span>
+                </button>
             </div>
         </nav>
     );

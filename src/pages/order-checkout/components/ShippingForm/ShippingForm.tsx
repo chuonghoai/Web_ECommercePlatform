@@ -7,10 +7,39 @@ import { LocationSelector, useShippingController } from './shippingForm.controll
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddressModal }) => {
-    const { position } = useShippingController(address.latitude, address.longitude);
+export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddressModal, onOpenAddNewAddressModal }) => {
+    const fallbackLat = 10.8231;
+    const fallbackLng = 106.6297;
+    const { position } = useShippingController(address?.latitude ?? fallbackLat, address?.longitude ?? fallbackLng);
 
     const disabledInputClass = "input-field w-full px-3 py-2 text-text-muted border-dashed border-border-medium cursor-not-allowed";
+
+    if (!address) {
+        return (
+            <section className="w-full">
+                <div className="flex justify-between items-center border-b border-subtle pb-2 mb-4">
+                    <h2 className="font-headline text-2xl text-text-ink">Thông tin giao hàng</h2>
+                </div>
+                <div className="bg-surface-card card-border border-dashed rounded-lg p-8 flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mb-2">
+                        <span className="material-symbols-outlined text-4xl text-text-muted">location_off</span>
+                    </div>
+                    <div>
+                        <p className="font-body text-text-ink font-semibold text-lg">Bạn chưa có địa chỉ giao hàng</p>
+                        <p className="font-caption text-text-muted mt-1">Vui lòng thêm địa chỉ để tiếp tục thanh toán đơn hàng</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={onOpenAddNewAddressModal}
+                        className="btn-primary px-6 py-2.5 mt-2 rounded-lg font-body font-semibold flex items-center gap-2 transition-transform hover:-translate-y-0.5"
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add_location</span>
+                        Thêm mới địa chỉ
+                    </button>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="w-full">

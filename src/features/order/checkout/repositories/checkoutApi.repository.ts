@@ -35,15 +35,11 @@ export class CheckoutApiRepository implements CheckoutRepository {
     }
 
     /**
-     * GET /orders/checkout/result
+     * GET /checkout/orders/:id/payment-status
      * @param orderId
      * @returns CheckoutResultDto
      */
     async getOrderResult(orderId: string): Promise<ApiResponse<CheckoutResultDto>> {
-        return apiClient.get<ApiResponse<CheckoutResultDto>>("/orders/checkout/result", {
-            params: {
-                orderId
-            }
-        });
+        return apiClient.get<ApiResponse<CheckoutResultDto>>(`/checkout/orders/${orderId}/payment-status`);
     }
 }

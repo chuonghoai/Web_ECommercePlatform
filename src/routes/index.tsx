@@ -24,6 +24,8 @@ import { ProductsPage } from "../admin/pages/products/ProductsPage";
 import { CreateProductPage } from "../admin/pages/products/CreateProductPage";
 import { EditProductPage } from "../admin/pages/products/EditProductPage";
 import { ProductDetailPage } from "../admin/pages/products/ProductDetailPage";
+import OrderPage from "../admin/pages/order/orderPage";
+import OrderDetailPage from "../admin/pages/orderDetail/orderDetailPage";
 
 function AppRoutes() {
     return (
@@ -77,6 +79,8 @@ function AppRoutes() {
                     <Route path="products/create" element={<CreateProductPage />} />
                     <Route path="products/:id" element={<ProductDetailPage />} />
                     <Route path="products/:id/edit" element={<EditProductPage />} />
+                    <Route path="orders" element={<OrderPage />} />
+                    <Route path="orders/:id" element={<OrderDetailPage />} />
                 </Route>
 
                 {/* AUTH */}
