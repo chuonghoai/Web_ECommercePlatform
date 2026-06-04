@@ -29,7 +29,7 @@ const mockOrderItems: OrderItemTracking[] = [
         firstProductImageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
         firstProductName: "Tai nghe chống ồn Sony WH-1000XM4",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PENDING,
+        paymentStatus: EPaymentStatus.PENDING,
     },
     {
         id: "ORD-2026-0002",
@@ -40,7 +40,7 @@ const mockOrderItems: OrderItemTracking[] = [
         firstProductImageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60",
         firstProductName: "Ốp lưng điện thoại trong suốt cao cấp",
         paymentMethod: EPaymentMethod.MOMO,
-        paymentStaus: EPaymentStatus.PAID,
+        paymentStatus: EPaymentStatus.PAID,
     },
     {
         id: "ORD-2026-0003",
@@ -51,7 +51,7 @@ const mockOrderItems: OrderItemTracking[] = [
         firstProductImageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60",
         firstProductName: "Đồng hồ thông minh Apple Watch Series 8",
         paymentMethod: EPaymentMethod.MOMO,
-        paymentStaus: EPaymentStatus.PAID,
+        paymentStatus: EPaymentStatus.PAID,
     },
     {
         id: "ORD-2026-0004",
@@ -62,7 +62,7 @@ const mockOrderItems: OrderItemTracking[] = [
         firstProductImageUrl: "https://images.unsplash.com/photo-1503602642458-232111445657?w=500&auto=format&fit=crop&q=60",
         firstProductName: "Balo laptop thời trang chống nước",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PAID,
+        paymentStatus: EPaymentStatus.PAID,
     },
     {
         id: "ORD-2026-0005",
@@ -73,7 +73,7 @@ const mockOrderItems: OrderItemTracking[] = [
         firstProductImageUrl: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&auto=format&fit=crop&q=60",
         firstProductName: "Loa bluetooth mini bass mạnh",
         paymentMethod: EPaymentMethod.MOMO,
-        paymentStaus: EPaymentStatus.FAILED,
+        paymentStatus: EPaymentStatus.FAILED,
     }
 ];
 

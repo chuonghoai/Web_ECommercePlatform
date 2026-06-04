@@ -34,5 +34,5 @@ export interface OrderItem {
     buyerPhone: string;
 
     paymentMethod: EPaymentMethod;
-    paymentStaus: EPaymentStatus;
+    paymentStatus: EPaymentStatus;
 }

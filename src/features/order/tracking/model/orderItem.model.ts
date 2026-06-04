@@ -27,5 +27,5 @@ export interface OrderItemTracking {
     firstProductName: string;
 
     paymentMethod: EPaymentMethod;
-    paymentStaus: EPaymentStatus;
+    paymentStatus: EPaymentStatus;
 }

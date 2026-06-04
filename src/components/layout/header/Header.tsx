@@ -54,7 +54,7 @@ export const Header = () => {
 
   const handleNavigateOrder = () => {
     if (!user) return;
-    const navPath = user.role === EUserRole.ADMIN ? "/admin/orders" : "/orders";
+    const navPath = user.role === EUserRole.ADMIN ? "/admin/orders" : "/profile/order/tracking";
     navigate(navPath);
   };
 
