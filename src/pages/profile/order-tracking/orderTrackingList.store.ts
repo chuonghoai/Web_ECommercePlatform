@@ -9,6 +9,7 @@ export const useOrderTrackingListStore = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [ordersCount, setOrdersCount] = useState<OrderTrackingStatusCount | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
 
     const fetchOrders = useCallback(async (status?: EOrderStatus) => {
         setLoading(true);
@@ -38,12 +39,46 @@ export const useOrderTrackingListStore = () => {
         }
     }, []);
 
+    const cancelOrder = useCallback(async (orderId: string, note: string) => {
+        setActionLoading(true);
+        try {
+            const response = await orderService.cancelOrder(orderId, note);
+            if (response.success) {
+                // Remove or update the order in the list? We can just return success
+                return { success: true };
+            }
+            return { success: false, message: response.message };
+        } catch {
+            return { success: false, message: 'Lỗi khi hủy đơn hàng' };
+        } finally {
+            setActionLoading(false);
+        }
+    }, []);
+
+    const returnOrder = useCallback(async (orderId: string, note: string) => {
+        setActionLoading(true);
+        try {
+            const response = await orderService.returnOrder(orderId, note);
+            if (response.success) {
+                return { success: true };
+            }
+            return { success: false, message: response.message };
+        } catch {
+            return { success: false, message: 'Lỗi khi yêu cầu trả hàng' };
+        } finally {
+            setActionLoading(false);
+        }
+    }, []);
+
     return {
         orders,
         loading,
         error,
         ordersCount,
+        actionLoading,
         fetchOrders,
         fetchOrdersCount,
+        cancelOrder,
+        returnOrder,
     };
 };

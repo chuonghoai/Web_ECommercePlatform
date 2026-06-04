@@ -50,7 +50,7 @@ export const OrderTrackingDetail: React.FC = () => {
                             Mã đơn: <span className="text-market-primary">{controller.order.id}</span>
                         </h2>
                         <p className="text-stone-500 text-sm mt-1">
-                            Ngày đặt: {controller.order.createdAt.toLocaleDateString("vi-VN", {
+                            Ngày đặt: {new Date(controller.order.createdAt).toLocaleDateString("vi-VN", {
                                 hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric"
                             })}
                         </p>

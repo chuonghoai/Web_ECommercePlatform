@@ -65,16 +65,26 @@ export const OrderTrackingList: React.FC = () => {
                         <div className="w-8 h-8 rounded-full border-2 border-market-primary border-t-transparent animate-spin"></div>
                     </div>
                 )}
-                
                 {controller.error && (
                     <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 mb-2">
                         {controller.error}
                     </div>
                 )}
+                
+                {controller.actionLoading && (
+                    <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-20 rounded-2xl">
+                        <div className="w-8 h-8 rounded-full border-2 border-market-primary border-t-transparent animate-spin"></div>
+                    </div>
+                )}
 
                 {controller.filteredItems.length > 0 ? (
                     controller.filteredItems.map((order) => (
-                        <OrderCard key={order.id} order={order} />
+                        <OrderCard 
+                            key={order.id} 
+                            order={order} 
+                            onCancel={controller.handleCancelOrder}
+                            onReturn={controller.handleReturnOrder}
+                        />
                     ))
                 ) : (
                     !controller.loading && (
