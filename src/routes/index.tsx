@@ -14,7 +14,8 @@ import ProductPage from "../pages/product/productPage";
 import CheckoutPage from "../pages/order-checkout/checkoutPage";
 import { ProfileLayout } from "../pages/profile/layouts/ProfileLayout";
 import ProfileDashboardPage from "../pages/profile/dashboard/ProfileDashboardPage";
-import OrderTrackingPage from "../pages/profile/order-tracking/OrderTrackingPage";
+import { OrderTrackingList } from "../pages/profile/order-tracking/OrderTrackingList";
+import { OrderTrackingDetail } from "../pages/profile/order-tracking-detail/OrderTrackingDetail";
 import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
 import { AdminLayout } from "../admin/layout/AdminLayout";
@@ -69,7 +70,10 @@ function AppRoutes() {
                     }>
                         <Route index element={<Navigate to="/profile/dashboard" replace />} />
                         <Route path="dashboard" element={<ProfileDashboardPage />} />
-                        <Route path="order-tracking" element={<OrderTrackingPage />} />
+                        <Route path="order/tracking">
+                            <Route index element={<OrderTrackingList />} />
+                            <Route path=":orderId" element={<OrderTrackingDetail />} />
+                        </Route>
                     </Route>
                 </Route>
 
