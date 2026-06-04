@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
 import { useProductStore } from './products.store';
 import { productService } from '../../features/products/services/product.service';
-import type { Product, ProductFormData } from '../../features/products/models/product.model';
+import type { Product, ProductFormData, CreateProductRequest } from '../../features/products/models/product.model';
+
 export const useProductController = () => {
     const store = useProductStore();
-    // === GIỮ NGUYÊN ===
+
+    // === Fetch danh sách sản phẩm ===
     const fetchProducts = useCallback(async () => {
         store.setLoading(true);
         store.setError(null);
@@ -32,15 +34,30 @@ export const useProductController = () => {
         } finally {
             store.setLoading(false);
         }
-    }, [store.page, store.pageSize, store.filters]); 
-    // === GIỮ NGUYÊN ===
+    }, [store.page, store.pageSize, store.filters]);
+
+    // === Fetch chi tiết 1 sản phẩm (cho Edit/Detail page) ===
+    const fetchProductById = useCallback(async (id: string): Promise<Product | null> => {
+        try {
+            const response = await productService.fetchProductById(id);
+            if (response.success && response.data) {
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
+            return null;
+        }
+    }, []);
+
+    // === Phân trang ===
     const handlePageChange = (newPage: number) => {
         store.setPagination(newPage, store.pageSize, store.totalItems, store.totalPages);
     };
-    // === GIỮ NGUYÊN ===
+
+    // === Xóa sản phẩm ===
     const handleDeleteProduct = async (id: string) => {
         if (!window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) return;
-        
         const success = await productService.removeProduct(id);
         if (success) {
             fetchProducts();
@@ -48,30 +65,38 @@ export const useProductController = () => {
             alert('Không thể xóa sản phẩm. Vui lòng thử lại!');
         }
     };
-    const handleSaveProduct = async (formData: ProductFormData) => {
+
+    // === Lưu sản phẩm (tạo mới hoặc cập nhật) ===
+    const handleSaveProduct = async (
+        formData: ProductFormData,
+        editingProductId?: string
+    ): Promise<boolean> => {
         store.setSaving(true);
         try {
-            let imageUrl = formData.imageUrl || store.editingProduct?.imageUrl || '';
+            // 1. Upload ảnh đại diện (nếu có file mới)
+            let imageUrl = formData.imageUrl || '';
             if (formData.avatarFile) {
-                const uploadedUrl = await productService.uploadImage(formData.avatarFile);
-                if (!uploadedUrl) {
+                const urls = await productService.uploadImages([formData.avatarFile]);
+                if (!urls || urls.length === 0) {
                     alert('Upload ảnh đại diện thất bại. Vui lòng thử lại!');
-                    store.setSaving(false);
-                    return;
+                    return false;
                 }
-                imageUrl = uploadedUrl;
+                imageUrl = urls[0];
             }
+
+            // 2. Upload ảnh chi tiết mới (nếu có)
             let images: string[] = formData.images || [];
             if (formData.detailImageFiles && formData.detailImageFiles.length > 0) {
-                const uploadedUrls = await productService.uploadMultipleImages(formData.detailImageFiles);
-                if (!uploadedUrls) {
+                const urls = await productService.uploadImages(formData.detailImageFiles);
+                if (!urls) {
                     alert('Upload ảnh chi tiết thất bại. Vui lòng thử lại!');
-                    store.setSaving(false);
-                    return;
+                    return false;
                 }
-                images = [...images, ...uploadedUrls];
+                images = [...images, ...urls];
             }
-            const productData: Partial<Product> = {
+
+            // 3. Build request payload
+            const productData: CreateProductRequest = {
                 name: formData.name,
                 price: formData.price,
                 originalPrice: formData.originalPrice,
@@ -79,31 +104,29 @@ export const useProductController = () => {
                 imageUrl,
                 images,
                 stockStatus: formData.stockStatus,
-                description: formData.description,       
-                materials: formData.materials,            
+                description: formData.description,
+                materials: formData.materials,
             };
 
-            const isEditing = !!store.editingProduct;
-            const success = await productService.saveProduct(
-                productData,
-                isEditing ? store.editingProduct!.id : undefined
-            );
-            if (success) {
-                store.closeModal();
-                fetchProducts();
-            } else {
+            // 4. Gọi API tạo/cập nhật
+            const success = await productService.saveProduct(productData, editingProductId);
+            if (!success) {
                 alert('Không thể lưu sản phẩm. Vui lòng thử lại!');
             }
+            return success;
         } catch (error) {
             console.error('Lỗi khi lưu sản phẩm:', error);
             alert('Đã xảy ra lỗi không xác định.');
+            return false;
         } finally {
             store.setSaving(false);
         }
     };
+
     return {
         ...store,
         fetchProducts,
+        fetchProductById,
         handlePageChange,
         handleDeleteProduct,
         handleSaveProduct,

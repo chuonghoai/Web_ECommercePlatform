@@ -1,27 +1,18 @@
-import { apiClient } from "../../../../core/api/apiClient";
-import type { UploadImageResponse } from "../models/product.model";
+import type { ApiResponse } from "../../../../core/api/apiResponse";
+import type { UploadFileResponse } from "../models/product.model";
 
-// ============================================================
-// GHI CHÚ CHO BACKEND:
-// API upload ảnh lên Cloudinary.
-// Endpoint hiện tại là tạm, cần BE xác nhận.
-// Request: POST, multipart/form-data, field "file"
-// Response mong muốn: { url: "https://res.cloudinary.com/..." }
-// ============================================================
-const UPLOAD_ENDPOINT = '/uploads/image';
-
-export const uploadRepository = {
+/**
+ * Interface cho Upload Repository.
+ * API: POST /media/uploads (multipart/form-data)
+ * Field: files (Array<File>)
+ * Query: ?folder=<string> (optional)
+ */
+export interface IUploadRepository {
     /**
-     * Upload 1 file ảnh lên server (BE forward lên Cloudinary).
-     * @param file - File ảnh từ input type="file"
-     * @returns Response chứa URL ảnh đã upload
+     * Upload nhiều file cùng lúc lên Cloudinary qua BE.
+     * @param files - Danh sách file ảnh
+     * @param folder - Tên thư mục trên Cloudinary (mặc định: 'products')
+     * @returns Mảng thông tin file đã upload
      */
-    async uploadImage(file: File): Promise<UploadImageResponse> {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        return apiClient.post<UploadImageResponse>(UPLOAD_ENDPOINT, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        });
-    },
-};
+    uploadFiles(files: File[], folder?: string): Promise<ApiResponse<UploadFileResponse[]>>;
+}

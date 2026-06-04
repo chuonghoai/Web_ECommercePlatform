@@ -7,9 +7,8 @@ export interface Product {
     discountPercentage: number;
     rating: number;
     images: string[];
-    description?: string;      
-    materials: string[];      
-
+    description?: string;
+    materials: string[];
     categoryName?: string;
     categoryId?: string;
     sellerInfo?: {
@@ -53,24 +52,35 @@ export interface PaginatedResponse<T> {
     data: T[];
 }
 
-// === Response khi upload ảnh lên Cloudinary ===
-// BE sẽ cung cấp API upload ảnh, trả về URL ảnh đã upload
-// Endpoint đề xuất: POST /uploads/image (multipart/form-data)
-export interface UploadImageResponse {
-    url: string;        // URL ảnh trên Cloudinary
-    imageUrl?: string;  // Fallback nếu BE dùng tên field khác
+export interface UploadFileResponse {
+    url: string;
+    publicId: string;
+    format: string;
+    bytes: number;
 }
 
-// === Dữ liệu form thêm/sửa sản phẩm ===
-// Tách biệt khỏi Product interface vì form cần xử lý file upload
+export interface CreateProductRequest {
+    name: string;
+    price: number;
+    originalPrice: number;
+    discountPercentage: number;
+    imageUrl: string;
+    images: string[];
+    description?: string;
+    materials?: string[];
+    stockStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';
+}
+
+export type UpdateProductRequest = Partial<CreateProductRequest>;
+
 export interface ProductFormData {
     name: string;
     price: number;
     originalPrice: number;
     discountPercentage: number;
     stockStatus: 'in_stock' | 'low_stock' | 'out_of_stock';
-    description: string;     
-    materials: string[];  
+    description: string;
+    materials: string[];
     avatarFile?: File | null;
     detailImageFiles?: File[];
     imageUrl?: string;
