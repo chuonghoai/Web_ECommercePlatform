@@ -6,27 +6,34 @@ import type { RegisterRequest } from "../dto/register.type";
 import { OtpPurpose } from "../enums/otpPurpose.enum";
 import type { AuthRepository } from "./auth.repository";
 import { ApiException } from "../../../core/exceptions/api.exception";
+import { EUserRole, type UserRole } from "../../user/models/user.model";
 
 export class AuthMockRepository implements AuthRepository {
     async login(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
+        let roleResponse: UserRole = EUserRole.ADMIN;
         if (data.email === "111" && data.password === "111") {
-            return {
-                success: true,
-                message: "Đăng nhập thành công",
-                data: {
-                    accessToken: "mock_token_123",
-                    user: {
-                        id: "1",
-                        email: "manggia098@gmail.com",
-                        fullName: "manggia",
-                        role: "ADMIN",
-                        avatarUrl: ""
-                    }
-                },
-            };
+            roleResponse = EUserRole.USER;
+        }
+        else if (data.email === "222" && data.password === "222") {
+            roleResponse = EUserRole.ADMIN;
+        } else {
+            throw new UnauthorizedException("Sai email hoặc mật khẩu");
         }
 
-        throw new UnauthorizedException("Sai email hoặc mật khẩu");
+        return {
+            success: true,
+            message: "Đăng nhập thành công",
+            data: {
+                accessToken: "mock_token_123",
+                user: {
+                    id: "1",
+                    email: "manggia098@gmail.com",
+                    fullName: "manggia",
+                    role: roleResponse,
+                    avatarUrl: ""
+                }
+            },
+        };
     }
 
     async register(data: RegisterRequest): Promise<ApiResponse<LoginResponse>> {

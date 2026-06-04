@@ -5,7 +5,6 @@ import type { UserProfileResponse } from "../dto/getProfile.type";
 import type { UserRepository } from "./user.repository";
 import type { Address } from "../../order/checkout/models/checkout.model";
 import type { DistrictModel, ProvinceModel, WardModel } from "../models/address.model";
-import { apiClient } from "../../../core/api/apiClient";
 import axios from "axios";
 import { ApiException } from "../../../core/exceptions/api.exception";
 

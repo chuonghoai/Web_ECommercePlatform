@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserService } from "../../features/user/services/user.service";
+import { userService } from "../../features/user/services/user.service";
 import { userStorageService } from "../../features/user/services/userStorage.service";
 import type { UpdateProfileRequest } from "../../features/user/dto/updateProfile.type";
 import type { WishlistItem } from "../../features/user/models/wishlist.model";
@@ -7,7 +7,6 @@ import type { User } from "../../features/user/models/user.model";
 import { useToast } from "../../components/toast/toast";
 import type { ApiResponse } from "../../core/api/apiResponse";
 
-const userService = new UserService();
 const WISHLIST_PAGE_SIZE = 40;
 
 export const useProfileStore = () => {
