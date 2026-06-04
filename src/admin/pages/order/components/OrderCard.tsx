@@ -63,9 +63,9 @@ export const OrderCard = ({ order }: { order: OrderItem }) => {
                         {formatCurrency(order.totalAmount)}
                     </span>
                     <span
-                        className={`mt-1 px-2.5 py-0.5 rounded-sm font-body text-[11px] font-bold uppercase tracking-wider ${PAYMENT_CONFIG[order.paymentStaus].color}`}
+                        className={`mt-1 px-2.5 py-0.5 rounded-sm font-body text-[11px] font-bold uppercase tracking-wider ${PAYMENT_CONFIG[order.paymentStatus].color}`}
                     >
-                        {PAYMENT_CONFIG[order.paymentStaus].label}
+                        {PAYMENT_CONFIG[order.paymentStatus].label}
                     </span>
                     <span className="cursor-text font-body text-[12px] text-[#57534E] mt-1 text-left md:text-right">
                         {PAYMENT_METHOD_LABEL[order.paymentMethod]}

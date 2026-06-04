@@ -20,7 +20,7 @@ const mockOrder: OrderItem[] = [
         buyerAddress: "Address 1",
         buyerPhone: "1234567890",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PENDING
+        paymentStatus: EPaymentStatus.PENDING
     },
     {
         id: "bbbbb",
@@ -33,7 +33,7 @@ const mockOrder: OrderItem[] = [
         buyerAddress: "Address 2",
         buyerPhone: "1234567890",
         paymentMethod: EPaymentMethod.MOMO,
-        paymentStaus: EPaymentStatus.PAID
+        paymentStatus: EPaymentStatus.PAID
     },
     {
         id: "cccccc",
@@ -46,7 +46,7 @@ const mockOrder: OrderItem[] = [
         buyerAddress: "Address 1",
         buyerPhone: "1234567890",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PENDING
+        paymentStatus: EPaymentStatus.PENDING
     },
     {
         id: "ddddd",
@@ -59,7 +59,7 @@ const mockOrder: OrderItem[] = [
         buyerAddress: "Address 1",
         buyerPhone: "1234567890",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PENDING
+        paymentStatus: EPaymentStatus.PENDING
     },
     {
         id: "ddddd",
@@ -72,7 +72,7 @@ const mockOrder: OrderItem[] = [
         buyerAddress: "Address 1",
         buyerPhone: "1234567890",
         paymentMethod: EPaymentMethod.COD,
-        paymentStaus: EPaymentStatus.PENDING
+        paymentStatus: EPaymentStatus.PENDING
     }
 ]
 
@@ -190,7 +190,7 @@ export class OrderMockRepository implements OrderRepository {
             discountAmount: 10000,
             totalAmount: 110000,
             paymentMethod: orderInfo.paymentMethod,
-            paymentStatus: orderInfo.paymentStaus
+            paymentStatus: orderInfo.paymentStatus
         };
 
         return Promise.resolve({
