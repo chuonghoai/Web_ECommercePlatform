@@ -12,7 +12,9 @@ import { MainLayout } from "../components/layout/MainLayout";
 import MarketplacePage from "../pages/marketplace/marketplacePage";
 import ProductPage from "../pages/product/productPage";
 import CheckoutPage from "../pages/order-checkout/checkoutPage";
-import ProfilePage from "../pages/profile/profilePage";
+import { ProfileLayout } from "../pages/profile/layouts/ProfileLayout";
+import ProfileDashboardPage from "../pages/profile/dashboard/ProfileDashboardPage";
+import OrderTrackingPage from "../pages/profile/order-tracking/OrderTrackingPage";
 import CartPage from "../pages/cart/CartPage";
 import AuthGuard from "../core/auth/auth.guard";
 import { AdminLayout } from "../admin/layout/AdminLayout";
@@ -62,9 +64,13 @@ function AppRoutes() {
                     {/* PROFILE */}
                     <Route path="profile" element={
                         <AuthGuard requireAuth={true} allowedRoles={[EUserRole.USER]}>
-                            <ProfilePage />
+                            <ProfileLayout />
                         </AuthGuard>
-                    } />
+                    }>
+                        <Route index element={<Navigate to="/profile/dashboard" replace />} />
+                        <Route path="dashboard" element={<ProfileDashboardPage />} />
+                        <Route path="order-tracking" element={<OrderTrackingPage />} />
+                    </Route>
                 </Route>
 
                 {/* ADMIN & STAFF */}
