@@ -29,6 +29,8 @@ import { EditProductPage } from "../admin/pages/products/EditProductPage";
 import { ProductDetailPage } from "../admin/pages/products/ProductDetailPage";
 import OrderPage from "../admin/pages/order/orderPage";
 import OrderDetailPage from "../admin/pages/orderDetail/orderDetailPage";
+import { VouchersPage } from "../admin/pages/voucher/VouchersPage";
+import { VoucherStatsPage } from "../admin/pages/voucher/VoucherStatsPage";
 
 function AppRoutes() {
     return (
@@ -91,6 +93,8 @@ function AppRoutes() {
                     <Route path="products/:id/edit" element={<EditProductPage />} />
                     <Route path="orders" element={<OrderPage />} />
                     <Route path="orders/:id" element={<OrderDetailPage />} />
+                    <Route path="vouchers" element={<VouchersPage />} />
+                    <Route path="vouchers/stats" element={<VoucherStatsPage />} />
                 </Route>
 
                 {/* AUTH */}
