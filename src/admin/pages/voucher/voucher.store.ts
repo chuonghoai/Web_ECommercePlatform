@@ -13,6 +13,7 @@ interface VoucherState {
     filters: Omit<GetVouchersQuery, 'page' | 'pageSize'>;
 
     saving: boolean;
+    selectedVoucherForEdit: Voucher | null;
 
     stats: VoucherStats | null;
     statsLoading: boolean;
@@ -26,6 +27,8 @@ interface VoucherState {
     setStats: (stats: VoucherStats | null) => void;
     setStatsLoading: (loading: boolean) => void;
     updateVoucherInList: (id: number, patch: Partial<Voucher>) => void;
+    removeVoucherFromList: (id: number) => void;
+    setSelectedVoucherForEdit: (voucher: Voucher | null) => void;
 }
 
 export const useVoucherStore = create<VoucherState>((set) => ({
@@ -40,6 +43,7 @@ export const useVoucherStore = create<VoucherState>((set) => ({
     filters: {},
 
     saving: false,
+    selectedVoucherForEdit: null,
 
     stats: null,
     statsLoading: false,
@@ -57,4 +61,10 @@ export const useVoucherStore = create<VoucherState>((set) => ({
         set((state) => ({
             vouchers: state.vouchers.map((v) => (v.id === id ? { ...v, ...patch } : v)),
         })),
+    removeVoucherFromList: (id) =>
+        set((state) => ({
+            vouchers: state.vouchers.filter((v) => v.id !== id),
+            totalItems: state.totalItems - 1,
+        })),
+    setSelectedVoucherForEdit: (voucher) => set({ selectedVoucherForEdit: voucher }),
 }));

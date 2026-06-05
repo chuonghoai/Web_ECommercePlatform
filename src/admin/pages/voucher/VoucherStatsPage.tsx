@@ -3,8 +3,6 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 import type { HeaderOptions } from '../../layout/AdminLayout';
 import { useVoucherController } from './voucher.controller';
 import { VoucherType } from '../../features/voucher/models/voucher.model';
-import { VoucherStatusBadge } from './components/VoucherStatusBadge';
-import { VoucherStatus } from '../../features/voucher/models/voucher.model';
 
 const VOUCHER_TYPE_LABEL: Record<string, string> = {
     [VoucherType.PERCENT]: 'Giảm %',
@@ -69,6 +67,11 @@ export const VoucherStatsPage = () => {
                 </div>
 
                 <div className="bg-surface-card border border-border-subtle rounded-xl p-5 space-y-1">
+                    <p className="font-body text-xs text-text-muted uppercase tracking-wider font-semibold">Đang hoạt động</p>
+                    <p className="font-headline text-3xl font-bold text-emerald-600">{stats.active_vouchers_count}</p>
+                </div>
+
+                <div className="bg-surface-card border border-border-subtle rounded-xl p-5 space-y-1">
                     <p className="font-body text-xs text-text-muted uppercase tracking-wider font-semibold">Lượt sử dụng</p>
                     <p className="font-headline text-3xl font-bold text-text-ink">{stats.total_used_count.toLocaleString('vi-VN')}</p>
                 </div>
@@ -76,16 +79,6 @@ export const VoucherStatsPage = () => {
                 <div className="bg-surface-card border border-border-subtle rounded-xl p-5 space-y-1">
                     <p className="font-body text-xs text-text-muted uppercase tracking-wider font-semibold">Tổng đã giảm</p>
                     <p className="font-headline text-2xl font-bold text-text-ink">{formatCurrency(stats.total_discount_given)}</p>
-                </div>
-
-                <div className="bg-surface-card border border-border-subtle rounded-xl p-5 space-y-1">
-                    <p className="font-body text-xs text-text-muted uppercase tracking-wider font-semibold">Loại ưa chuộng</p>
-                    <p className="font-headline text-2xl font-bold text-text-ink">
-                        {stats.most_popular_type ? VOUCHER_TYPE_LABEL[stats.most_popular_type] : '—'}
-                    </p>
-                    {stats.most_popular_category && (
-                        <p className="font-body text-xs text-text-muted">Chủ đề: {stats.most_popular_category}</p>
-                    )}
                 </div>
             </div>
 
@@ -171,20 +164,14 @@ export const VoucherStatsPage = () => {
                     <ul className="space-y-3">
                         <li className="flex justify-between items-center border-b border-border-subtle pb-3">
                             <span className="font-body text-sm text-text-muted">Tổng voucher đang hoạt động</span>
-                            <span className="font-body text-sm font-semibold text-text-ink">
+                            <span className="font-body text-sm font-semibold text-emerald-600">
                                 {stats.active_vouchers_count}
-                            </span>             
+                            </span>
                         </li>
                         <li className="flex justify-between items-center border-b border-border-subtle pb-3">
                             <span className="font-body text-sm text-text-muted">Loại phổ biến nhất</span>
                             <span className="font-body text-sm font-semibold text-text-ink">
                                 {stats.most_popular_type ? VOUCHER_TYPE_LABEL[stats.most_popular_type] : '—'}
-                            </span>
-                        </li>
-                        <li className="flex justify-between items-center border-b border-border-subtle pb-3">
-                            <span className="font-body text-sm text-text-muted">Chủ đề ưa chuộng</span>
-                            <span className="font-body text-sm font-semibold text-text-ink">
-                                {stats.most_popular_category || '—'}
                             </span>
                         </li>
                         <li className="flex justify-between items-center">

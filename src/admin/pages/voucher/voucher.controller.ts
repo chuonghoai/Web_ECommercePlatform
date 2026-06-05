@@ -1,13 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useVoucherStore } from './voucher.store';
 import { voucherService } from '../../features/voucher/services/voucher.service';
-import type { CreateVoucherRequest } from '../../features/voucher/models/voucher.model';
+import type { CreateVoucherRequest, UpdateVoucherRequest, Voucher } from '../../features/voucher/models/voucher.model';
 import { VoucherStatus } from '../../features/voucher/models/voucher.model';
 
 export const useVoucherController = () => {
     const store = useVoucherStore();
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const query = useMemo(() => ({
         page: store.page,
@@ -83,6 +84,48 @@ export const useVoucherController = () => {
         }
     };
 
+    const handleOpenEditModal = (voucher: Voucher) => {
+        store.setSelectedVoucherForEdit(voucher);
+        setIsEditModalOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+        store.setSelectedVoucherForEdit(null);
+        setIsEditModalOpen(false);
+    };
+
+    const handleEditVoucher = async (id: number, data: UpdateVoucherRequest): Promise<boolean> => {
+        store.setSaving(true);
+        try {
+            const response = await voucherService.updateVoucher(id, data);
+            if (response.success) {
+                handleCloseEditModal();
+                await fetchVouchers();
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Lỗi khi sửa voucher:', error);
+            return false;
+        } finally {
+            store.setSaving(false);
+        }
+    };
+
+    const handleDeleteVoucher = async (id: number): Promise<boolean> => {
+        try {
+            const response = await voucherService.deleteVoucher(id);
+            if (response.success) {
+                store.removeVoucherFromList(id);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Lỗi khi xóa voucher:', error);
+            return false;
+        }
+    };
+
     const handleDisableVoucher = async (id: number): Promise<boolean> => {
         try {
             const response = await voucherService.disableVoucher(id, { status: VoucherStatus.DISABLED });
@@ -125,6 +168,8 @@ export const useVoucherController = () => {
         statsLoading: store.statsLoading,
 
         isCreateModalOpen,
+        isEditModalOpen,
+        selectedVoucherForEdit: store.selectedVoucherForEdit,
 
         fetchVouchers,
         fetchStats,
@@ -133,6 +178,10 @@ export const useVoucherController = () => {
         handleOpenCreateModal,
         handleCloseCreateModal,
         handleCreateVoucher,
+        handleOpenEditModal,
+        handleCloseEditModal,
+        handleEditVoucher,
+        handleDeleteVoucher,
         handleDisableVoucher,
         handleActivateVoucher,
     };

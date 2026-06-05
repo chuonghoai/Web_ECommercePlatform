@@ -4,6 +4,7 @@ import type { HeaderOptions } from '../../layout/AdminLayout';
 import { useVoucherController } from './voucher.controller';
 import { VoucherTable } from './components/VoucherTable';
 import { VoucherCreateModal } from './components/VoucherCreateModal';
+import { VoucherEditModal } from './components/VoucherEditModal';
 import type { GetVouchersQuery } from '../../features/voucher/models/voucher.model';
 import { VoucherStatus, DistributionType } from '../../features/voucher/models/voucher.model';
 
@@ -45,16 +46,10 @@ export const VouchersPage = () => {
         ctrl.fetchVouchers();
     }, [ctrl.fetchVouchers]);
 
-    const handleConfirmDisable = async (id: number) => {
-        if (!window.confirm('Bạn có chắc muốn vô hiệu hóa voucher này?')) return;
-        const ok = await ctrl.handleDisableVoucher(id);
-        if (!ok) alert('Không thể vô hiệu hóa voucher. Vui lòng thử lại!');
-    };
-
-    const handleConfirmActivate = async (id: number) => {
-        if (!window.confirm('Bạn có chắc muốn kích hoạt lại voucher này?')) return;
-        const ok = await ctrl.handleActivateVoucher(id);
-        if (!ok) alert('Không thể kích hoạt voucher. Vui lòng thử lại!');
+    const handleConfirmDelete = async (id: number) => {
+        if (!window.confirm('Bạn có chắc muốn xoá vĩnh viễn voucher này? Thao tác này không thể hoàn tác!')) return;
+        const ok = await ctrl.handleDeleteVoucher(id);
+        if (!ok) alert('Không thể xoá voucher. Vui lòng thử lại!');
     };
 
     const filterOptions = useMemo<{
@@ -136,8 +131,8 @@ export const VouchersPage = () => {
                 <VoucherTable
                     vouchers={ctrl.vouchers}
                     loading={ctrl.loading}
-                    onDisable={(v) => handleConfirmDisable(v.id)}
-                    onActivate={(v) => handleConfirmActivate(v.id)}
+                    onEdit={ctrl.handleOpenEditModal}
+                    onDelete={(v) => handleConfirmDelete(v.id)}
                 />
 
                 {ctrl.totalPages > 1 && (
@@ -172,7 +167,13 @@ export const VouchersPage = () => {
                 onSubmit={ctrl.handleCreateVoucher}
             />
 
-
+            <VoucherEditModal
+                isOpen={ctrl.isEditModalOpen}
+                saving={ctrl.saving}
+                voucher={ctrl.selectedVoucherForEdit}
+                onClose={ctrl.handleCloseEditModal}
+                onSubmit={ctrl.handleEditVoucher}
+            />
         </div>
     );
 };

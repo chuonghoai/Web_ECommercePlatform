@@ -8,6 +8,7 @@ import type {
     UpdateVoucherStatusRequest,
     RevokeVoucherRequest,
     CreateVoucherResponse,
+    UpdateVoucherRequest,
 } from '../models/voucher.model';
 import { DistributionType, VoucherType, VoucherStatus } from '../models/voucher.model';
 import type { IVoucherRepository } from './voucher.repository';
@@ -19,8 +20,6 @@ const MOCK_VOUCHERS: Voucher[] = [
         code: 'KM10',
         distribution_type: DistributionType.PUBLIC,
         voucher_type: VoucherType.PERCENT,
-        category_id: 1,
-        category_name: 'Sự kiện Tháng 6',
         discount_value: 10,
         max_discount_amount: 50000,
         min_order_value: 200000,
@@ -38,8 +37,6 @@ const MOCK_VOUCHERS: Voucher[] = [
         code: 'FREESHIP150',
         distribution_type: DistributionType.LIMITED,
         voucher_type: VoucherType.FREESHIP,
-        category_id: null,
-        category_name: null,
         discount_value: 0,
         max_discount_amount: null,
         min_order_value: 150000,
@@ -57,8 +54,6 @@ const MOCK_VOUCHERS: Voucher[] = [
         code: 'GIAM50K',
         distribution_type: DistributionType.UNLIMITED,
         voucher_type: VoucherType.CASH,
-        category_id: 2,
-        category_name: 'Flash Sale',
         discount_value: 50000,
         max_discount_amount: null,
         min_order_value: 500000,
@@ -71,13 +66,28 @@ const MOCK_VOUCHERS: Voucher[] = [
         created_at: '2026-05-31T09:00:00Z',
     },
     {
+        id: 4,
+        title: 'Ưu đãi tháng 8',
+        code: 'THANG8',
+        distribution_type: DistributionType.PUBLIC,
+        voucher_type: VoucherType.PERCENT,
+        discount_value: 20,
+        max_discount_amount: 100000,
+        min_order_value: 400000,
+        total_limit: 300,
+        used_count: 0,
+        limit_per_user: 1,
+        start_date: '2026-08-01T00:00:00Z',
+        end_date: '2026-08-31T23:59:59Z',
+        status: VoucherStatus.DISABLED,
+        created_at: '2026-06-05T09:00:00Z',
+    },
+    {
         id: 5,
         title: 'Giảm 15% mua sắm mùa hè',
         code: 'SUMMER15',
         distribution_type: DistributionType.PUBLIC,
         voucher_type: VoucherType.PERCENT,
-        category_id: 4,
-        category_name: 'Mùa hè',
         discount_value: 15,
         max_discount_amount: 80000,
         min_order_value: 300000,
@@ -96,7 +106,6 @@ const MOCK_STATS: VoucherStats = {
     total_used_count: 1461,
     total_discount_given: 72340000,
     most_popular_type: VoucherType.PERCENT,
-    most_popular_category: 'Mùa hè',
     active_vouchers_count: 3,
     top_vouchers: [
         {
@@ -164,14 +173,13 @@ export class VoucherMockRepository implements IVoucherRepository {
     }
 
     async createVoucher(data: CreateVoucherRequest): Promise<ApiResponse<CreateVoucherResponse>> {
+        const isFuture = new Date(data.start_date) > new Date();
         const newVoucher: Voucher = {
             id: nextId++,
             title: data.title,
             code: data.code,
             distribution_type: data.distribution_type,
             voucher_type: data.voucher_type,
-            category_id: data.category_id,
-            category_name: data.new_category_name,
             discount_value: data.discount_value,
             max_discount_amount: data.max_discount_amount,
             min_order_value: data.min_order_value,
@@ -180,14 +188,14 @@ export class VoucherMockRepository implements IVoucherRepository {
             limit_per_user: data.limit_per_user,
             start_date: data.start_date,
             end_date: data.end_date,
-            status: VoucherStatus.ACTIVE,
+            status: isFuture ? VoucherStatus.DISABLED : VoucherStatus.ACTIVE,
             created_at: new Date().toISOString(),
         };
         mockVouchers.unshift(newVoucher);
         return {
             success: true,
             message: 'Tạo voucher thành công',
-            data: { id: newVoucher.id, status: VoucherStatus.ACTIVE },
+            data: { id: newVoucher.id, status: newVoucher.status },
         };
     }
 
@@ -196,7 +204,12 @@ export class VoucherMockRepository implements IVoucherRepository {
         if (idx === -1) {
             return { success: false, message: 'Không tìm thấy voucher', data: null };
         }
-        mockVouchers[idx] = { ...mockVouchers[idx], status: data.status };
+        const voucher = mockVouchers[idx];
+        let newStartDate = voucher.start_date;
+        if (data.status === VoucherStatus.ACTIVE && new Date(voucher.start_date) > new Date()) {
+            newStartDate = new Date().toISOString();
+        }
+        mockVouchers[idx] = { ...voucher, status: data.status, start_date: newStartDate };
         return { success: true, message: 'Cập nhật trạng thái thành công', data: null };
     }
 
@@ -216,5 +229,30 @@ export class VoucherMockRepository implements IVoucherRepository {
                 active_vouchers_count: activeCount,
             },
         };
+    }
+
+    async updateVoucher(id: number, data: UpdateVoucherRequest): Promise<ApiResponse<null>> {
+        const idx = mockVouchers.findIndex(v => v.id === id);
+        if (idx === -1) {
+            return { success: false, message: 'Không tìm thấy voucher', data: null };
+        }
+        const voucher = mockVouchers[idx];
+        const updates: Partial<typeof voucher> = { ...data };
+
+        if (data.status === VoucherStatus.ACTIVE && new Date(voucher.start_date) > new Date()) {
+            updates.start_date = new Date().toISOString();
+        }
+
+        mockVouchers[idx] = { ...voucher, ...updates };
+        return { success: true, message: 'Cập nhật voucher thành công', data: null };
+    }
+
+    async deleteVoucher(id: number): Promise<ApiResponse<null>> {
+        const idx = mockVouchers.findIndex(v => v.id === id);
+        if (idx === -1) {
+            return { success: false, message: 'Không tìm thấy voucher', data: null };
+        }
+        mockVouchers.splice(idx, 1);
+        return { success: true, message: 'Xóa voucher thành công', data: null };
     }
 }

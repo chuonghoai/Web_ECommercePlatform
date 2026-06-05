@@ -8,6 +8,7 @@ import type {
     UpdateVoucherStatusRequest,
     RevokeVoucherRequest,
     CreateVoucherResponse,
+    UpdateVoucherRequest,
 } from '../models/voucher.model';
 import type { IVoucherRepository } from './voucher.repository';
 
@@ -65,5 +66,24 @@ export class VoucherApiRepository implements IVoucherRepository {
      */
     async getVoucherStats(): Promise<ApiResponse<VoucherStats>> {
         return apiClient.get<ApiResponse<VoucherStats>>('/api/v1/admin/vouchers/stats');
+    }
+
+    /**
+     * PUT /api/v1/admin/vouchers/:id
+     * @params id: number
+     * @body UpdateVoucherRequest
+     * @returns ApiResponse<null>
+     */
+    async updateVoucher(id: number, data: UpdateVoucherRequest): Promise<ApiResponse<null>> {
+        return apiClient.put<ApiResponse<null>>(`/api/v1/admin/vouchers/${id}`, data);
+    }
+
+    /**
+     * DELETE /api/v1/admin/vouchers/:id
+     * @params id: number
+     * @returns ApiResponse<null>
+     */
+    async deleteVoucher(id: number): Promise<ApiResponse<null>> {
+        return apiClient.delete<ApiResponse<null>>(`/api/v1/admin/vouchers/${id}`);
     }
 }

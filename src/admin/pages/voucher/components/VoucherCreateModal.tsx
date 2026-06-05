@@ -14,8 +14,6 @@ const INITIAL_FORM: CreateVoucherRequest = {
     code: '',
     distribution_type: DistributionType.PUBLIC,
     voucher_type: VoucherType.PERCENT,
-    category_id: null,
-    new_category_name: null,
     discount_value: 0,
     max_discount_amount: null,
     min_order_value: 0,
@@ -104,7 +102,7 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
                             {errors.title && <p className="text-error text-xs mt-1 font-body">{errors.title}</p>}
                         </div>
 
-                        <div>
+                        <div className="col-span-2">
                             <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
                                 Mã voucher <span className="text-error">*</span>
                             </label>
@@ -117,18 +115,6 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
                                 className="w-full px-3 py-2 border border-border-subtle rounded-lg font-mono text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 focus:border-primary-container transition-all"
                             />
                             {errors.code && <p className="text-error text-xs mt-1 font-body">{errors.code}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">Chủ đề (danh mục)</label>
-                            <input
-                                id="input-voucher-category"
-                                type="text"
-                                value={form.new_category_name || ''}
-                                onChange={(e) => setField('new_category_name', e.target.value || null)}
-                                placeholder="VD: Flash Sale, Sinh nhật..."
-                                className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 focus:border-primary-container transition-all"
-                            />
                         </div>
                     </div>
 
@@ -272,7 +258,6 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
                             {errors.end_date && <p className="text-error text-xs mt-1 font-body">{errors.end_date}</p>}
                         </div>
                     </div>
-
 
                     <div className="flex justify-end gap-3 pt-2 border-t border-border-subtle">
                         <button

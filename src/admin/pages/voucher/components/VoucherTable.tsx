@@ -1,12 +1,12 @@
 import type { Voucher } from '../../../features/voucher/models/voucher.model';
-import { VoucherStatus, VoucherType, DistributionType } from '../../../features/voucher/models/voucher.model';
+import { VoucherType, DistributionType } from '../../../features/voucher/models/voucher.model';
 import { VoucherStatusBadge } from './VoucherStatusBadge';
 
 interface VoucherTableProps {
     vouchers: Voucher[];
     loading: boolean;
-    onDisable: (voucher: Voucher) => void;
-    onActivate: (voucher: Voucher) => void;
+    onEdit: (voucher: Voucher) => void;
+    onDelete: (voucher: Voucher) => void;
 }
 
 const VOUCHER_TYPE_LABEL: Record<string, string> = {
@@ -37,7 +37,7 @@ const formatDate = (dateStr: string): string => {
     return new Date(dateStr).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
 };
 
-export const VoucherTable = ({ vouchers, loading, onDisable, onActivate }: VoucherTableProps) => {
+export const VoucherTable = ({ vouchers, loading, onEdit, onDelete }: VoucherTableProps) => {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -80,9 +80,6 @@ export const VoucherTable = ({ vouchers, loading, onDisable, onActivate }: Vouch
                                         {voucher.code}
                                     </span>
                                     <p className="text-text-ink font-semibold mt-1 text-sm">{voucher.title}</p>
-                                    {voucher.category_name && (
-                                        <p className="text-text-muted text-xs mt-0.5">{voucher.category_name}</p>
-                                    )}
                                 </div>
                             </td>
                             <td className="px-4 py-3">
@@ -124,29 +121,24 @@ export const VoucherTable = ({ vouchers, loading, onDisable, onActivate }: Vouch
                             </td>
                             <td className="px-4 py-3">
                                 <div className="flex items-center gap-1">
-                                    {voucher.status === VoucherStatus.ACTIVE && (
-                                        <button
-                                            id={`btn-disable-voucher-${voucher.id}`}
-                                            onClick={() => onDisable(voucher)}
-                                            title="Vô hiệu hóa"
-                                            className="px-3 py-1.5 rounded-lg text-sm font-medium text-amber-600 hover:bg-amber-50 transition-colors"
-                                        >
-                                            Khoá
-                                        </button>
-                                    )}
-                                    {voucher.status === VoucherStatus.DISABLED && (
-                                        <button
-                                            id={`btn-activate-voucher-${voucher.id}`}
-                                            onClick={() => onActivate(voucher)}
-                                            title="Kích hoạt lại"
-                                            className="px-3 py-1.5 rounded-lg text-sm font-medium text-emerald-600 hover:bg-emerald-50 transition-colors"
-                                        >
-                                            Mở
-                                        </button>
-                                    )}
+                                    <button
+                                        id={`btn-edit-voucher-${voucher.id}`}
+                                        onClick={() => onEdit(voucher)}
+                                        title="Sửa / Khoá / Mở"
+                                        className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-[18px]">edit</span>
+                                    </button>
+                                    <button
+                                        id={`btn-delete-voucher-${voucher.id}`}
+                                        onClick={() => onDelete(voucher)}
+                                        title="Xoá"
+                                        className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
                                 </div>
                             </td>
-
                         </tr>
                     ))}
                 </tbody>

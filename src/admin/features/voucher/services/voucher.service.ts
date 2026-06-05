@@ -7,6 +7,7 @@ import type {
     UpdateVoucherStatusRequest,
     RevokeVoucherRequest,
     CreateVoucherResponse,
+    UpdateVoucherRequest,
 } from '../models/voucher.model';
 import type { IVoucherRepository } from '../repositories/voucher.repository';
 import { VoucherApiRepository } from '../repositories/voucherApi.repository';
@@ -70,6 +71,24 @@ export class VoucherService {
             return await this.repository.getVoucherStats();
         } catch (error) {
             console.error('Lỗi khi lấy thống kê voucher:', error);
+            throw error;
+        }
+    }
+
+    async updateVoucher(id: number, data: UpdateVoucherRequest): Promise<ApiResponse<null>> {
+        try {
+            return await this.repository.updateVoucher(id, data);
+        } catch (error) {
+            console.error('Lỗi khi cập nhật voucher:', error);
+            throw error;
+        }
+    }
+
+    async deleteVoucher(id: number): Promise<ApiResponse<null>> {
+        try {
+            return await this.repository.deleteVoucher(id);
+        } catch (error) {
+            console.error('Lỗi khi xóa voucher:', error);
             throw error;
         }
     }

@@ -7,6 +7,7 @@ import type {
     UpdateVoucherStatusRequest,
     RevokeVoucherRequest,
     CreateVoucherResponse,
+    UpdateVoucherRequest,
 } from '../models/voucher.model';
 
 export interface IVoucherRepository {
@@ -16,4 +17,6 @@ export interface IVoucherRepository {
     updateVoucherStatus(id: number, data: UpdateVoucherStatusRequest): Promise<ApiResponse<null>>;
     revokeVoucher(id: number, data: RevokeVoucherRequest): Promise<ApiResponse<null>>;
     getVoucherStats(): Promise<ApiResponse<VoucherStats>>;
+    updateVoucher(id: number, data: UpdateVoucherRequest): Promise<ApiResponse<null>>;
+    deleteVoucher(id: number): Promise<ApiResponse<null>>;
 }
