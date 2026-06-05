@@ -72,12 +72,49 @@ export const useOrderTrackingListController = () => {
         });
     }, [store.orders, activeTab]);
 
+    const handleCancelOrder = useCallback(async (orderId: string) => {
+        const result = await store.cancelOrder(orderId, "Khách hàng đổi ý (thao tác từ giao diện)");
+        if (result.success) {
+            alert("Hủy đơn hàng thành công!");
+            store.fetchOrdersCount();
+            store.fetchOrders(activeTab === "all" ? undefined : (
+                activeTab === "pending" ? EOrderStatus.PENDING :
+                activeTab === "preparing" ? EOrderStatus.PREPARING :
+                activeTab === "shipping" ? EOrderStatus.SHIPPING :
+                activeTab === "success" ? EOrderStatus.SUCCESS :
+                activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
+            ));
+        } else {
+            alert(result.message || "Không thể hủy đơn hàng.");
+        }
+    }, [store.cancelOrder, store.fetchOrders, store.fetchOrdersCount, activeTab]);
+
+    const handleReturnOrder = useCallback(async (orderId: string) => {
+        const result = await store.returnOrder(orderId, "Hàng bị lỗi (thao tác từ giao diện)");
+        if (result.success) {
+            alert("Yêu cầu trả hàng thành công!");
+            store.fetchOrdersCount();
+            store.fetchOrders(activeTab === "all" ? undefined : (
+                activeTab === "pending" ? EOrderStatus.PENDING :
+                activeTab === "preparing" ? EOrderStatus.PREPARING :
+                activeTab === "shipping" ? EOrderStatus.SHIPPING :
+                activeTab === "success" ? EOrderStatus.SUCCESS :
+                activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
+            ));
+        } else {
+            alert(result.message || "Không thể yêu cầu trả hàng.");
+        }
+    }, [store.returnOrder, store.fetchOrders, store.fetchOrdersCount, activeTab]);
+
     return {
         loading: store.loading,
         error: store.error,
+        actionLoading: store.actionLoading,
         activeTab,
         tabs,
         filteredItems,
         handleTabChange,
+        handleCancelOrder,
+        handleReturnOrder,
     };
 };

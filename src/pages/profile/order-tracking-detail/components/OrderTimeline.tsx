@@ -21,7 +21,7 @@ const getStatusLabel = (status: EOrderStatus): string => {
 
 export const OrderTimeline: React.FC<OrderTimelineProps> = ({ history }) => {
     if (!history || history.length === 0) return null;
-    const sortedHistory = [...history].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    const sortedHistory = [...history].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return (
         <div className="bg-white border border-border-subtle rounded-xl shadow-sm p-6 mb-6">
@@ -59,7 +59,7 @@ export const OrderTimeline: React.FC<OrderTimelineProps> = ({ history }) => {
                                         {getStatusLabel(item.status)}
                                     </h4>
                                     <span className={`text-xs ${isLatest ? "text-stone-500" : "text-stone-400"}`}>
-                                        {item.timestamp.toLocaleString("vi-VN", {
+                                        {new Date(item.timestamp).toLocaleString("vi-VN", {
                                             hour: "2-digit",
                                             minute: "2-digit",
                                             day: "2-digit",

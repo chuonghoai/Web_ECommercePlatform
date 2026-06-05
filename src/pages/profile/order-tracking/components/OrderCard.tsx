@@ -6,17 +6,27 @@ import { EOrderStatus } from "../../../../features/order/enums/orderStatus.enum"
 
 interface OrderCardProps {
     order: OrderItemTracking;
+    onCancel?: (orderId: string) => void;
+    onReturn?: (orderId: string) => void;
 }
 
-export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
+export const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onReturn }) => {
     const handleCancel = (e: React.MouseEvent) => {
         e.preventDefault();
-        console.log("Hủy đơn hàng:", order.id);
+        if (onCancel) {
+            onCancel(order.id);
+        } else {
+            console.log("Hủy đơn hàng:", order.id);
+        }
     };
 
     const handleReturn = (e: React.MouseEvent) => {
         e.preventDefault();
-        console.log("Yêu cầu trả hàng:", order.id);
+        if (onReturn) {
+            onReturn(order.id);
+        } else {
+            console.log("Yêu cầu trả hàng:", order.id);
+        }
     };
 
     return (
@@ -26,7 +36,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                 <div className="flex items-center gap-3">
                     <span className="font-semibold text-stone-800 text-sm">{order.id}</span>
                     <span className="text-stone-400 text-xs hidden sm:inline">
-                        {order.createdAt.toLocaleDateString("vi-VN", {
+                        {new Date(order.createdAt).toLocaleDateString("vi-VN", {
                             hour: "2-digit",
                             minute: "2-digit",
                         })}
