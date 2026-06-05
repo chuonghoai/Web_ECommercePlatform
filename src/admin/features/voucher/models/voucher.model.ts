@@ -94,9 +94,6 @@ export interface UpdateVoucherStatusRequest {
     status: VoucherStatus;
 }
 
-export interface RevokeVoucherRequest {
-    user_ids: number[];
-}
 
 export interface CreateVoucherResponse {
     id: number;

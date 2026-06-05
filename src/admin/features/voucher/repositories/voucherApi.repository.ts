@@ -6,7 +6,6 @@ import type {
     GetVouchersQuery,
     CreateVoucherRequest,
     UpdateVoucherStatusRequest,
-    RevokeVoucherRequest,
     CreateVoucherResponse,
     UpdateVoucherRequest,
 } from '../models/voucher.model';
@@ -50,15 +49,6 @@ export class VoucherApiRepository implements IVoucherRepository {
         return apiClient.patch<ApiResponse<null>>(`/api/v1/admin/vouchers/${id}/status`, data);
     }
 
-    /**
-     * POST /api/v1/admin/vouchers/:id/revoke
-     * @params id: number
-     * @body RevokeVoucherRequest
-     * @returns ApiResponse<null>
-     */
-    async revokeVoucher(id: number, data: RevokeVoucherRequest): Promise<ApiResponse<null>> {
-        return apiClient.post<ApiResponse<null>>(`/api/v1/admin/vouchers/${id}/revoke`, data);
-    }
 
     /**
      * GET /api/v1/admin/vouchers/stats

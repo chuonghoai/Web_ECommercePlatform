@@ -6,7 +6,6 @@ import type {
     GetVouchersQuery,
     CreateVoucherRequest,
     UpdateVoucherStatusRequest,
-    RevokeVoucherRequest,
     CreateVoucherResponse,
     UpdateVoucherRequest,
 } from '../models/voucher.model';
@@ -213,9 +212,6 @@ export class VoucherMockRepository implements IVoucherRepository {
         return { success: true, message: 'Cập nhật trạng thái thành công', data: null };
     }
 
-    async revokeVoucher(_id: number, _data: RevokeVoucherRequest): Promise<ApiResponse<null>> {
-        return { success: true, message: 'Thu hồi voucher thành công', data: null };
-    }
 
     async getVoucherStats(): Promise<ApiResponse<VoucherStats>> {
         const activeCount = mockVouchers.filter(v => v.status === VoucherStatus.ACTIVE).length;

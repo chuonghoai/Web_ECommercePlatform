@@ -5,7 +5,6 @@ import type {
     GetVouchersQuery,
     CreateVoucherRequest,
     UpdateVoucherStatusRequest,
-    RevokeVoucherRequest,
     CreateVoucherResponse,
     UpdateVoucherRequest,
 } from '../models/voucher.model';
@@ -57,14 +56,6 @@ export class VoucherService {
         }
     }
 
-    async revokeFromUsers(id: number, data: RevokeVoucherRequest): Promise<ApiResponse<null>> {
-        try {
-            return await this.repository.revokeVoucher(id, data);
-        } catch (error) {
-            console.error('Lỗi khi thu hồi voucher:', error);
-            throw error;
-        }
-    }
 
     async fetchStats(): Promise<ApiResponse<VoucherStats>> {
         try {
