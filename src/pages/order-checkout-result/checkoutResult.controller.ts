@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { checkoutService } from "../../features/order/checkout/services/checkout.service";
 import type { CheckoutResultDto } from "../../features/order/checkout/models/checkoutResult.dto";
+import { resolveOrderIdFromUrl } from "./helpers/resolveOrderId.helper";
 
 export const useCheckoutResultController = () => {
     const [searchParams] = useSearchParams();
-    const orderId = searchParams.get("orderId");
+    const orderId = resolveOrderIdFromUrl(searchParams);
 
     const [result, setResult] = useState<CheckoutResultDto | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
