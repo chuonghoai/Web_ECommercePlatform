@@ -1,7 +1,6 @@
 export const DistributionType = {
     PUBLIC: 'PUBLIC',
     LIMITED: 'LIMITED',
-    UNLIMITED: 'UNLIMITED',
 } as const;
 
 export type DistributionType = typeof DistributionType[keyof typeof DistributionType];
@@ -9,7 +8,8 @@ export type DistributionType = typeof DistributionType[keyof typeof Distribution
 export const VoucherType = {
     PERCENT: 'PERCENT',
     CASH: 'CASH',
-    FREESHIP: 'FREESHIP',
+    FREESHIP_CASH: 'FREESHIP_CASH',
+    FREESHIP_PERCENT: 'FREESHIP_PERCENT',
 } as const;
 
 export type VoucherType = typeof VoucherType[keyof typeof VoucherType];

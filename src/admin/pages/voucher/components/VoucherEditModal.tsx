@@ -75,7 +75,7 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
         }
 
         if (isGroup2) {
-            if (voucher.voucher_type !== VoucherType.FREESHIP && (!form.discount_value || form.discount_value <= 0)) {
+            if (!form.discount_value || form.discount_value <= 0) {
                 newErrors.discount_value = 'Giá trị giảm phải lớn hơn 0';
             }
             if (!form.start_date) newErrors.start_date = 'Vui lòng chọn ngày bắt đầu';
@@ -116,7 +116,8 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
         onSubmit(voucher.id, payload);
     };
 
-    const isFreeship = voucher.voucher_type === VoucherType.FREESHIP;
+    const isFreeship = voucher.voucher_type === VoucherType.FREESHIP_CASH || voucher.voucher_type === VoucherType.FREESHIP_PERCENT;
+    const isPercent = voucher.voucher_type === VoucherType.PERCENT || voucher.voucher_type === VoucherType.FREESHIP_PERCENT;
     const currentStatus = form.status ?? voucher.status;
     const statusCfg = STATUS_CONFIG[currentStatus];
     const isActive = currentStatus === VoucherStatus.ACTIVE;
@@ -197,43 +198,41 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
                         {errors.title && <p className="text-error text-xs mt-1 font-body">{errors.title}</p>}
                     </div>
 
-                    {!isFreeship && (
-                        <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
+                                {isFreeship ? 'Giảm phí ship' : 'Giá trị giảm'} {isPercent ? '(%)' : '(VNĐ)'} <span className="text-error">*</span>
+                            </label>
+                            <input
+                                id="edit-input-discount-value"
+                                type="number"
+                                min={0}
+                                value={form.discount_value ?? 0}
+                                onChange={(e) => setField('discount_value', parseFloat(e.target.value) || 0)}
+                                disabled={!isGroup2}
+                                className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 disabled:opacity-50 disabled:bg-surface-container transition-all"
+                            />
+                            {errors.discount_value && <p className="text-error text-xs mt-1 font-body">{errors.discount_value}</p>}
+                        </div>
+
+                        {isPercent && (
                             <div>
                                 <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
-                                    Giá trị giảm {voucher.voucher_type === VoucherType.PERCENT ? '(%)' : '(VNĐ)'} <span className="text-error">*</span>
+                                    Giảm tối đa (VNĐ)
                                 </label>
                                 <input
-                                    id="edit-input-discount-value"
+                                    id="edit-input-max-discount"
                                     type="number"
                                     min={0}
-                                    value={form.discount_value ?? 0}
-                                    onChange={(e) => setField('discount_value', parseFloat(e.target.value) || 0)}
+                                    value={form.max_discount_amount ?? ''}
+                                    onChange={(e) => setField('max_discount_amount', e.target.value ? parseFloat(e.target.value) : null)}
                                     disabled={!isGroup2}
+                                    placeholder="Để trống nếu không giới hạn"
                                     className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 disabled:opacity-50 disabled:bg-surface-container transition-all"
                                 />
-                                {errors.discount_value && <p className="text-error text-xs mt-1 font-body">{errors.discount_value}</p>}
                             </div>
-
-                            {voucher.voucher_type === VoucherType.PERCENT && (
-                                <div>
-                                    <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
-                                        Giảm tối đa (VNĐ)
-                                    </label>
-                                    <input
-                                        id="edit-input-max-discount"
-                                        type="number"
-                                        min={0}
-                                        value={form.max_discount_amount ?? ''}
-                                        onChange={(e) => setField('max_discount_amount', e.target.value ? parseFloat(e.target.value) : null)}
-                                        disabled={!isGroup2}
-                                        placeholder="Để trống nếu không giới hạn"
-                                        className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 disabled:opacity-50 disabled:bg-surface-container transition-all"
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>

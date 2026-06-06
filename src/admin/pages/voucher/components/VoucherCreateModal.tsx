@@ -39,7 +39,7 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
         if (!form.title.trim()) newErrors.title = 'Vui lòng nhập tên voucher';
         if (!form.code.trim()) newErrors.code = 'Vui lòng nhập mã voucher';
         if (/\s/.test(form.code) || /[^\w]/.test(form.code)) newErrors.code = 'Mã không dấu, viết liền, không ký tự đặc biệt';
-        if (form.voucher_type !== VoucherType.FREESHIP && form.discount_value <= 0) newErrors.discount_value = 'Giá trị giảm phải lớn hơn 0';
+        if (form.discount_value <= 0) newErrors.discount_value = 'Giá trị giảm phải lớn hơn 0';
         if (!form.start_date) newErrors.start_date = 'Vui lòng chọn ngày bắt đầu';
         if (!form.end_date) newErrors.end_date = 'Vui lòng chọn ngày kết thúc';
         if (form.start_date && form.end_date && form.start_date >= form.end_date) newErrors.end_date = 'Ngày kết thúc phải sau ngày bắt đầu';
@@ -65,7 +65,8 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
         onClose();
     };
 
-    const isFreeship = form.voucher_type === VoucherType.FREESHIP;
+    const isFreeship = form.voucher_type === VoucherType.FREESHIP_CASH || form.voucher_type === VoucherType.FREESHIP_PERCENT;
+    const isPercent = form.voucher_type === VoucherType.PERCENT || form.voucher_type === VoucherType.FREESHIP_PERCENT;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -131,7 +132,8 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
                             >
                                 <option value={VoucherType.PERCENT}>Giảm theo %</option>
                                 <option value={VoucherType.CASH}>Giảm tiền mặt</option>
-                                <option value={VoucherType.FREESHIP}>Miễn phí vận chuyển</option>
+                                <option value={VoucherType.FREESHIP_CASH}>Freeship theo tiền</option>
+                                <option value={VoucherType.FREESHIP_PERCENT}>Freeship theo %</option>
                             </select>
                         </div>
 
@@ -147,46 +149,43 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
                             >
                                 <option value={DistributionType.PUBLIC}>Công khai</option>
                                 <option value={DistributionType.LIMITED}>Giới hạn người dùng</option>
-                                <option value={DistributionType.UNLIMITED}>Không giới hạn</option>
                             </select>
                         </div>
                     </div>
 
-                    {!isFreeship && (
-                        <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
+                                {isFreeship ? 'Giảm phí ship' : 'Giá trị giảm'} {isPercent ? '(%)' : '(VNĐ)'} <span className="text-error">*</span>
+                            </label>
+                            <input
+                                id="input-discount-value"
+                                type="number"
+                                min={0}
+                                value={form.discount_value}
+                                onChange={(e) => setField('discount_value', parseFloat(e.target.value) || 0)}
+                                className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 focus:border-primary-container transition-all"
+                            />
+                            {errors.discount_value && <p className="text-error text-xs mt-1 font-body">{errors.discount_value}</p>}
+                        </div>
+
+                        {isPercent && (
                             <div>
                                 <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
-                                    Giá trị giảm {form.voucher_type === VoucherType.PERCENT ? '(%)' : '(VNĐ)'} <span className="text-error">*</span>
+                                    {isFreeship ? 'Giảm tối đa (VNĐ)' : 'Giảm tối đa (VNĐ)'}
                                 </label>
                                 <input
-                                    id="input-discount-value"
+                                    id="input-max-discount"
                                     type="number"
                                     min={0}
-                                    value={form.discount_value}
-                                    onChange={(e) => setField('discount_value', parseFloat(e.target.value) || 0)}
+                                    value={form.max_discount_amount || ''}
+                                    onChange={(e) => setField('max_discount_amount', e.target.value ? parseFloat(e.target.value) : null)}
+                                    placeholder="Để trống nếu không giới hạn"
                                     className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 focus:border-primary-container transition-all"
                                 />
-                                {errors.discount_value && <p className="text-error text-xs mt-1 font-body">{errors.discount_value}</p>}
                             </div>
-
-                            {form.voucher_type === VoucherType.PERCENT && (
-                                <div>
-                                    <label className="block font-body text-sm font-semibold text-text-ink mb-1.5">
-                                        Giảm tối đa (VNĐ)
-                                    </label>
-                                    <input
-                                        id="input-max-discount"
-                                        type="number"
-                                        min={0}
-                                        value={form.max_discount_amount || ''}
-                                        onChange={(e) => setField('max_discount_amount', e.target.value ? parseFloat(e.target.value) : null)}
-                                        placeholder="Để trống nếu không giới hạn"
-                                        className="w-full px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 focus:border-primary-container transition-all"
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>

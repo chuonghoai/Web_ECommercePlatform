@@ -7,7 +7,8 @@ import { VoucherType } from '../../features/voucher/models/voucher.model';
 const VOUCHER_TYPE_LABEL: Record<string, string> = {
     [VoucherType.PERCENT]: 'Giảm %',
     [VoucherType.CASH]: 'Giảm tiền',
-    [VoucherType.FREESHIP]: 'Freeship',
+    [VoucherType.FREESHIP_CASH]: 'Freeship (tiền)',
+    [VoucherType.FREESHIP_PERCENT]: 'Freeship (%)',
 };
 
 const formatCurrency = (val: number): string =>
@@ -25,18 +26,8 @@ export const VoucherStatsPage = () => {
                 { label: 'Thống kê', href: '/admin/vouchers/stats', active: true },
             ],
             showSearch: false,
-            rightActions: (
-                <button
-                    id="btn-back-to-vouchers"
-                    onClick={() => navigate('/admin/vouchers')}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border-subtle font-body text-sm font-semibold text-text-muted hover:bg-surface-container hover:text-text-ink transition-colors"
-                >
-                    <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                    Quay lại danh sách
-                </button>
-            ),
         });
-    }, [setHeaderOptions, navigate]);
+    }, [setHeaderOptions]);
 
     useEffect(() => {
         fetchStats();
@@ -55,9 +46,19 @@ export const VoucherStatsPage = () => {
 
     return (
         <div className="max-w-6xl mx-auto space-y-8 w-full pb-8">
-            <div>
-                <h2 className="font-headline text-4xl font-semibold text-text-ink">Thống kê Voucher</h2>
-                <p className="font-body text-lg text-text-muted mt-2">Tổng quan hiệu quả sử dụng các chương trình khuyến mãi.</p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="font-headline text-4xl font-semibold text-text-ink">Thống kê Voucher</h2>
+                    <p className="font-body text-lg text-text-muted mt-2">Tổng quan hiệu quả sử dụng các chương trình khuyến mãi.</p>
+                </div>
+                <button
+                    id="btn-back-to-vouchers"
+                    onClick={() => navigate('/admin/vouchers')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border-subtle font-body text-sm font-semibold text-text-muted hover:bg-surface-container hover:text-text-ink transition-colors"
+                >
+                    <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Quay lại danh sách
+                </button>
             </div>
 
             <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">

@@ -12,23 +12,23 @@ interface VoucherTableProps {
 const VOUCHER_TYPE_LABEL: Record<string, string> = {
     [VoucherType.PERCENT]: 'Giảm %',
     [VoucherType.CASH]: 'Giảm tiền',
-    [VoucherType.FREESHIP]: 'Freeship',
+    [VoucherType.FREESHIP_CASH]: 'Freeship (tiền)',
+    [VoucherType.FREESHIP_PERCENT]: 'Freeship (%)',
 };
 
 const DISTRIBUTION_LABEL: Record<string, string> = {
     [DistributionType.PUBLIC]: 'Công khai',
     [DistributionType.LIMITED]: 'Giới hạn',
-    [DistributionType.UNLIMITED]: 'Không giới hạn',
 };
 
 const DISTRIBUTION_BADGE: Record<string, string> = {
     [DistributionType.PUBLIC]: 'bg-blue-50 text-blue-600 border border-blue-200',
     [DistributionType.LIMITED]: 'bg-orange-50 text-orange-600 border border-orange-200',
-    [DistributionType.UNLIMITED]: 'bg-purple-50 text-purple-600 border border-purple-200',
 };
 
 const formatDiscount = (voucher: Voucher): string => {
-    if (voucher.voucher_type === VoucherType.FREESHIP) return 'Miễn phí vận chuyển';
+    if (voucher.voucher_type === VoucherType.FREESHIP_PERCENT) return `Giảm ${voucher.discount_value}% phí ship`;
+    if (voucher.voucher_type === VoucherType.FREESHIP_CASH) return `Giảm ${voucher.discount_value.toLocaleString('vi-VN')}đ phí ship`;
     if (voucher.voucher_type === VoucherType.PERCENT) return `Giảm ${voucher.discount_value}%`;
     return `Giảm ${voucher.discount_value.toLocaleString('vi-VN')}đ`;
 };

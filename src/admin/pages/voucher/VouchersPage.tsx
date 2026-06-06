@@ -19,28 +19,8 @@ export const VouchersPage = () => {
                 { label: 'Tất cả voucher', href: '/admin/vouchers', active: true },
             ],
             showSearch: false,
-            rightActions: (
-                <div className="flex items-center gap-3">
-                    <button
-                        id="btn-open-create-voucher"
-                        onClick={ctrl.handleOpenCreateModal}
-                        className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-[2px] flex items-center gap-1"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">add</span>
-                        Thêm voucher
-                    </button>
-                    <button
-                        id="btn-goto-voucher-stats"
-                        onClick={() => navigate('/admin/vouchers/stats')}
-                        className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-[2px] flex items-center gap-1"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">bar_chart</span>
-                        Thống kê voucher
-                    </button>
-                </div>
-            ),
         });
-    }, [setHeaderOptions, navigate]);
+    }, [setHeaderOptions]);
 
     useEffect(() => {
         ctrl.fetchVouchers();
@@ -66,7 +46,6 @@ export const VouchersPage = () => {
             { label: 'Tất cả hình thức', value: '' },
             { label: 'Công khai', value: DistributionType.PUBLIC },
             { label: 'Giới hạn', value: DistributionType.LIMITED },
-            { label: 'Không giới hạn', value: DistributionType.UNLIMITED },
         ],
     }), []);
 
@@ -97,34 +76,55 @@ export const VouchersPage = () => {
                 <div className="bg-[#fee2e2] text-error rounded-xl px-6 py-4 font-body text-sm">{ctrl.error}</div>
             )}
 
-            <div className="flex items-center gap-3">
-                <select
-                    id="filter-voucher-status"
-                    value={ctrl.filters.status || ''}
-                    onChange={(e) => handleStatusFilter(e.target.value)}
-                    className="px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 transition-all"
-                >
-                    {filterOptions.statusOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                </select>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                    <select
+                        id="filter-voucher-status"
+                        value={ctrl.filters.status || ''}
+                        onChange={(e) => handleStatusFilter(e.target.value)}
+                        className="px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 transition-all"
+                    >
+                        {filterOptions.statusOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
 
-                <select
-                    id="filter-distribution-type"
-                    value={ctrl.filters.distribution_type || ''}
-                    onChange={(e) => handleDistributionFilter(e.target.value)}
-                    className="px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 transition-all"
-                >
-                    {filterOptions.distributionOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                </select>
+                    <select
+                        id="filter-distribution-type"
+                        value={ctrl.filters.distribution_type || ''}
+                        onChange={(e) => handleDistributionFilter(e.target.value)}
+                        className="px-3 py-2 border border-border-subtle rounded-lg font-body text-sm text-text-ink bg-background-page focus:outline-none focus:ring-2 focus:ring-primary-container/40 transition-all"
+                    >
+                        {filterOptions.distributionOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
 
-                {ctrl.totalItems > 0 && (
-                    <span className="text-text-muted font-body text-sm ml-auto">
-                        {ctrl.totalItems} voucher
-                    </span>
-                )}
+                    {ctrl.totalItems > 0 && (
+                        <span className="text-text-muted font-body text-sm">
+                            {ctrl.totalItems} voucher
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <button
+                        id="btn-goto-voucher-stats"
+                        onClick={() => navigate('/admin/vouchers/stats')}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-border-subtle font-body text-sm font-semibold text-text-muted hover:bg-surface-container hover:text-text-ink transition-colors"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">bar_chart</span>
+                        Thống kê voucher
+                    </button>
+                    <button
+                        id="btn-open-create-voucher"
+                        onClick={ctrl.handleOpenCreateModal}
+                        className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-[2px] flex items-center gap-1.5 transition-transform"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">add</span>
+                        Thêm voucher
+                    </button>
+                </div>
             </div>
 
             <div className="bg-surface-card border border-border-subtle rounded-xl shadow-sm">
