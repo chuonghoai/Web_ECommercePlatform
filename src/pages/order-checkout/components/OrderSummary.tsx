@@ -22,6 +22,38 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
     onOrderSubmit,
     isCheckingOut
 }) => {
+    const getPaymentMethodInfo = (method: EPaymentMethod) => {
+        switch (method) {
+            case EPaymentMethod.COD:
+                return {
+                    icon: <span className="material-symbols-outlined text-primary-container shrink-0 text-xl">local_shipping</span>,
+                    text: "Thanh toán khi nhận hàng (COD)"
+                };
+            case EPaymentMethod.MOMO:
+                return {
+                    icon: <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square-1024x1024.png" alt="MoMo" className="w-5 h-5 object-contain rounded-sm shrink-0" />,
+                    text: "Ví điện tử MoMo"
+                };
+            case EPaymentMethod.VNPAY:
+                return {
+                    icon: <img src="https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png" alt="VNPAY" className="w-5 h-5 object-contain rounded-sm shrink-0" />,
+                    text: "Cổng thanh toán VNPAY"
+                };
+            case EPaymentMethod.PAYPAL:
+                return {
+                    icon: <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png" alt="PayPal" className="w-5 h-5 object-contain rounded-sm shrink-0" />,
+                    text: "Ví điện tử PayPal"
+                };
+            default:
+                return {
+                    icon: <span className="material-symbols-outlined text-primary-container shrink-0 text-xl">payment</span>,
+                    text: "Chưa chọn phương thức"
+                };
+        }
+    };
+
+    const paymentInfo = getPaymentMethodInfo(selectedPaymentMethod);
+
     return (
         <aside className="w-full lg:w-1/3">
             <div className="lg:sticky lg:top-6 space-y-6">
@@ -59,20 +91,9 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     {/* Payment method button: open modal choosing payment method */}
                     <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                            {selectedPaymentMethod === EPaymentMethod.COD ? (
-                                <span className="material-symbols-outlined text-primary-container shrink-0 text-xl">
-                                    local_shipping
-                                </span>
-                            ) : (
-                                <img
-                                    src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square-1024x1024.png"
-                                    alt="MoMo"
-                                    className="w-5 h-5 object-contain rounded-sm shrink-0"
-                                />
-                            )}
-
-                            <span className="font-body-sm text-text-ink truncate" title={selectedPaymentMethod === EPaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}>
-                                {selectedPaymentMethod === EPaymentMethod.COD ? "Thanh toán khi nhận hàng (COD)" : "Ví điện tử MoMo"}
+                            {paymentInfo.icon}
+                            <span className="font-body-sm text-text-ink truncate" title={paymentInfo.text}>
+                                {paymentInfo.text}
                             </span>
                         </div>
                         <button

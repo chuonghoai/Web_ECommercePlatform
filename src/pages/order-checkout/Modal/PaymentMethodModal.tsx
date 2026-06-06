@@ -70,6 +70,46 @@ export const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                             className="w-4 h-4 text-primary-container cursor-pointer"
                         />
                     </label>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === EPaymentMethod.VNPAY ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
+                        <div className="flex items-center gap-4">
+                            <img
+                                src="https://vnpay.vn/s1/statics.vnpay.vn/2023/9/06ncktiwd6dc1694418196384.png"
+                                alt="VNPAY"
+                                className="w-8 h-8 object-contain rounded-md"
+                            />
+                            <div>
+                                <p className="font-body font-semibold text-text-ink">Cổng thanh toán VNPAY</p>
+                                <p className="font-caption text-text-muted">Thanh toán an toàn qua VNPAY</p>
+                            </div>
+                        </div>
+                        <input
+                            type="radio"
+                            name="payment"
+                            checked={selectedPayment === EPaymentMethod.VNPAY}
+                            onChange={() => onSelectPayment(EPaymentMethod.VNPAY)}
+                            className="w-4 h-4 text-primary-container cursor-pointer"
+                        />
+                    </label>
+                    <label className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === EPaymentMethod.PAYPAL ? 'border-primary-container bg-surface-container-low' : 'border-border-medium hover:border-primary-container/50'}`}>
+                        <div className="flex items-center gap-4">
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png"
+                                alt="PayPal"
+                                className="w-8 h-8 object-contain rounded-md"
+                            />
+                            <div>
+                                <p className="font-body font-semibold text-text-ink">Ví điện tử PayPal</p>
+                                <p className="font-caption text-text-muted">Thanh toán quốc tế qua PayPal</p>
+                            </div>
+                        </div>
+                        <input
+                            type="radio"
+                            name="payment"
+                            checked={selectedPayment === EPaymentMethod.PAYPAL}
+                            onChange={() => onSelectPayment(EPaymentMethod.PAYPAL)}
+                            className="w-4 h-4 text-primary-container cursor-pointer"
+                        />
+                    </label>
                 </div>
 
                 <div className="p-4 border-t border-subtle bg-surface-container flex justify-end gap-4">
