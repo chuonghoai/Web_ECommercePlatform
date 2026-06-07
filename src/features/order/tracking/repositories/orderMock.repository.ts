@@ -93,6 +93,7 @@ const mockOrderDetail: OrderTrackingDetail = {
     buyerAddress: "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
     items: [
         {
+            orderItemId: "1",
             productId: "PROD-001",
             productName: "Tai nghe chống ồn Sony WH-1000XM4",
             productImageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
@@ -100,9 +101,11 @@ const mockOrderDetail: OrderTrackingDetail = {
             originalPrice: 2500000,
             discountPercentage: 20,
             quantity: 1,
-            amount: 2000000
+            amount: 2000000,
+            isReviewed: false,
         },
         {
+            orderItemId: "2",
             productId: "PROD-002",
             productName: "Ốp lưng điện thoại trong suốt cao cấp",
             productImageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60",
@@ -110,7 +113,8 @@ const mockOrderDetail: OrderTrackingDetail = {
             originalPrice: 250000,
             discountPercentage: 0,
             quantity: 2,
-            amount: 500000
+            amount: 500000,
+            isReviewed: true
         }
     ],
     subTotal: 2500000,
@@ -141,6 +145,7 @@ const mockOrderDetailPreparing: OrderTrackingDetail = {
     ],
     items: [
         {
+            orderItemId: "3",
             productId: "PROD-003",
             productName: "Giày chạy bộ thể thao siêu nhẹ",
             productImageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60",

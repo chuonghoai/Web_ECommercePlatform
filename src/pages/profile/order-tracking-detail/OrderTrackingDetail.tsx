@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { OrderTimeline } from "./components/OrderTimeline";
-import { OrderStatusBadge } from "../order-tracking/components/OrderStatusBadge";
+import { CancelOrderRequestModal } from "../components/CancelOrderRequestModal";
+import { ReturnOrderRequestModal } from "../components/ReturnOrderRequestModal";
 import { EOrderStatus } from "../../../features/order/enums/orderStatus.enum";
 import { useOrderTrackingDetailController } from "./orderTrackingDetail.controller";
+import { useNavigate } from "react-router-dom";
 
 export const OrderTrackingDetail: React.FC = () => {
     const controller = useOrderTrackingDetailController();
+    const navigate = useNavigate();
+    const [isCancelModalOpen, setIsCancelModalOpen] = React.useState(false);
+    const [isReturnModalOpen, setIsReturnModalOpen] = React.useState(false);
 
     if (controller.loading && !controller.order) {
         return (
@@ -25,6 +30,8 @@ export const OrderTrackingDetail: React.FC = () => {
     }
 
     const showCancelReason = (controller.order.orderStatus === EOrderStatus.CANCELLED || controller.order.orderStatus === EOrderStatus.RETURNED) && controller.order.cancelReason;
+    const canCancel = controller.order.orderStatus === EOrderStatus.PENDING;
+    const canReturn = controller.order.orderStatus === EOrderStatus.SUCCESS;
 
     return (
         <div className="flex flex-col gap-6 relative">
@@ -35,56 +42,43 @@ export const OrderTrackingDetail: React.FC = () => {
             )}
 
             {/* Header */}
-            <div className="bg-white border border-border-subtle rounded-2xl shadow-sm overflow-hidden p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/profile/order/tracking"
-                        className="w-10 h-10 rounded-full flex items-center justify-center bg-stone-100 hover:bg-stone-200 text-stone-600 transition-colors"
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </Link>
-                    <div>
-                        <h2 className="font-['Lora',serif] text-xl font-bold text-stone-900 flex items-center gap-3">
-                            Mã đơn: <span className="text-market-primary">{controller.order.id}</span>
-                        </h2>
-                        <p className="text-stone-500 text-sm mt-1">
-                            Ngày đặt: {new Date(controller.order.createdAt).toLocaleDateString("vi-VN", {
-                                hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric"
-                            })}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3">
-                    <OrderStatusBadge status={controller.order.orderStatus} className="text-sm px-4 py-1.5" />
-                    {controller.order.orderStatus === EOrderStatus.PENDING && (
-                        <button onClick={controller.handleCancelOrder} className="px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
-                            Hủy đơn
-                        </button>
-                    )}
-                    {controller.order.orderStatus === EOrderStatus.SUCCESS && (
-                        <button onClick={controller.handleReturnOrder} className="px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors">
-                            Trả hàng
-                        </button>
-                    )}
+            <div className="bg-white border border-border-subtle rounded-2xl shadow-sm overflow-hidden p-6 flex items-center gap-4">
+                <Link
+                    to="/profile/order/tracking"
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-stone-100 hover:bg-stone-200 text-stone-600 transition-colors shrink-0"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </Link>
+                <div>
+                    <h2 className="font-['Lora',serif] text-xl font-bold text-stone-900 flex items-center gap-3">
+                        Mã đơn: <span className="text-market-primary">{controller.order.id}</span>
+                    </h2>
+                    <p className="text-stone-500 text-sm mt-1">
+                        Ngày đặt: {new Date(controller.order.createdAt).toLocaleDateString("vi-VN", {
+                            hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric"
+                        })}
+                    </p>
                 </div>
             </div>
 
             {/* Cancel Reason */}
-            {showCancelReason && (
-                <div className="bg-red-50 border border-red-100 rounded-xl p-5 flex items-start gap-3">
-                    <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                        <h4 className="font-semibold text-red-800 mb-1">
-                            Lý do {controller.order.orderStatus === EOrderStatus.RETURNED ? "hoàn trả" : "hủy đơn"}
-                        </h4>
-                        <p className="text-red-600 text-sm">{controller.order.cancelReason}</p>
+            {(showCancelReason
+                || controller.order.orderStatus === EOrderStatus.RETURNED
+                || controller.order.orderStatus === EOrderStatus.CANCELLED) && (
+                    <div className="bg-red-50 border border-red-100 rounded-xl p-5 flex items-start gap-3">
+                        <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h4 className="font-semibold text-red-800 mb-1">
+                                Lý do {controller.order.orderStatus === EOrderStatus.RETURNED ? "hoàn trả" : "hủy đơn"}
+                            </h4>
+                            <p className="text-red-600 text-sm">{controller.order.cancelReason}</p>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
             {/* Timeline */}
             <OrderTimeline history={controller.order.statusHistory} />
@@ -99,15 +93,16 @@ export const OrderTrackingDetail: React.FC = () => {
                         </h3>
                         <div className="flex flex-col gap-4">
                             {controller.order.items.map((item) => (
-                                <div key={item.productId} className="flex items-start gap-4 pb-4 border-b border-stone-50 last:border-0 last:pb-0">
+                                <div key={item.orderItemId} className="flex items-start gap-4 pb-4 border-b border-stone-50 last:border-0 last:pb-0">
                                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-stone-100 bg-stone-50 shrink-0">
                                         <img src={item.productImageUrl} alt={item.productName} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0 flex flex-col items-start">
                                         <h4 className="text-stone-800 font-medium text-base mb-1">{item.productName}</h4>
-                                        <div className="flex items-center gap-3 text-sm">
+                                        <div className="flex items-center gap-3 text-sm mb-2">
                                             <span className="text-stone-500">Số lượng: x{item.quantity}</span>
                                         </div>
+
                                     </div>
                                     <div className="text-right shrink-0">
                                         <div className="text-market-primary font-semibold text-base mb-1">
@@ -116,6 +111,24 @@ export const OrderTrackingDetail: React.FC = () => {
                                         {item.originalPrice > item.price && (
                                             <div className="text-stone-400 text-xs line-through">
                                                 {item.originalPrice.toLocaleString("vi-VN")}đ
+                                            </div>
+                                        )}
+
+                                        {controller.order?.orderStatus === EOrderStatus.SUCCESS && (
+                                            <div className="mt-auto flex justify-end pt-5">
+                                                <button
+                                                    onClick={() => {
+                                                        navigate(`/profile/order/tracking/${controller.order!.id}/evaluate`, {
+                                                            state: { order: controller.order, focusItemId: item.orderItemId }
+                                                        });
+                                                    }}
+                                                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${item.isReviewed
+                                                        ? "text-stone-600 bg-white border-stone-200 hover:bg-stone-50"
+                                                        : "text-market-primary bg-market-primary/10 border-transparent hover:bg-market-primary/20"
+                                                        }`}
+                                                >
+                                                    {item.isReviewed ? "Xem đánh giá" : "Đánh giá"}
+                                                </button>
                                             </div>
                                         )}
                                     </div>
@@ -185,9 +198,49 @@ export const OrderTrackingDetail: React.FC = () => {
                                 </span>
                             </div>
                         </div>
+
+                        {/* Action Buttons */}
+                        {(canCancel || canReturn) && (
+                            <div className="mt-6 flex flex-col gap-3">
+                                {canCancel && (
+                                    <button
+                                        onClick={() => setIsCancelModalOpen(true)}
+                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-error hover:bg-red-700 rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Hủy đơn
+                                    </button>
+                                )}
+                                {canReturn && (
+                                    <button
+                                        onClick={() => setIsReturnModalOpen(true)}
+                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-warning hover:bg-amber-600 rounded-xl transition-colors shadow-sm"
+                                    >
+                                        Yêu cầu trả hàng
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
+
+            {/* Modals */}
+            {controller.order && (
+                <CancelOrderRequestModal
+                    open={isCancelModalOpen}
+                    order={controller.order}
+                    onClose={() => setIsCancelModalOpen(false)}
+                    onSubmit={controller.handleCancelOrder}
+                />
+            )}
+            {controller.order && (
+                <ReturnOrderRequestModal
+                    open={isReturnModalOpen}
+                    order={controller.order}
+                    onClose={() => setIsReturnModalOpen(false)}
+                    onSubmit={controller.handleReturnOrder}
+                />
+            )}
         </div>
     );
 };

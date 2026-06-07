@@ -2,9 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { OrderCard } from "./components/OrderCard";
 import { useOrderTrackingListController } from "./orderTrackingList.controller";
+import { CancelOrderRequestModal } from "../components/CancelOrderRequestModal";
+import { ReturnOrderRequestModal } from "../components/ReturnOrderRequestModal";
+import type { OrderItemTracking } from "../../../features/order/tracking/model/orderItem.model";
 
 export const OrderTrackingList: React.FC = () => {
     const controller = useOrderTrackingListController();
+    const [actionState, setActionState] = React.useState<{ type: 'cancel' | 'return' | null, order: OrderItemTracking | null }>({ type: null, order: null });
 
     return (
         <div className="bg-white border border-border-subtle rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-125">
@@ -82,8 +86,8 @@ export const OrderTrackingList: React.FC = () => {
                         <OrderCard 
                             key={order.id} 
                             order={order} 
-                            onCancel={controller.handleCancelOrder}
-                            onReturn={controller.handleReturnOrder}
+                            onCancel={() => setActionState({ type: 'cancel', order })}
+                            onReturn={() => setActionState({ type: 'return', order })}
                         />
                     ))
                 ) : (
@@ -110,6 +114,30 @@ export const OrderTrackingList: React.FC = () => {
                     )
                 )}
             </div>
+
+            {/* Modals */}
+            {actionState.order && actionState.type === 'cancel' && (
+                <CancelOrderRequestModal
+                    open={true}
+                    order={actionState.order}
+                    onClose={() => setActionState({ type: null, order: null })}
+                    onSubmit={async (note) => {
+                        await controller.handleCancelOrder(actionState.order!.id, note);
+                        setActionState({ type: null, order: null });
+                    }}
+                />
+            )}
+            {actionState.order && actionState.type === 'return' && (
+                <ReturnOrderRequestModal
+                    open={true}
+                    order={actionState.order}
+                    onClose={() => setActionState({ type: null, order: null })}
+                    onSubmit={async (note) => {
+                        await controller.handleReturnOrder(actionState.order!.id, note);
+                        setActionState({ type: null, order: null });
+                    }}
+                />
+            )}
         </div>
     );
 };

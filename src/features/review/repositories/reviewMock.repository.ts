@@ -1,6 +1,7 @@
 import type { ApiResponse } from "../../../core/api/apiResponse";
-import type { Review } from "../models/review.model";
+import type { Review, OrderReviewList } from "../models/review.model";
 import type { ReviewRepository } from "./review.repository";
+import type { CreateReviewRequest, SubmitReviewResponse } from "../dto/createReview.request";
 
 export class ReviewMockRepository implements ReviewRepository {
     private MockReviews: Review = {
@@ -66,6 +67,33 @@ export class ReviewMockRepository implements ReviewRepository {
             success: true,
             message: `Get review of ${productId} success`,
             data: this.MockReviews,
+        };
+    }
+
+    async getOrderReviews(orderId: string): Promise<ApiResponse<OrderReviewList>> {
+        return {
+            success: true,
+            message: `Get order reviews success`,
+            data: {
+                orderId,
+                reviews: [
+                    {
+                        orderItemId: "2",
+                        productId: "1",
+                        rating: 5,
+                        content: "Rất tốt (từ Mock)",
+                        createdAt: new Date(),
+                    }
+                ]
+            },
+        };
+    }
+
+    async createReviews(request: CreateReviewRequest): Promise<ApiResponse<SubmitReviewResponse>> {
+        return {
+            success: true,
+            message: "Submit review success",
+            data: { submittedCount: request.reviews.length },
         };
     }
 }

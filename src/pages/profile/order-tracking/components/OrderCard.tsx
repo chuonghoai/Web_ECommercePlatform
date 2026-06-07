@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 import type { OrderItemTracking } from "../../../../features/order/tracking/model/orderItem.model";
 import { EOrderStatus } from "../../../../features/order/enums/orderStatus.enum";
+import { EPaymentStatus } from "../../../../features/order/enums/paymentStatus.enum";
+import { EPaymentMethod } from "../../../../features/order/enums/paymentMethod.enum";
 
 interface OrderCardProps {
     order: OrderItemTracking;
@@ -68,6 +70,11 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onReturn 
                     <p className="text-xs text-stone-500 mb-1">Tổng tiền</p>
                     <p className="text-market-primary font-bold text-lg">
                         {order.totalAmount.toLocaleString("vi-VN")}đ
+                    </p>
+                    <p className="text-xs text-stone-500 mt-4">
+                        {order.paymentMethod === EPaymentMethod.COD && order.paymentStatus === EPaymentStatus.PENDING ? "Thanh toán khi nhận hàng"
+                            : order.paymentStatus === EPaymentStatus.PAID ? `Đã thanh toán qua ${order.paymentMethod}`
+                                : order.paymentStatus === EPaymentStatus.FAILED ? "Thanh toán thất bại" : ""}
                     </p>
                 </div>
             </div>

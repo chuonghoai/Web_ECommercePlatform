@@ -13,3 +13,16 @@ export interface ReviewItem {
     content: string;
     createdAt: Date;
 }
+
+export interface OrderReviewList {
+    orderId: string;
+    reviews: OrderReviewItem[];
+}
+
+export interface OrderReviewItem {
+    orderItemId: string;
+    productId: string;
+    rating: number;
+    content: string;
+    createdAt: Date;
+}

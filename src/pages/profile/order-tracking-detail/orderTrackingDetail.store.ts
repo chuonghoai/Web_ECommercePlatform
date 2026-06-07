@@ -62,6 +62,7 @@ export const useOrderTrackingDetailStore = () => {
         loading,
         error,
         actionLoading,
+        setOrder,
         fetchOrderDetail,
         cancelOrder,
         returnOrder,

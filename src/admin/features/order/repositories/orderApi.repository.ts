@@ -19,8 +19,9 @@ export class OrderApiRepository implements OrderRepository {
      *      Sắp xếp theo thứ tự PENDING -> PREPARING -> SHIPPING và giảm dần theo ngày tạo đơn hàng (createAt)
      */
     async getOrdersByStatus(status?: EOrderStatus): Promise<ApiResponse<OrderItem[]>> {
+        const params = status ? { status } : undefined;
         return apiClient.get("/admin/order", {
-            params: status
+            params
         })
     }
 
