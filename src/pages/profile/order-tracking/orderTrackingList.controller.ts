@@ -3,7 +3,7 @@ import { useOrderTrackingListStore } from "./orderTrackingList.store";
 import { useToast } from "../../../components/toast/toast";
 import { EOrderStatus } from "../../../features/order/enums/orderStatus.enum";
 
-export type TabKey = "all" | "pending" | "preparing" | "shipping" | "success" | "cancelled";
+export type TabKey = "all" | "pending" | "preparing" | "shipping" | "success" | "cancelled" | "returned";
 
 export interface TabItem {
     key: TabKey;
@@ -33,6 +33,7 @@ export const useOrderTrackingListController = () => {
         else if (activeTab === "shipping") status = EOrderStatus.SHIPPING;
         else if (activeTab === "success") status = EOrderStatus.SUCCESS;
         else if (activeTab === "cancelled") status = EOrderStatus.CANCELLED;
+        else if (activeTab === "returned") status = EOrderStatus.RETURNED;
 
         store.fetchOrders(status);
     }, [activeTab, store.fetchOrders]);
@@ -49,6 +50,7 @@ export const useOrderTrackingListController = () => {
             { key: "shipping", label: "Đang giao", count: count?.shipping || 0 },
             { key: "success", label: "Đã giao", count: count?.success || 0 },
             { key: "cancelled", label: "Đã hủy", count: count?.cancelled || 0 },
+            { key: "returned", label: "Yêu cầu trả hàng", count: 0 },
         ];
     }, [store.ordersCount]);
 
@@ -69,7 +71,8 @@ export const useOrderTrackingListController = () => {
             if (activeTab === "preparing") return item.orderStatus === EOrderStatus.PREPARING;
             if (activeTab === "shipping") return item.orderStatus === EOrderStatus.SHIPPING;
             if (activeTab === "success") return item.orderStatus === EOrderStatus.SUCCESS || item.orderStatus === EOrderStatus.DELIVERED;
-            if (activeTab === "cancelled") return item.orderStatus === EOrderStatus.CANCELLED || item.orderStatus === EOrderStatus.RETURNED;
+            if (activeTab === "cancelled") return item.orderStatus === EOrderStatus.CANCELLED;
+            if (activeTab === "returned") return item.orderStatus === EOrderStatus.RETURNED;
             return true;
         });
     }, [store.orders, activeTab]);
@@ -81,10 +84,11 @@ export const useOrderTrackingListController = () => {
             store.fetchOrdersCount();
             store.fetchOrders(activeTab === "all" ? undefined : (
                 activeTab === "pending" ? EOrderStatus.PENDING :
-                activeTab === "preparing" ? EOrderStatus.PREPARING :
-                activeTab === "shipping" ? EOrderStatus.SHIPPING :
-                activeTab === "success" ? EOrderStatus.SUCCESS :
-                activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
+                    activeTab === "preparing" ? EOrderStatus.PREPARING :
+                        activeTab === "shipping" ? EOrderStatus.SHIPPING :
+                            activeTab === "success" ? EOrderStatus.SUCCESS :
+                                activeTab === "cancelled" ? EOrderStatus.CANCELLED :
+                                    activeTab === "returned" ? EOrderStatus.RETURNED : undefined
             ));
         } else {
             toast(result.message || "Không thể hủy đơn hàng.", "error");
@@ -98,10 +102,11 @@ export const useOrderTrackingListController = () => {
             store.fetchOrdersCount();
             store.fetchOrders(activeTab === "all" ? undefined : (
                 activeTab === "pending" ? EOrderStatus.PENDING :
-                activeTab === "preparing" ? EOrderStatus.PREPARING :
-                activeTab === "shipping" ? EOrderStatus.SHIPPING :
-                activeTab === "success" ? EOrderStatus.SUCCESS :
-                activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
+                    activeTab === "preparing" ? EOrderStatus.PREPARING :
+                        activeTab === "shipping" ? EOrderStatus.SHIPPING :
+                            activeTab === "success" ? EOrderStatus.SUCCESS :
+                                activeTab === "cancelled" ? EOrderStatus.CANCELLED :
+                                    activeTab === "returned" ? EOrderStatus.RETURNED : undefined
             ));
         } else {
             toast(result.message || "Không thể yêu cầu trả hàng.", "error");

@@ -133,7 +133,7 @@ export const CancelOrderRequestModal: React.FC<CancelOrderRequestModalProps> = (
                         type="button"
                         onClick={onClose}
                         disabled={isSubmitting}
-                        className="px-4 py-2 font-medium text-stone-600 bg-white border border-border-medium rounded-xl hover:bg-stone-50 transition-colors disabled:opacity-60 min-w-[100px]"
+                        className="px-4 py-2 font-medium text-stone-600 bg-white border border-border-medium rounded-xl hover:bg-stone-50 transition-colors disabled:opacity-60 min-w-25"
                     >
                         Đóng
                     </button>
