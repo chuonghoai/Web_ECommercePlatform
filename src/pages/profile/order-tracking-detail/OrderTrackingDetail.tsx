@@ -5,9 +5,11 @@ import { CancelOrderRequestModal } from "../components/CancelOrderRequestModal";
 import { ReturnOrderRequestModal } from "../components/ReturnOrderRequestModal";
 import { EOrderStatus } from "../../../features/order/enums/orderStatus.enum";
 import { useOrderTrackingDetailController } from "./orderTrackingDetail.controller";
+import { useNavigate } from "react-router-dom";
 
 export const OrderTrackingDetail: React.FC = () => {
     const controller = useOrderTrackingDetailController();
+    const navigate = useNavigate();
     const [isCancelModalOpen, setIsCancelModalOpen] = React.useState(false);
     const [isReturnModalOpen, setIsReturnModalOpen] = React.useState(false);
 
@@ -30,6 +32,8 @@ export const OrderTrackingDetail: React.FC = () => {
     const showCancelReason = (controller.order.orderStatus === EOrderStatus.CANCELLED || controller.order.orderStatus === EOrderStatus.RETURNED) && controller.order.cancelReason;
     const canCancel = controller.order.orderStatus === EOrderStatus.PENDING;
     const canReturn = controller.order.orderStatus === EOrderStatus.SUCCESS;
+    const canEvaluate = controller.order.orderStatus === EOrderStatus.SUCCESS;
+    const isAllReviewed = controller.order.items.every(item => item.isReviewed);
 
     return (
         <div className="flex flex-col gap-6 relative">
@@ -179,8 +183,24 @@ export const OrderTrackingDetail: React.FC = () => {
                         </div>
 
                         {/* Action Buttons */}
-                        {(canCancel || canReturn) && (
-                            <div className="mt-6">
+                        {(canCancel || canReturn || canEvaluate) && (
+                            <div className="mt-6 flex flex-col gap-3">
+                                {canEvaluate && (
+                                    <button
+                                        onClick={() => {
+                                            navigate(`/profile/order/tracking/${controller.order!.id}/evaluate`, {
+                                                state: { order: controller.order }
+                                            });
+                                        }}
+                                        className={`w-full min-h-11 flex items-center justify-center font-medium rounded-xl transition-colors shadow-sm ${
+                                            isAllReviewed 
+                                            ? "text-stone-700 bg-white border border-stone-300 hover:bg-stone-50" 
+                                            : "text-white bg-market-primary hover:bg-market-primary/90"
+                                        }`}
+                                    >
+                                        {isAllReviewed ? "Xem đánh giá" : "Đánh giá sản phẩm"}
+                                    </button>
+                                )}
                                 {canCancel && (
                                     <button
                                         onClick={() => setIsCancelModalOpen(true)}
@@ -192,7 +212,7 @@ export const OrderTrackingDetail: React.FC = () => {
                                 {canReturn && (
                                     <button
                                         onClick={() => setIsReturnModalOpen(true)}
-                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-warning hover:bg-amber-600 rounded-xl transition-colors shadow-sm mt-3"
+                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-warning hover:bg-amber-600 rounded-xl transition-colors shadow-sm"
                                     >
                                         Yêu cầu trả hàng
                                     </button>

@@ -35,6 +35,9 @@ export interface OrderDetailTrackingItem {
 
     quantity: number;           // Số lượng mua
     amount: number;             // Tổng tiền (= price * quantity)
+
+    isReviewed?: boolean;
+    reviewId?: string;
 }
 
 /**
