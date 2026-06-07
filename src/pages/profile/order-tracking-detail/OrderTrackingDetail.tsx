@@ -32,8 +32,6 @@ export const OrderTrackingDetail: React.FC = () => {
     const showCancelReason = (controller.order.orderStatus === EOrderStatus.CANCELLED || controller.order.orderStatus === EOrderStatus.RETURNED) && controller.order.cancelReason;
     const canCancel = controller.order.orderStatus === EOrderStatus.PENDING;
     const canReturn = controller.order.orderStatus === EOrderStatus.SUCCESS;
-    const canEvaluate = controller.order.orderStatus === EOrderStatus.SUCCESS;
-    const isAllReviewed = controller.order.items.every(item => item.isReviewed);
 
     return (
         <div className="flex flex-col gap-6 relative">
@@ -95,15 +93,16 @@ export const OrderTrackingDetail: React.FC = () => {
                         </h3>
                         <div className="flex flex-col gap-4">
                             {controller.order.items.map((item) => (
-                                <div key={item.productId} className="flex items-start gap-4 pb-4 border-b border-stone-50 last:border-0 last:pb-0">
+                                <div key={item.orderItemId} className="flex items-start gap-4 pb-4 border-b border-stone-50 last:border-0 last:pb-0">
                                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-stone-100 bg-stone-50 shrink-0">
                                         <img src={item.productImageUrl} alt={item.productName} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0 flex flex-col items-start">
                                         <h4 className="text-stone-800 font-medium text-base mb-1">{item.productName}</h4>
-                                        <div className="flex items-center gap-3 text-sm">
+                                        <div className="flex items-center gap-3 text-sm mb-2">
                                             <span className="text-stone-500">Số lượng: x{item.quantity}</span>
                                         </div>
+
                                     </div>
                                     <div className="text-right shrink-0">
                                         <div className="text-market-primary font-semibold text-base mb-1">
@@ -112,6 +111,24 @@ export const OrderTrackingDetail: React.FC = () => {
                                         {item.originalPrice > item.price && (
                                             <div className="text-stone-400 text-xs line-through">
                                                 {item.originalPrice.toLocaleString("vi-VN")}đ
+                                            </div>
+                                        )}
+
+                                        {controller.order?.orderStatus === EOrderStatus.SUCCESS && (
+                                            <div className="mt-auto flex justify-end pt-5">
+                                                <button
+                                                    onClick={() => {
+                                                        navigate(`/profile/order/tracking/${controller.order!.id}/evaluate`, {
+                                                            state: { order: controller.order, focusItemId: item.orderItemId }
+                                                        });
+                                                    }}
+                                                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${item.isReviewed
+                                                        ? "text-stone-600 bg-white border-stone-200 hover:bg-stone-50"
+                                                        : "text-market-primary bg-market-primary/10 border-transparent hover:bg-market-primary/20"
+                                                        }`}
+                                                >
+                                                    {item.isReviewed ? "Xem đánh giá" : "Đánh giá"}
+                                                </button>
                                             </div>
                                         )}
                                     </div>
@@ -183,24 +200,8 @@ export const OrderTrackingDetail: React.FC = () => {
                         </div>
 
                         {/* Action Buttons */}
-                        {(canCancel || canReturn || canEvaluate) && (
+                        {(canCancel || canReturn) && (
                             <div className="mt-6 flex flex-col gap-3">
-                                {canEvaluate && (
-                                    <button
-                                        onClick={() => {
-                                            navigate(`/profile/order/tracking/${controller.order!.id}/evaluate`, {
-                                                state: { order: controller.order }
-                                            });
-                                        }}
-                                        className={`w-full min-h-11 flex items-center justify-center font-medium rounded-xl transition-colors shadow-sm ${
-                                            isAllReviewed 
-                                            ? "text-stone-700 bg-white border border-stone-300 hover:bg-stone-50" 
-                                            : "text-white bg-market-primary hover:bg-market-primary/90"
-                                        }`}
-                                    >
-                                        {isAllReviewed ? "Xem đánh giá" : "Đánh giá sản phẩm"}
-                                    </button>
-                                )}
                                 {canCancel && (
                                     <button
                                         onClick={() => setIsCancelModalOpen(true)}

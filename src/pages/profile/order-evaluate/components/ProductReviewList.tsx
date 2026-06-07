@@ -3,14 +3,14 @@ import type { OrderDetailTrackingItem } from "../../../../features/order/trackin
 
 interface ProductReviewListProps {
     items: OrderDetailTrackingItem[];
-    selectedProductId: string | null;
-    onSelectProduct: (productId: string) => void;
+    selectedItemId: string | null;
+    onSelectItem: (orderItemId: string) => void;
 }
 
 export const ProductReviewList: React.FC<ProductReviewListProps> = ({
     items,
-    selectedProductId,
-    onSelectProduct,
+    selectedItemId,
+    onSelectItem,
 }) => {
     return (
         <div className="bg-white border border-border-subtle rounded-xl shadow-sm p-4 h-full">
@@ -19,11 +19,11 @@ export const ProductReviewList: React.FC<ProductReviewListProps> = ({
             </h3>
             <div className="flex flex-col gap-3">
                 {items.map((item) => {
-                    const isSelected = item.productId === selectedProductId;
+                    const isSelected = item.orderItemId === selectedItemId;
                     return (
                         <div
-                            key={item.productId}
-                            onClick={() => onSelectProduct(item.productId)}
+                            key={item.orderItemId}
+                            onClick={() => onSelectItem(item.orderItemId)}
                             className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors border ${
                                 isSelected
                                     ? "bg-market-primary/5 border-market-primary"

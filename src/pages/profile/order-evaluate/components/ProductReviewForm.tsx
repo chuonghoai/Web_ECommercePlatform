@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Star } from "lucide-react";
-import { reviewService } from "../../../../features/review/services/review.service";
 import type { OrderDetailTrackingItem } from "../../../../features/order/tracking/model/orderDetail.model";
-import type { ReviewItem } from "../../../../features/review/models/review.model";
+import type { OrderReviewItem } from "../../../../features/review/models/review.model";
 
 interface ProductReviewFormProps {
     item: OrderDetailTrackingItem;
     rating: number;
     comment: string;
+    readOnlyReview?: OrderReviewItem;
     onRatingChange: (rating: number) => void;
     onCommentChange: (comment: string) => void;
 }
@@ -16,41 +16,10 @@ export const ProductReviewForm: React.FC<ProductReviewFormProps> = ({
     item,
     rating,
     comment,
+    readOnlyReview,
     onRatingChange,
     onCommentChange,
 }) => {
-    const [readOnlyReview, setReadOnlyReview] = useState<ReviewItem | null>(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const fetchReview = async () => {
-            if (item.isReviewed && item.reviewId) {
-                setLoading(true);
-                try {
-                    const res = await reviewService.getReviewById(item.reviewId);
-                    if (res.success && res.data) {
-                        setReadOnlyReview(res.data);
-                    }
-                } catch {
-                    // Ignore
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setReadOnlyReview(null);
-            }
-        };
-        fetchReview();
-    }, [item]);
-
-    if (loading) {
-        return (
-            <div className="bg-white border border-border-subtle rounded-xl shadow-sm p-6 h-full flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-market-primary"></div>
-            </div>
-        );
-    }
-
     const currentRating = item.isReviewed && readOnlyReview ? readOnlyReview.rating : rating;
     const currentComment = item.isReviewed && readOnlyReview ? readOnlyReview.content : comment;
 

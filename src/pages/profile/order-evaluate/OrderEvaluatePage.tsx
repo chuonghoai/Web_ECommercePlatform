@@ -8,16 +8,24 @@ import { OrderReviewSummary } from "./components/OrderReviewSummary";
 export const OrderEvaluatePage: React.FC = () => {
     const controller = useOrderEvaluateController();
 
-    if (!controller.order) {
-        return null;
+    if (!controller.order || controller.isLoadingInitial) {
+        return (
+            <div className="flex justify-center items-center h-full min-h-150 bg-white rounded-2xl border border-border-subtle shadow-sm">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-market-primary"></div>
+            </div>
+        );
     }
 
     const selectedItem = controller.order.items.find(
-        (item) => item.productId === controller.selectedProductId
+        (item) => item.orderItemId === controller.selectedItemId
     );
 
     const currentReviewState = controller.reviews.find(
-        (r) => r.productId === controller.selectedProductId
+        (r) => r.orderItemId === controller.selectedItemId
+    );
+
+    const currentReadOnlyReview = controller.readOnlyReviews.find(
+        (r) => r.orderItemId === controller.selectedItemId
     );
 
     return (
@@ -48,8 +56,8 @@ export const OrderEvaluatePage: React.FC = () => {
                 <div className="lg:col-span-1">
                     <ProductReviewList
                         items={controller.order.items}
-                        selectedProductId={controller.selectedProductId}
-                        onSelectProduct={controller.setSelectedProductId}
+                        selectedItemId={controller.selectedItemId}
+                        onSelectItem={controller.setSelectedItemId}
                     />
                 </div>
 
@@ -60,8 +68,9 @@ export const OrderEvaluatePage: React.FC = () => {
                             item={selectedItem}
                             rating={currentReviewState?.rating || 0}
                             comment={currentReviewState?.comment || ""}
-                            onRatingChange={(rating) => controller.setRating(selectedItem.productId, rating)}
-                            onCommentChange={(comment) => controller.setComment(selectedItem.productId, comment)}
+                            readOnlyReview={currentReadOnlyReview}
+                            onRatingChange={(rating) => controller.setRating(selectedItem.orderItemId, rating)}
+                            onCommentChange={(comment) => controller.setComment(selectedItem.orderItemId, comment)}
                         />
                     ) : (
                         <div className="bg-white border border-border-subtle rounded-xl shadow-sm p-6 h-full flex flex-col items-center justify-center text-stone-400">

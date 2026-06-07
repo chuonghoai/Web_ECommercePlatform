@@ -25,6 +25,8 @@ export interface OrderTrackingStatusHistory {
  * Chi tiết từng sản phẩm trong đơn hàng
  */
 export interface OrderDetailTrackingItem {
+    orderItemId: string;
+
     productId: string;
     productName: string;
     productImageUrl: string;
@@ -37,7 +39,6 @@ export interface OrderDetailTrackingItem {
     amount: number;             // Tổng tiền (= price * quantity)
 
     isReviewed?: boolean;
-    reviewId?: string;
 }
 
 /**
