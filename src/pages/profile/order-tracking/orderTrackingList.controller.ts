@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useOrderTrackingListStore } from "./orderTrackingList.store";
+import { useToast } from "../../../components/toast/toast";
 import { EOrderStatus } from "../../../features/order/enums/orderStatus.enum";
 
 export type TabKey = "all" | "pending" | "preparing" | "shipping" | "success" | "cancelled";
@@ -12,6 +13,7 @@ export interface TabItem {
 
 export const useOrderTrackingListController = () => {
     const store = useOrderTrackingListStore();
+    const { toast } = useToast();
     const [activeTab, setActiveTab] = useState<TabKey>("all");
 
     /**
@@ -72,10 +74,10 @@ export const useOrderTrackingListController = () => {
         });
     }, [store.orders, activeTab]);
 
-    const handleCancelOrder = useCallback(async (orderId: string) => {
-        const result = await store.cancelOrder(orderId, "Khách hàng đổi ý (thao tác từ giao diện)");
+    const handleCancelOrder = useCallback(async (orderId: string, note: string) => {
+        const result = await store.cancelOrder(orderId, note);
         if (result.success) {
-            alert("Hủy đơn hàng thành công!");
+            toast("Hủy đơn hàng thành công!", "success");
             store.fetchOrdersCount();
             store.fetchOrders(activeTab === "all" ? undefined : (
                 activeTab === "pending" ? EOrderStatus.PENDING :
@@ -85,14 +87,14 @@ export const useOrderTrackingListController = () => {
                 activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
             ));
         } else {
-            alert(result.message || "Không thể hủy đơn hàng.");
+            toast(result.message || "Không thể hủy đơn hàng.", "error");
         }
-    }, [store.cancelOrder, store.fetchOrders, store.fetchOrdersCount, activeTab]);
+    }, [store.cancelOrder, store.fetchOrders, store.fetchOrdersCount, activeTab, toast]);
 
-    const handleReturnOrder = useCallback(async (orderId: string) => {
-        const result = await store.returnOrder(orderId, "Hàng bị lỗi (thao tác từ giao diện)");
+    const handleReturnOrder = useCallback(async (orderId: string, note: string) => {
+        const result = await store.returnOrder(orderId, note);
         if (result.success) {
-            alert("Yêu cầu trả hàng thành công!");
+            toast("Yêu cầu trả hàng thành công!", "success");
             store.fetchOrdersCount();
             store.fetchOrders(activeTab === "all" ? undefined : (
                 activeTab === "pending" ? EOrderStatus.PENDING :
@@ -102,9 +104,9 @@ export const useOrderTrackingListController = () => {
                 activeTab === "cancelled" ? EOrderStatus.CANCELLED : undefined
             ));
         } else {
-            alert(result.message || "Không thể yêu cầu trả hàng.");
+            toast(result.message || "Không thể yêu cầu trả hàng.", "error");
         }
-    }, [store.returnOrder, store.fetchOrders, store.fetchOrdersCount, activeTab]);
+    }, [store.returnOrder, store.fetchOrders, store.fetchOrdersCount, activeTab, toast]);
 
     return {
         loading: store.loading,

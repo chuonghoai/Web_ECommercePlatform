@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { OrderTimeline } from "./components/OrderTimeline";
-
+import { CancelOrderRequestModal } from "../components/CancelOrderRequestModal";
+import { ReturnOrderRequestModal } from "../components/ReturnOrderRequestModal";
 import { EOrderStatus } from "../../../features/order/enums/orderStatus.enum";
 import { useOrderTrackingDetailController } from "./orderTrackingDetail.controller";
 
 export const OrderTrackingDetail: React.FC = () => {
     const controller = useOrderTrackingDetailController();
+    const [isCancelModalOpen, setIsCancelModalOpen] = React.useState(false);
+    const [isReturnModalOpen, setIsReturnModalOpen] = React.useState(false);
 
     if (controller.loading && !controller.order) {
         return (
@@ -178,7 +181,7 @@ export const OrderTrackingDetail: React.FC = () => {
                             <div className="mt-6">
                                 {canCancel && (
                                     <button
-                                        onClick={controller.handleCancelOrder}
+                                        onClick={() => setIsCancelModalOpen(true)}
                                         className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-error hover:bg-red-700 rounded-xl transition-colors shadow-sm"
                                     >
                                         Hủy đơn
@@ -186,8 +189,8 @@ export const OrderTrackingDetail: React.FC = () => {
                                 )}
                                 {canReturn && (
                                     <button
-                                        onClick={controller.handleReturnOrder}
-                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-error hover:bg-red-700 rounded-xl transition-colors shadow-sm"
+                                        onClick={() => setIsReturnModalOpen(true)}
+                                        className="w-full min-h-11 flex items-center justify-center font-medium text-white bg-market-warning hover:bg-amber-600 rounded-xl transition-colors shadow-sm mt-3"
                                     >
                                         Yêu cầu trả hàng
                                     </button>
@@ -197,6 +200,24 @@ export const OrderTrackingDetail: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modals */}
+            {controller.order && (
+                <CancelOrderRequestModal
+                    open={isCancelModalOpen}
+                    order={controller.order}
+                    onClose={() => setIsCancelModalOpen(false)}
+                    onSubmit={controller.handleCancelOrder}
+                />
+            )}
+            {controller.order && (
+                <ReturnOrderRequestModal
+                    open={isReturnModalOpen}
+                    order={controller.order}
+                    onClose={() => setIsReturnModalOpen(false)}
+                    onSubmit={controller.handleReturnOrder}
+                />
+            )}
         </div>
     );
 };
