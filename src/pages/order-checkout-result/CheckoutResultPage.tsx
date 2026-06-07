@@ -121,7 +121,7 @@ const CheckoutResultPage: React.FC = () => {
                             Quay về trang chủ
                         </Link>
                         <Link
-                            to="/orders/history"
+                            to="/profile/order/tracking"
                             className="w-full block btn-secondary py-2.5 font-body transition-transform hover:-translate-y-0.5 bg-surface-container-low hover:bg-surface-container"
                         >
                             Đơn hàng đã mua
