@@ -58,6 +58,27 @@ export class UserApiRepository implements UserRepository {
     }
 
     /**
+     * PUT /users/me/address/:id
+     */
+    async updateAddress(id: number, data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        return apiClient.put<ApiResponse<Address>>(`/users/me/address/${id}`, data);
+    }
+
+    /**
+     * DELETE /users/me/address/:id
+     */
+    async deleteAddress(id: number): Promise<ApiResponse<null>> {
+        return apiClient.delete<ApiResponse<null>>(`/users/me/address/${id}`);
+    }
+
+    /**
+     * PATCH /users/me/address/:id/default
+     */
+    async setDefaultAddress(id: number): Promise<ApiResponse<null>> {
+        return apiClient.patch<ApiResponse<null>>(`/users/me/address/${id}/default`);
+    }
+
+    /**
      * Get open API province, district and ward
      */
     async getProvinces(): Promise<ProvinceModel[]> {

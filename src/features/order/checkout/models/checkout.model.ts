@@ -41,6 +41,8 @@ export type Address = {
     longitude: number;
 
     fullAddress: string;    // Chuỗi hoàn chính: Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TPHCM
+
+    isDefault?: boolean;    // true nếu đây là địa chỉ mặc định
 }
 
 /**

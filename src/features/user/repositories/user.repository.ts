@@ -12,6 +12,9 @@ export interface UserRepository {
 
     getAddress(): Promise<ApiResponse<Address[]>>;
     addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>>;
+    updateAddress(id: number, data: Omit<Address, "id">): Promise<ApiResponse<Address>>;
+    deleteAddress(id: number): Promise<ApiResponse<null>>;
+    setDefaultAddress(id: number): Promise<ApiResponse<null>>;
 
     getProvinces(): Promise<ProvinceModel[]>;
     getDistricts(provinceId: number): Promise<DistrictModel[]>;
