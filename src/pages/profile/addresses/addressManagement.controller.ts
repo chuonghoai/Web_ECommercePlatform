@@ -11,6 +11,10 @@ export const useAddressManagementController = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
+    // Delete confirmation state
+    const [deletingAddressId, setDeletingAddressId] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const fetchAddresses = useCallback(async () => {
         setLoading(true);
         try {
@@ -42,18 +46,33 @@ export const useAddressManagementController = () => {
         toast("Cập nhật địa chỉ thành công!", "success");
     };
 
-    const handleDelete = async (id: number) => {
-        if (!window.confirm("Bạn có chắc chắn muốn xóa địa chỉ này?")) return;
+    // Mở modal xác nhận xóa
+    const confirmDelete = (id: number) => {
+        setDeletingAddressId(id);
+    };
+
+    // Đóng modal xác nhận xóa
+    const cancelDelete = () => {
+        setDeletingAddressId(null);
+    };
+
+    // Thực hiện xóa sau khi xác nhận
+    const executeDelete = async () => {
+        if (deletingAddressId === null) return;
+        setIsDeleting(true);
         try {
-            const res = await userService.deleteAddress(id);
+            const res = await userService.deleteAddress(deletingAddressId);
             if (res.success) {
-                setAddresses(prev => prev.filter(a => a.id !== id));
+                setAddresses(prev => prev.filter(a => a.id !== deletingAddressId));
                 toast("Xóa địa chỉ thành công!", "success");
             } else {
                 toast(res.message || "Không thể xóa địa chỉ", "error");
             }
         } catch {
             toast("Có lỗi xảy ra khi xóa địa chỉ", "error");
+        } finally {
+            setIsDeleting(false);
+            setDeletingAddressId(null);
         }
     };
 
@@ -71,6 +90,9 @@ export const useAddressManagementController = () => {
         }
     };
 
+    // Lấy tên address đang chờ xóa (để hiển thị trên modal)
+    const deletingAddress = addresses.find(a => a.id === deletingAddressId) ?? null;
+
     return {
         addresses,
         loading,
@@ -80,7 +102,11 @@ export const useAddressManagementController = () => {
         setEditingAddress,
         handleAddSuccess,
         handleUpdateSuccess,
-        handleDelete,
+        confirmDelete,
+        cancelDelete,
+        executeDelete,
+        isDeleting,
+        deletingAddress,
         handleSetDefault,
         fetchAddresses,
     };
