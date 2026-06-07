@@ -1,18 +1,22 @@
 import { useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useOrderTrackingDetailStore } from "./orderTrackingDetail.store";
 import { useToast } from "../../../components/toast/toast";
 
 export const useOrderTrackingDetailController = () => {
     const { orderId } = useParams<{ orderId: string }>();
+    const location = useLocation();
     const store = useOrderTrackingDetailStore();
     const { toast } = useToast();
 
     useEffect(() => {
-        if (orderId) {
+        if (location.state?.updatedOrder) {
+            store.setOrder(location.state.updatedOrder);
+            window.history.replaceState({}, document.title);
+        } else if (orderId) {
             store.fetchOrderDetail(orderId);
         }
-    }, [orderId, store.fetchOrderDetail]);
+    }, [orderId, store.fetchOrderDetail, store.setOrder, location.state]);
 
     const handleCancelOrder = useCallback(async (note: string) => {
         if (!orderId) return;
