@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useProductStore } from './products.store';
 import { productService } from '../../features/products/services/product.service';
 import type { Product, ProductFormData, CreateProductRequest } from '../../features/products/models/product.model';
+import { mediaService } from '../../../features/media/services/media.service';
 
 export const useProductController = () => {
     const store = useProductStore();
@@ -73,26 +74,32 @@ export const useProductController = () => {
     ): Promise<boolean> => {
         store.setSaving(true);
         try {
-            // 1. Upload ảnh đại diện (nếu có file mới)
             let imageUrl = formData.imageUrl || '';
+            let images: string[] = formData.images || [];
+            const mediaPublicIds: string[] = [];
+
+            // 1. Upload ảnh đại diện (nếu có file mới)
             if (formData.avatarFile) {
-                const urls = await productService.uploadImages([formData.avatarFile]);
-                if (!urls || urls.length === 0) {
+                const results = await mediaService.uploadMultipleFiles([formData.avatarFile]);
+                if (!results || results.length === 0) {
                     alert('Upload ảnh đại diện thất bại. Vui lòng thử lại!');
                     return false;
                 }
-                imageUrl = urls[0];
+                imageUrl = results[0].url;
+                mediaPublicIds.push(results[0].publicId);
             }
 
             // 2. Upload ảnh chi tiết mới (nếu có)
-            let images: string[] = formData.images || [];
             if (formData.detailImageFiles && formData.detailImageFiles.length > 0) {
-                const urls = await productService.uploadImages(formData.detailImageFiles);
-                if (!urls) {
+                const results = await mediaService.uploadMultipleFiles(formData.detailImageFiles);
+                if (!results) {
                     alert('Upload ảnh chi tiết thất bại. Vui lòng thử lại!');
                     return false;
                 }
-                images = [...images, ...urls];
+                const newUrls = results.map(r => r.url);
+                const newPublicIds = results.map(r => r.publicId);
+                images = [...images, ...newUrls];
+                mediaPublicIds.push(...newPublicIds);
             }
 
             // 3. Build request payload
@@ -103,6 +110,7 @@ export const useProductController = () => {
                 discountPercentage: formData.discountPercentage,
                 imageUrl,
                 images,
+                mediaPublicIds,
                 stockStatus: formData.stockStatus,
                 description: formData.description,
                 materials: formData.materials,

@@ -52,12 +52,7 @@ export interface PaginatedResponse<T> {
     data: T[];
 }
 
-export interface UploadFileResponse {
-    url: string;
-    publicId: string;
-    format: string;
-    bytes: number;
-}
+
 
 export interface CreateProductRequest {
     name: string;
@@ -66,6 +61,7 @@ export interface CreateProductRequest {
     discountPercentage: number;
     imageUrl: string;
     images: string[];
+    mediaPublicIds?: string[];
     description?: string;
     materials?: string[];
     stockStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';

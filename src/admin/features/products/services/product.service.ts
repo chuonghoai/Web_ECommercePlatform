@@ -1,20 +1,15 @@
 import type { ApiResponse } from '../../../../core/api/apiResponse';
 import type { Product, GetProductsQuery, CreateProductRequest, UpdateProductRequest } from '../models/product.model';
 import type { IProductRepository } from '../repositories/product.repository';
-import type { IUploadRepository } from '../repositories/upload.repository';
 import { ProductApiRepository } from '../repositories/productApi.repository';
 import { ProductMockRepository } from '../repositories/productMock.repository';
-import { UploadApiRepository } from '../repositories/uploadApi.repository';
-import { UploadMockRepository } from '../repositories/uploadMock.repository';
 import { USE_MOCK } from '../../../../core/config/useMock.config';
 
 export class ProductService {
     private readonly productRepository: IProductRepository;
-    private readonly uploadRepository: IUploadRepository;
 
-    constructor(productRepository: IProductRepository, uploadRepository: IUploadRepository) {
+    constructor(productRepository: IProductRepository) {
         this.productRepository = productRepository;
-        this.uploadRepository = uploadRepository;
     }
 
     // === Fetch ===
@@ -70,29 +65,10 @@ export class ProductService {
         }
     }
 
-    // === Upload ===
 
-    /**
-     * Upload nhiều file ảnh qua API /media/uploads.
-     * @returns Mảng URL ảnh đã upload, hoặc null nếu lỗi.
-     */
-    async uploadImages(files: File[], folder: string = 'products'): Promise<string[] | null> {
-        try {
-            const response = await this.uploadRepository.uploadFiles(files, folder);
-            if (response.success && response.data) {
-                return response.data.map(item => item.url);
-            }
-            console.error('Upload thất bại:', response.message);
-            return null;
-        } catch (error) {
-            console.error('Lỗi khi upload ảnh:', error);
-            return null;
-        }
-    }
 }
 
 // === Khởi tạo instance — chọn Mock hoặc Api dựa trên USE_MOCK ===
 export const productService = new ProductService(
-    USE_MOCK ? new ProductMockRepository() : new ProductApiRepository(),
-    USE_MOCK ? new UploadMockRepository() : new UploadApiRepository()
+    USE_MOCK ? new ProductMockRepository() : new ProductApiRepository()
 );
