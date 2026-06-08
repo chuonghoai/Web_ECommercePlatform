@@ -4,6 +4,7 @@ import type { HeaderOptions } from '../../layout/AdminLayout';
 import type { Product } from '../../features/products/models/product.model';
 import { useProductController } from './products.controller';
 import { ProductStatusBadge } from './components/ProductStatusBadge';
+import { ProductSpecsInfo } from './components/ProductSpecsInfo';
 
 const formatVND = (v: number) => Number(v || 0).toLocaleString('vi-VN');
 
@@ -115,39 +116,14 @@ export const ProductDetailPage = () => {
                             </div>
                         )}
 
-                        {product.dimensions && product.dimensions.length === 3 && (
-                            <div>
-                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Kích thước (Dài × Rộng × Cao)</p>
-                                <p className="font-body text-sm text-text-ink">
-                                    {product.dimensions[0]} × {product.dimensions[1]} × {product.dimensions[2]} cm
-                                </p>
-                            </div>
-                        )}
-
-                        {product.weight !== undefined && product.weight !== null && (
-                            <div>
-                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Trọng lượng</p>
-                                <p className="font-body text-sm text-text-ink">{product.weight} kg</p>
-                            </div>
-                        )}
-
-                        {product.careInstructions && (
-                            <div>
-                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Hướng dẫn bảo quản</p>
-                                <p className="font-body text-sm text-text-ink whitespace-pre-line">{product.careInstructions}</p>
-                            </div>
-                        )}
-
-                        {product.materials && product.materials.length > 0 && (
-                            <div>
-                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Chất liệu</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {product.materials.map((m, i) => (
-                                        <span key={i} className="text-xs bg-surface-container px-3 py-1 rounded-full border border-border-subtle">{m}</span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                        <div className="pt-2">
+                            <ProductSpecsInfo 
+                                dimensions={product.dimensions}
+                                weight={product.weight}
+                                careInstructions={product.careInstructions}
+                                materials={product.materials}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

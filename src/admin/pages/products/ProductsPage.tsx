@@ -22,7 +22,7 @@ export const ProductsPage = () => {
             rightActions: (
                 <button
                     onClick={() => navigate('/admin/products/create')}
-                    className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-[2px] flex items-center gap-1"
+                    className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-0.5 flex items-center gap-1"
                 >
                     <span className="material-symbols-outlined text-[18px]">add</span>
                     Thêm sản phẩm

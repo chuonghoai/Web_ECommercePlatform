@@ -16,14 +16,15 @@ function ProductPage() {
         handleAddToCart,
         handleToggleFavorite,
         handleDecreaseQuantity,
-        handleIncreaseQuantity
+        handleIncreaseQuantity,
+        formattedDimensions
     } = useProductController();
 
     if (isLoading) {
         return (
             <div className="animate-pulse max-w-screen-2xl mx-auto px-6 py-8">
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-24">
-                    <div className="w-full md:w-[55%] aspect-[4/5] md:h-[700px] bg-[#F5F5F4]" />
+                    <div className="w-full md:w-[55%] aspect-4/5 md:h-175 bg-[#F5F5F4]" />
                     <div className="w-full md:w-[45%] space-y-6 pt-4">
                         <div className="h-4 bg-[#F5F5F4] rounded w-1/4" />
                         <div className="h-12 bg-[#F5F5F4] rounded w-full" />
@@ -49,7 +50,7 @@ function ProductPage() {
 
                 {/* ── Breadcrumbs ── */}
                 <nav aria-label="Breadcrumb" className="mb-6">
-                    <ol className="flex items-center flex-wrap gap-1.5 text-[12px] text-[#59413a]">
+                    <ol className="flex items-center flex-wrap gap-1.5 text-[12px] text-on-surface-variant">
                         <li>
                             <Link to="/" className="hover:text-[#9b2f00] transition-colors">Trang chủ</Link>
                         </li>
@@ -57,7 +58,7 @@ function ProductPage() {
                         <li>
                             <Link
                                 to={`/?categories=${product.categoryId}`}
-                                className="hover:text-[#9b2f00] transition-colors"
+                                className="hover:text-primary transition-colors"
                             >
                                 {product.categoryName}
                             </Link>
@@ -73,7 +74,7 @@ function ProductPage() {
                     {/* Left – Images */}
                     <div className="w-full md:w-[55%]">
                         {/* Main image */}
-                        <div className="relative w-full aspect-[4/5] md:aspect-auto md:h-[700px] border border-[#E7E5E4] bg-[#FAF2EB] overflow-hidden group">
+                        <div className="relative w-full aspect-4/5 md:aspect-auto md:h-175 border border-border-subtle bg-[#FAF2EB] overflow-hidden group">
                             <img
                                 src={allImages[activeImgIndex]}
                                 alt={product.name}
@@ -81,14 +82,14 @@ function ProductPage() {
                             />
                             {/* Discount badge */}
                             {isSale && product.discountPercentage && (
-                                <div className="absolute top-4 left-4 bg-[#c2410c] text-white text-[11px] font-bold px-3 py-1 uppercase tracking-widest">
+                                <div className="absolute top-4 left-4 bg-primary-container text-white text-[11px] font-bold px-3 py-1 uppercase tracking-widest">
                                     -{product.discountPercentage}%
                                 </div>
                             )}
                             {/* Out of stock overlay */}
                             {isOutOfStock && (
                                 <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-                                    <span className="bg-white border border-[#E7E5E4] text-[#59413a] text-[13px] font-semibold px-5 py-2 uppercase tracking-widest">
+                                    <span className="bg-white border border-border-subtle text-on-surface-variant text-[13px] font-semibold px-5 py-2 uppercase tracking-widest">
                                         Hết hàng
                                     </span>
                                 </div>
@@ -100,7 +101,7 @@ function ProductPage() {
                             <div className="relative group/slider mt-3">
                                 <button
                                     onClick={() => scrollThumbnails('left')}
-                                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center bg-white border border-[#E7E5E4] text-[#78716C] hover:text-[#1C1917] hover:border-[#D6D3D1] opacity-0 group-hover/slider:opacity-100 transition-all duration-200 shadow-sm"
+                                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center bg-white border border-border-subtle text-[#78716C] hover:text-text-ink hover:border-border-medium opacity-0 group-hover/slider:opacity-100 transition-all duration-200 shadow-sm"
                                     aria-label="Xem ảnh trước"
                                 >
                                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -210,10 +211,10 @@ function ProductPage() {
                         )}
 
                         {/* Dimensions */}
-                        {product.dimensions && (
+                        {formattedDimensions && (
                             <p className="text-[14px] text-[#59413a] mb-6">
                                 <span className="font-semibold text-[#1e1b17]">Kích thước: </span>
-                                {product.dimensions}
+                                {formattedDimensions}
                             </p>
                         )}
 
@@ -378,21 +379,21 @@ function ProductPage() {
                                         <span className="text-[14px] text-[#1e1b17] leading-relaxed">{product.materials.join(', ')}</span>
                                     </div>
                                 )}
-                                {product.dimensions && (
+                                {formattedDimensions && (
                                     <div className="flex flex-col gap-1 py-4 border-b border-[#E7E5E4]">
                                         <span className="text-[11px] font-bold uppercase tracking-[0.09em] text-[#78716C]">Kích thước</span>
-                                        <span className="text-[14px] text-[#1e1b17]">{product.dimensions}</span>
+                                        <span className="text-[14px] text-[#1e1b17]">{formattedDimensions}</span>
                                     </div>
                                 )}
-                                {product.weight && (
+                                {product.weight !== undefined && product.weight !== null && (
                                     <div className="flex flex-col gap-1 py-4 border-b border-[#E7E5E4]">
                                         <span className="text-[11px] font-bold uppercase tracking-[0.09em] text-[#78716C]">Trọng lượng</span>
-                                        <span className="text-[14px] text-[#1e1b17]">{product.weight}</span>
+                                        <span className="text-[14px] text-[#1e1b17]">{product.weight} kg</span>
                                     </div>
                                 )}
                                 <div className="flex flex-col gap-1 pt-4">
                                     <span className="text-[11px] font-bold uppercase tracking-[0.09em] text-[#78716C]">Bảo quản</span>
-                                    <span className="text-[14px] text-[#1e1b17] leading-relaxed">
+                                    <span className="text-[14px] text-[#1e1b17] leading-relaxed whitespace-pre-line">
                                         {product.careInstructions || 'Bảo quản nơi khô ráo, tránh ánh nắng trực tiếp.'}
                                     </span>
                                 </div>

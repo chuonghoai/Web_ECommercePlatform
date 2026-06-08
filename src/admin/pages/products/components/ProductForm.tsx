@@ -4,6 +4,7 @@ import type { Product, ProductFormData } from '../../../features/products/models
 import { ProductImageUploader } from './ProductImageUploader';
 import { MaterialTagInput } from './MaterialTagInput';
 import { ProductStatusBadge } from './ProductStatusBadge';
+import { ProductSpecsInfo } from './ProductSpecsInfo';
 import type { Category } from '../../../../features/category/models/category.model';
 
 interface Props {
@@ -35,6 +36,9 @@ export const ProductForm = ({ categories = [], onSave, editingProduct, saving, o
     const watchedDiscount = watch('discountPercentage', 0);
     const watchedStock = watch('stock', 0);
     const watchedDescription = watch('description', '');
+    const watchedDimensions = watch('dimensions');
+    const watchedWeight = watch('weight');
+    const watchedCareInstructions = watch('careInstructions', '');
 
     useEffect(() => {
         if (editingProduct) {
@@ -293,7 +297,15 @@ export const ProductForm = ({ categories = [], onSave, editingProduct, saving, o
                             <ProductStatusBadge status={computedStockStatus} />
                             <span className="text-sm font-semibold text-text-muted">Kho: {watchedStock}</span>
                             {watchedDescription && <div className="pt-2"><p className="text-xs text-text-muted mb-1">Mô tả:</p><p className="text-sm text-text-ink line-clamp-3">{watchedDescription}</p></div>}
-                            {materials.length > 0 && <div className="pt-2"><p className="text-xs text-text-muted mb-1">Chất liệu:</p><div className="flex flex-wrap gap-1">{materials.map((m, i) => <span key={i} className="text-xs bg-surface-container px-2 py-0.5 rounded-full">{m}</span>)}</div></div>}
+                            
+                            <div className="pt-2">
+                                <ProductSpecsInfo 
+                                    dimensions={watchedDimensions as any}
+                                    weight={watchedWeight}
+                                    careInstructions={watchedCareInstructions}
+                                    materials={materials}
+                                />
+                            </div>
                             {(existingImages.length > 0 || detailPreviews.length > 0) && (
                                 <div className="pt-2 border-t border-border-subtle">
                                     <p className="text-xs text-text-muted mb-1.5">Ảnh chi tiết</p>

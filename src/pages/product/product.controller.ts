@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "../../components/toast/toast";
 import { useProductStore } from "./product.store";
@@ -81,9 +81,19 @@ export const useProductController = () => {
         setQuantity(prev => Math.min(maxStock, prev + 1));
     };
 
+    // ViewModel derivations
+    const formattedDimensions = useMemo(() => {
+        if (!store.product?.dimensions || !Array.isArray(store.product.dimensions) || store.product.dimensions.length !== 3) {
+            return null;
+        }
+        const [l, w, h] = store.product.dimensions;
+        return `${l} cm × ${w} cm × ${h} cm`;
+    }, [store.product?.dimensions]);
+
     return {
         // Data store
         product: store.product,
+        formattedDimensions,
 
         // UI states
         isLoading,
