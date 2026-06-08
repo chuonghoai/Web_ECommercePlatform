@@ -36,6 +36,18 @@ export class UserService {
         return this.userRepository.addAddress(data);
     }
 
+    async updateAddress(id: number, data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        return this.userRepository.updateAddress(id, data);
+    }
+
+    async deleteAddress(id: number): Promise<ApiResponse<null>> {
+        return this.userRepository.deleteAddress(id);
+    }
+
+    async setDefaultAddress(id: number): Promise<ApiResponse<null>> {
+        return this.userRepository.setDefaultAddress(id);
+    }
+
     async getProvinces(): Promise<ProvinceModel[]> {
         return this.userRepository.getProvinces();
     }

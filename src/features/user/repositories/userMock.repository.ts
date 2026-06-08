@@ -145,7 +145,8 @@ const mockAddressDB = new Map<number, Address>([
         street: "Số 227 Nguyễn Văn Cừ",
         latitude: 10.88206144628933,
         longitude: 106.76458444116837,
-        fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM"
+        fullAddress: "Số 227 Nguyễn Văn Cừ, Phường Bến Thành, Quận 1, TP.HCM",
+        isDefault: true,
     }],
     [2, {
         id: 2,
@@ -160,7 +161,8 @@ const mockAddressDB = new Map<number, Address>([
         street: "Số 335 Nguyễn Trãi",
         latitude: 10.8231,
         longitude: 106.6297,
-        fullAddress: "Số 335 Nguyễn Trãi, Phường Nguyễn Huệ, Quận 2, TP.HCM"
+        fullAddress: "Số 335 Nguyễn Trãi, Phường Nguyễn Huệ, Quận 2, TP.HCM",
+        isDefault: false,
     }]
 ]);
 
@@ -218,13 +220,33 @@ export class UserMockRepository implements UserRepository {
     async addAddress(data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
         const currentIds = Array.from(mockAddressDB.keys());
         const newId = currentIds.length > 0 ? Math.max(...currentIds) + 1 : 1;
-        const newAddress: Address = { ...data, id: newId };
+        const newAddress: Address = { ...data, id: newId, isDefault: false };
         mockAddressDB.set(newId, newAddress);
         return {
             success: true,
             message: "Thêm địa chỉ mới thành công",
             data: newAddress,
         };
+    }
+
+    async updateAddress(id: number, data: Omit<Address, "id">): Promise<ApiResponse<Address>> {
+        const existing = mockAddressDB.get(id);
+        if (!existing) return { success: false, message: "Không tìm thấy địa chỉ", data: null as any };
+        const updated: Address = { ...data, id, isDefault: existing.isDefault };
+        mockAddressDB.set(id, updated);
+        return { success: true, message: "Cập nhật địa chỉ thành công", data: updated };
+    }
+
+    async deleteAddress(id: number): Promise<ApiResponse<null>> {
+        mockAddressDB.delete(id);
+        return { success: true, message: "Xóa địa chỉ thành công", data: null };
+    }
+
+    async setDefaultAddress(id: number): Promise<ApiResponse<null>> {
+        mockAddressDB.forEach((addr, key) => {
+            addr.isDefault = key === id;
+        });
+        return { success: true, message: "Đặt địa chỉ mặc định thành công", data: null };
     }
 
     async getProvinces(): Promise<ProvinceModel[]> {
