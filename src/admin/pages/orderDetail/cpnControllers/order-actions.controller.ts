@@ -31,9 +31,9 @@ export const useOrderActionsController = (order: OrderDetail, onUpdateSuccess: (
     /**
      * UI action update status (not cancel)
      */
-    const handleConfirmOrder = () => updateStatus(EOrderStatus.PREPARING, "Order confirmed");
-    const handleHandOver = () => updateStatus(EOrderStatus.SHIPPING, "Handed over to carrier");
-    const handleComplete = () => updateStatus(EOrderStatus.SUCCESS, "Order completed");
+    const handleConfirmOrder = () => updateStatus(EOrderStatus.PREPARING, "Đơn hàng đã được xác nhận");
+    const handleHandOver = () => updateStatus(EOrderStatus.SHIPPING, "Đơn hàng đang được giao");
+    const handleComplete = () => updateStatus(EOrderStatus.SUCCESS, "Đơn hàng đã hoàn tất");
 
     /**
      * UI action cancel order
