@@ -1,7 +1,7 @@
 import { apiClient } from "../../../../core/api/apiClient";
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
-import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
+import type { PrepareCheckoutPayload } from "../dto/prepareCheckout.dto";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 import type { CheckoutRepository } from "./checkout.repository";
@@ -9,10 +9,10 @@ import type { CheckoutRepository } from "./checkout.repository";
 export class CheckoutApiRepository implements CheckoutRepository {
     /**
      * POST /orders/prepare
-     * @body request: PrepareCheckoutRequest[]
+     * @body request: PrepareCheckoutPayload
      * @returns PrepareCheckoutModel
      */
-    async prepareOrder(request: PrepareCheckoutRequest[]): Promise<ApiResponse<PrepareCheckoutModel>> {
+    async prepareOrder(request: PrepareCheckoutPayload): Promise<ApiResponse<PrepareCheckoutModel>> {
         return apiClient.post<ApiResponse<PrepareCheckoutModel>>("/orders/prepare", request);
     }
 

@@ -26,7 +26,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // Init data
     useEffect(() => {
         if (initialRequest && initialRequest.length > 0 && !hasFetched.current) {
-            store.fetchPrepareOrder(initialRequest);
+            store.fetchPrepareOrder({ items: initialRequest });
             hasFetched.current = true;
         }
     }, [store.fetchPrepareOrder, initialRequest]);
@@ -34,7 +34,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // ReInit data
     const handleRetry = useCallback(() => {
         if (initialRequest && initialRequest.length > 0) {
-            store.fetchPrepareOrder(initialRequest);
+            store.fetchPrepareOrder({ items: initialRequest, addressId: store.data?.address?.id });
         }
     }, [initialRequest, store]);
 
@@ -58,7 +58,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
                 });
             }
 
-            store.fetchPrepareOrder(currentRequest);
+            store.fetchPrepareOrder({ items: currentRequest, addressId: address.id });
         }
         setIsAddressModalOpen(false);
     };
@@ -79,7 +79,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         ];
 
         if (remainingRequest.length > 0) {
-            store.fetchPrepareOrder(remainingRequest);
+            store.fetchPrepareOrder({ items: remainingRequest, addressId: store.data?.address?.id });
         } else {
             store.setData({
                 ...store.data,

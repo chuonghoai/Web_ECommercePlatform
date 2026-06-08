@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { checkoutService } from "../../features/order/checkout/services/checkout.service";
 import type { PrepareCheckoutModel } from "../../features/order/checkout/models/checkout.model";
-import type { PrepareCheckoutRequest } from "../../features/order/checkout/dto/prepareCheckout.dto";
+import type { PrepareCheckoutPayload } from "../../features/order/checkout/dto/prepareCheckout.dto";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../../features/order/checkout/dto/checkoutRequest.dto";
 
 export const useCheckoutStore = () => {
@@ -11,11 +11,11 @@ export const useCheckoutStore = () => {
 
     const [isCheckingOut, setIsCheckingOut] = useState<boolean>(false);
 
-    const fetchPrepareOrder = useCallback(async (request: PrepareCheckoutRequest[]) => {
+    const fetchPrepareOrder = useCallback(async (payload: PrepareCheckoutPayload) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await checkoutService.prepareOrder(request);
+            const response = await checkoutService.prepareOrder(payload);
             if (response.success && response.data) {
                 setData(response.data);
             } else {

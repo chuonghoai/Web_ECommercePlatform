@@ -1,6 +1,6 @@
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
-import type { PrepareCheckoutRequest } from "../dto/prepareCheckout.dto";
+import type { PrepareCheckoutPayload } from "../dto/prepareCheckout.dto";
 import { EPaymentMethod } from "../../enums/paymentMethod.enum";
 import type { PrepareCheckoutModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
@@ -8,27 +8,25 @@ import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 import { EPaymentStatus } from "../../enums/paymentStatus.enum";
 
 export class CheckoutMockRepository implements CheckoutRepository {
-    prepareOrder(request: PrepareCheckoutRequest[]): Promise<ApiResponse<PrepareCheckoutModel>> {
+    async prepareOrder(request: PrepareCheckoutPayload): Promise<ApiResponse<PrepareCheckoutModel>> {
+        // const subTotal = request.items.reduce((sum, item) => sum + 100000 * item.quantity, 0);
         const response: ApiResponse<PrepareCheckoutModel> = {
             success: true,
             message: "Success",
             data: {
-                address: {
+                address: request.addressId ? { id: request.addressId } as any : {
                     id: 1,
-                    fullName: "John Doe",
-                    phoneNumber: "1234567890",
-                    provinceCode: 123,
-                    provinceName: "Province 1",
-                    districtCode: 123,
-                    districtName: "District 1",
-                    wardCode: 123,
-                    wardName: "Ward 1",
-                    street: "Street 1",
-                    latitude: 10.88206144628933,
-                    longitude: 106.76458444116837,
-                    fullAddress: "Address 1",
+                    fullName: "Nguyen Van A",
+                    phoneNumber: "0123456789",
+                    provinceCode: 1,
+                    provinceName: "Hà Nội",
+                    districtCode: 1,
+                    districtName: "Quận Ba Đình",
+                    wardCode: 1,
+                    wardName: "Phường Phúc Xá",
+                    street: "123 Đường ABC",
+                    fullAddress: "123 Đường ABC, Phường Phúc Xá, Quận Ba Đình, Hà Nội"
                 },
-
                 items: [
                     {
                         product: {
@@ -38,7 +36,6 @@ export class CheckoutMockRepository implements CheckoutRepository {
                             price: 100000,
                             originalPrice: 120000,
                             discountPercentage: 0,
-
                         },
                         quantity: 2,
                         amount: 100000 * 2
