@@ -15,7 +15,12 @@ const MOCK_PRODUCTS: Product[] = [
         description: 'Áo thun cotton 100% thoáng mát',
         materials: ['Cotton', 'Polyester'],
         categoryName: 'Thời trang nam',
-        stockStatus: 'in_stock',
+        categoryId: 'cat1',
+        stock: 50,
+        soldCount: 120,
+        dimensions: [40, 30, 2],
+        weight: 0.3,
+        careInstructions: 'Giặt máy ở chế độ nhẹ. Tránh ánh nắng trực tiếp.',
     },
     {
         id: '2',
@@ -29,7 +34,12 @@ const MOCK_PRODUCTS: Product[] = [
         description: 'Quần jeans co giãn thoải mái',
         materials: ['Denim', 'Spandex'],
         categoryName: 'Thời trang nam',
-        stockStatus: 'low_stock',
+        categoryId: 'cat1',
+        stock: 5,
+        soldCount: 45,
+        dimensions: [50, 40, 3],
+        weight: 0.5,
+        careInstructions: 'Lộn trái khi giặt. Không dùng thuốc tẩy.',
     },
     {
         id: '3',
@@ -43,7 +53,12 @@ const MOCK_PRODUCTS: Product[] = [
         description: 'Giày sneaker phong cách',
         materials: ['Da tổng hợp', 'Cao su'],
         categoryName: 'Giày dép',
-        stockStatus: 'in_stock',
+        categoryId: 'cat2',
+        stock: 100,
+        soldCount: 300,
+        dimensions: [30, 20, 15],
+        weight: 0.8,
+        careInstructions: 'Lau sạch bằng khăn mềm. Bảo quản nơi khô ráo.',
     },
 ];
 
@@ -88,7 +103,12 @@ export class ProductMockRepository implements IProductRepository {
             description: data.description,
             materials: data.materials || [],
             rating: 0,
-            stockStatus: data.stockStatus,
+            stock: data.stock,
+            soldCount: 0,
+            categoryId: data.categoryId,
+            dimensions: data.dimensions,
+            weight: data.weight,
+            careInstructions: data.careInstructions,
         };
         return { success: true, message: 'Tạo sản phẩm thành công', data: newProduct };
     }
@@ -105,7 +125,12 @@ export class ProductMockRepository implements IProductRepository {
             description: data.description,
             materials: data.materials || [],
             rating: 4.0,
-            stockStatus: data.stockStatus,
+            stock: data.stock ?? 0,
+            soldCount: 0,
+            categoryId: data.categoryId,
+            dimensions: data.dimensions,
+            weight: data.weight,
+            careInstructions: data.careInstructions,
         };
         return { success: true, message: 'Cập nhật sản phẩm thành công', data: updated };
     }

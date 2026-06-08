@@ -14,6 +14,7 @@ export const ProductDetailPage = () => {
     const { fetchProductById } = useProductController();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
+    const [currentImage, setCurrentImage] = useState<string>('');
 
     useEffect(() => {
         setHeaderOptions({
@@ -28,7 +29,11 @@ export const ProductDetailPage = () => {
     useEffect(() => {
         if (id) {
             setLoading(true);
-            fetchProductById(id).then(p => { setProduct(p); setLoading(false); });
+            fetchProductById(id).then(p => { 
+                setProduct(p); 
+                setCurrentImage(p?.imageUrl || '');
+                setLoading(false); 
+            });
         }
     }, [id, fetchProductById]);
 
@@ -58,14 +63,20 @@ export const ProductDetailPage = () => {
                     {/* Ảnh */}
                     <div className="p-6 space-y-4">
                         <div className="aspect-square bg-surface-container rounded-lg overflow-hidden">
-                            <img src={product.imageUrl || 'https://via.placeholder.com/400'} alt={product.name} className="w-full h-full object-cover" />
+                            <img src={currentImage || 'https://via.placeholder.com/400'} alt={product.name} className="w-full h-full object-cover transition-opacity duration-300" />
                         </div>
                         {product.images && product.images.length > 0 && (
                             <div>
                                 <p className="text-sm text-text-muted mb-2">Ảnh chi tiết ({product.images.length})</p>
                                 <div className="flex flex-wrap gap-2">
+                                    <img 
+                                        src={product.imageUrl || 'https://via.placeholder.com/400'} 
+                                        alt="Main" 
+                                        onClick={() => setCurrentImage(product.imageUrl || '')}
+                                        className={`w-20 h-20 object-cover rounded-md border cursor-pointer hover:opacity-80 transition-opacity ${currentImage === product.imageUrl ? 'border-primary-container ring-2 ring-primary-container/50' : 'border-border-subtle'}`} 
+                                    />
                                     {product.images.map((url, i) => (
-                                        <img key={i} src={url} alt="" className="w-20 h-20 object-cover rounded-md border border-border-subtle" />
+                                        <img key={i} src={url} alt="" onClick={() => setCurrentImage(url)} className={`w-20 h-20 object-cover rounded-md border cursor-pointer hover:opacity-80 transition-opacity ${currentImage === url ? 'border-primary-container ring-2 ring-primary-container/50' : 'border-border-subtle'}`} />
                                     ))}
                                 </div>
                             </div>
@@ -80,9 +91,16 @@ export const ProductDetailPage = () => {
                             {showBadge && <span className="bg-error text-white text-xs font-bold px-2 py-1 rounded-md">-{product.discountPercentage}%</span>}
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <span className="font-body text-sm font-semibold text-text-muted">Tình trạng:</span>
-                            <ProductStatusBadge status={product.stockStatus || 'in_stock'} />
+                        <div className="flex flex-col gap-1 mt-2">
+                            <div className="flex items-center gap-2">
+                                <span className="font-body text-sm font-semibold text-text-muted">Tình trạng:</span>
+                                <ProductStatusBadge status={product.stock > 10 ? 'in_stock' : (product.stock > 0 ? 'low_stock' : 'out_of_stock')} />
+                                <span className="font-body text-sm text-text-ink ml-1">({product.stock} sản phẩm)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="font-body text-sm font-semibold text-text-muted">Đã bán:</span>
+                                <span className="font-body text-sm text-text-ink">{product.soldCount || 0}</span>
+                            </div>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -94,6 +112,29 @@ export const ProductDetailPage = () => {
                             <div>
                                 <p className="font-body text-sm font-semibold text-text-muted mb-1">Mô tả</p>
                                 <p className="font-body text-sm text-text-ink whitespace-pre-line">{product.description}</p>
+                            </div>
+                        )}
+
+                        {product.dimensions && product.dimensions.length === 3 && (
+                            <div>
+                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Kích thước (Dài × Rộng × Cao)</p>
+                                <p className="font-body text-sm text-text-ink">
+                                    {product.dimensions[0]} × {product.dimensions[1]} × {product.dimensions[2]} cm
+                                </p>
+                            </div>
+                        )}
+
+                        {product.weight !== undefined && product.weight !== null && (
+                            <div>
+                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Trọng lượng</p>
+                                <p className="font-body text-sm text-text-ink">{product.weight} kg</p>
+                            </div>
+                        )}
+
+                        {product.careInstructions && (
+                            <div>
+                                <p className="font-body text-sm font-semibold text-text-muted mb-1">Hướng dẫn bảo quản</p>
+                                <p className="font-body text-sm text-text-ink whitespace-pre-line">{product.careInstructions}</p>
                             </div>
                         )}
 

@@ -1,4 +1,5 @@
 import type { Product } from '../../../features/products/models/product.model';
+import { ProductStatusBadge } from './ProductStatusBadge';
 
 interface Props {
     product: Product;
@@ -27,6 +28,12 @@ export const ProductTableRow = ({ product, onEdit, onDelete, onViewDetail }: Pro
             </td>
             <td className="py-4 px-6 font-semibold">
                 {product.price.toLocaleString('vi-VN')} đ
+            </td>
+            <td className="py-4 px-6">
+                <div className="flex flex-col gap-1">
+                    <ProductStatusBadge status={product.stock > 10 ? 'in_stock' : (product.stock > 0 ? 'low_stock' : 'out_of_stock')} />
+                    <span className="text-xs text-text-muted">Tồn: {product.stock} | Đã bán: {product.soldCount || 0}</span>
+                </div>
             </td>
             <td className="py-4 px-6">
                 <div className="flex items-center text-[#eab308]">

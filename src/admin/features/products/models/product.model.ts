@@ -18,7 +18,11 @@ export interface Product {
         totalProducts: number;
         averageRating: number;
     };
-    stockStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';
+    stock: number;
+    soldCount: number;
+    dimensions?: number[];
+    weight?: number;
+    careInstructions?: string;
 }
 
 export const EFilterState = {
@@ -64,7 +68,11 @@ export interface CreateProductRequest {
     mediaPublicIds?: string[];
     description?: string;
     materials?: string[];
-    stockStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';
+    stock: number;
+    categoryId: string;
+    dimensions?: number[];
+    weight?: number;
+    careInstructions?: string;
 }
 
 export type UpdateProductRequest = Partial<CreateProductRequest>;
@@ -74,9 +82,13 @@ export interface ProductFormData {
     price: number;
     originalPrice: number;
     discountPercentage: number;
-    stockStatus: 'in_stock' | 'low_stock' | 'out_of_stock';
+    stock: number;
+    categoryId: string;
     description: string;
     materials: string[];
+    dimensions?: { length: number; width: number; height: number; };
+    weight?: number;
+    careInstructions?: string;
     avatarFile?: File | null;
     detailImageFiles?: File[];
     imageUrl?: string;

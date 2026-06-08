@@ -3,9 +3,22 @@ import { useProductStore } from './products.store';
 import { productService } from '../../features/products/services/product.service';
 import type { Product, ProductFormData, CreateProductRequest } from '../../features/products/models/product.model';
 import { mediaService } from '../../../features/media/services/media.service';
+import { categoryService } from '../../../features/category/services/category.service';
 
 export const useProductController = () => {
     const store = useProductStore();
+
+    // === Fetch danh mục (categories) ===
+    const fetchCategories = useCallback(async () => {
+        try {
+            const response = await categoryService.getAllCategories();
+            if (response.success && response.data) {
+                store.setCategories(response.data);
+            }
+        } catch (error) {
+            console.error('Lỗi khi tải danh mục:', error);
+        }
+    }, [store.setCategories]);
 
     // === Fetch danh sách sản phẩm ===
     const fetchProducts = useCallback(async () => {
@@ -111,9 +124,13 @@ export const useProductController = () => {
                 imageUrl,
                 images,
                 mediaPublicIds,
-                stockStatus: formData.stockStatus,
+                stock: formData.stock,
+                categoryId: formData.categoryId,
                 description: formData.description,
                 materials: formData.materials,
+                dimensions: formData.dimensions ? [formData.dimensions.length, formData.dimensions.width, formData.dimensions.height] : undefined,
+                weight: formData.weight,
+                careInstructions: formData.careInstructions,
             };
 
             // 4. Gọi API tạo/cập nhật
@@ -135,6 +152,7 @@ export const useProductController = () => {
         ...store,
         fetchProducts,
         fetchProductById,
+        fetchCategories,
         handlePageChange,
         handleDeleteProduct,
         handleSaveProduct,

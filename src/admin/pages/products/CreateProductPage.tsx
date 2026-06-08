@@ -8,7 +8,7 @@ import { ProductForm } from './components/ProductForm';
 export const CreateProductPage = () => {
     const { setHeaderOptions } = useOutletContext<{ setHeaderOptions: (o: HeaderOptions) => void }>();
     const navigate = useNavigate();
-    const { saving, handleSaveProduct } = useProductController();
+    const { saving, handleSaveProduct, categories, fetchCategories } = useProductController();
 
     useEffect(() => {
         setHeaderOptions({
@@ -25,6 +25,10 @@ export const CreateProductPage = () => {
         if (success) navigate('/admin/products');
     };
 
+    useEffect(() => {
+        fetchCategories();
+    }, [fetchCategories]);
+
     return (
         <div className="max-w-7xl mx-auto w-full pb-8">
             <div className="mb-6">
@@ -32,7 +36,7 @@ export const CreateProductPage = () => {
                 <p className="font-body text-lg text-text-muted mt-2">Điền thông tin sản phẩm bên dưới.</p>
             </div>
             <div className="bg-surface-card border border-border-subtle rounded-xl shadow-sm overflow-hidden">
-                <ProductForm onSave={handleSave} saving={saving} onCancel={() => navigate('/admin/products')} />
+                <ProductForm categories={categories} onSave={handleSave} saving={saving} onCancel={() => navigate('/admin/products')} />
             </div>
         </div>
     );
