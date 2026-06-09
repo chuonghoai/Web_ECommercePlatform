@@ -23,6 +23,7 @@ export const useMarketplaceController = () => {
                 minPrice: searchParams.get("minPrice") || "",
                 maxPrice: searchParams.get("maxPrice") || "",
             } as FilterState,
+            search: searchParams.get("search") || "",
         };
     }, [searchParamsString]);
 
@@ -38,7 +39,8 @@ export const useMarketplaceController = () => {
             const response = await productService.getAllProducts(
                 currentUrlState.page,
                 50,
-                currentUrlState.filters
+                currentUrlState.filters,
+                currentUrlState.search
             );
 
             if (response.success) {

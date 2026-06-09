@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { userStorageService } from "../../../features/user/services/userStorage.service";
 import { EUserRole, type User } from "../../../features/user/models/user.model";
@@ -13,6 +13,34 @@ export const Header = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentSearchParam = new URLSearchParams(location.search).get("search") || "";
+  const [searchTerm, setSearchTerm] = useState(currentSearchParam);
+
+  // Cập nhật state nếu URL bị thay đổi từ bên ngoài (như xoá filter)
+  useEffect(() => {
+    setSearchTerm(currentSearchParam);
+  }, [currentSearchParam]);
+
+  // Debounce search tự động sau 500ms
+  useEffect(() => {
+    if (searchTerm === currentSearchParam) return;
+
+    const timeoutId = setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      const val = searchTerm.trim();
+      if (val) {
+        params.set("search", val);
+      } else {
+        params.delete("search");
+      }
+      params.set("page", "1");
+      navigate(`/?${params.toString()}`);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, currentSearchParam, navigate]);
 
   useEffect(() => {
     const loadUserAndCart = () => {
@@ -73,9 +101,37 @@ export const Header = () => {
           <input
             type="text"
             placeholder="Tìm kiếm tác phẩm thủ công, nghệ nhân..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = e.currentTarget.value.trim();
+                const params = new URLSearchParams(window.location.search);
+                if (val) {
+                  params.set("search", val);
+                } else {
+                  params.delete("search");
+                }
+                params.set("page", "1");
+                navigate(`/?${params.toString()}`);
+              }
+            }}
             className="w-full bg-market-background border-[1.5px] border-[#D6D3D1] rounded-[4px] h-[42px] px-4 pr-12 text-[15px] font-['Open_Sans',sans-serif] outline-none focus:border-market-primary focus:ring-[3px] focus:ring-market-primary/15 transition-all text-[#1C1917] placeholder:text-[#A8A29E]"
           />
-          <button className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#A8A29E] hover:text-market-primary transition-colors">
+          <button 
+            onClick={() => {
+               const val = searchTerm.trim();
+               const params = new URLSearchParams(window.location.search);
+               if (val) {
+                 params.set("search", val);
+               } else {
+                 params.delete("search");
+               }
+               params.set("page", "1");
+               navigate(`/?${params.toString()}`);
+            }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#A8A29E] hover:text-market-primary transition-colors"
+          >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
