@@ -246,6 +246,32 @@ const OrderDetailPage: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Vouchers Information */}
+                    {store.orderDetail.vouchers && store.orderDetail.vouchers.length > 0 && (
+                        <div className="bg-white border border-gray-200 rounded-sm shadow-sm">
+                            <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/50">
+                                <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Voucher đã áp dụng</h2>
+                            </div>
+                            <div className="p-4 space-y-3 text-sm">
+                                {store.orderDetail.vouchers.map((v, idx) => {
+                                    const isFreeship = String(v.voucherSnapshot?.voucher_type || '').includes('FREESHIP');
+                                    const typeText = isFreeship ? 'Giảm phí vận chuyển' : 'Giảm giá sản phẩm';
+                                    return (
+                                        <div key={idx} className="flex flex-col gap-1 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-bold text-blue-600 uppercase">{v.voucherCode}</span>
+                                                <span className="font-semibold text-red-600">-{formatCurrency(v.discountAmount)}</span>
+                                            </div>
+                                            <div className="text-xs text-gray-500 line-clamp-1">
+                                                {v.voucherSnapshot?.title || typeText}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Order Summary */}
                     <div className="bg-white border border-gray-200 rounded-sm shadow-sm">
                         <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/50">
@@ -263,8 +289,14 @@ const OrderDetailPage: React.FC = () => {
                                 </div>
                                 {(store.orderDetail.discountAmount ?? 0) > 0 && (
                                     <div className="flex justify-between items-center">
-                                        <span className="text-gray-600 font-medium">Giảm giá</span>
+                                        <span className="text-gray-600 font-medium">Giảm giá sản phẩm</span>
                                         <span className="font-semibold text-red-600">-{formatCurrency(store.orderDetail.discountAmount!)}</span>
+                                    </div>
+                                )}
+                                {(store.orderDetail.shippingDiscountAmount ?? 0) > 0 && (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-600 font-medium">Giảm giá vận chuyển</span>
+                                        <span className="font-semibold text-red-600">-{formatCurrency(store.orderDetail.shippingDiscountAmount!)}</span>
                                     </div>
                                 )}
                             </div>

@@ -41,6 +41,12 @@ export interface OrderDetailTrackingItem {
     isReviewed?: boolean;
 }
 
+export interface OrderVoucherItem {
+    voucherCode: string;
+    discountAmount: number;
+    voucherSnapshot?: any;
+}
+
 /**
  * Chi tiết đơn hàng
  */
@@ -58,8 +64,10 @@ export interface OrderTrackingDetail {
 
     subTotal: number;           // Tổng tiền sản phẩm
     shippingFee: number;        // Phí vận chuyển
-    discountAmount?: number;    // Số tiền được giảm (Tạm thời không trả về field này do chưa phát triển module voucher)
-    totalAmount: number;        // Tổng thanh toán (= subTotal + shippingFee - discountAmount)
+    discountAmount?: number;    // Số tiền được giảm (sản phẩm)
+    shippingDiscountAmount?: number; // Số tiền được giảm (vận chuyển)
+    vouchers?: OrderVoucherItem[]; // Danh sách voucher đã áp dụng
+    totalAmount: number;        // Tổng thanh toán (= subTotal + shippingFee - discountAmount - shippingDiscountAmount)
 
     estimatedDeliveryDate?: Date;   // Ngày dự kiến giao hàng (ví dụ: "06/06/2026" để FE hiện "Dự kiến giao hàng: 06/06/2026")
 

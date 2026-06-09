@@ -19,7 +19,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<EPaymentMethod>(EPaymentMethod.COD);
-    const [selectedVoucher, setSelectedVoucher] = useState("");
+    const [voucherCodes, setVoucherCodes] = useState<string[]>([]);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] = useState(false);
 
@@ -34,11 +34,10 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     // ReInit data
     const handleRetry = useCallback(() => {
         if (initialRequest && initialRequest.length > 0) {
-            store.fetchPrepareOrder({ items: initialRequest, addressId: store.data?.address?.id });
+            store.fetchPrepareOrder({ items: initialRequest, addressId: store.data?.address?.id, voucherCodes });
         }
-    }, [initialRequest, store]);
+    }, [initialRequest, store, voucherCodes]);
 
-    // Open edit address modal and set new address
     const handleSelectAddress = (address: any) => {
         if (store.data) {
             store.setData({ ...store.data, address });
@@ -58,10 +57,33 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
                 });
             }
 
-            store.fetchPrepareOrder({ items: currentRequest, addressId: address.id });
+            store.fetchPrepareOrder({ items: currentRequest, addressId: address.id, voucherCodes });
         }
         setIsAddressModalOpen(false);
     };
+
+    // Apply vouchers and trigger realtime update
+    const handleApplyVouchers = useCallback((codes: string[]) => {
+        setVoucherCodes(codes);
+        if (store.data) {
+            const currentRequest: PrepareCheckoutRequest[] = store.data.items.map(item => ({
+                productId: item.product.id,
+                quantity: item.quantity
+            }));
+
+            if (store.data.invalidItems && store.data.invalidItems.length > 0) {
+                store.data.invalidItems.forEach(invalidItem => {
+                    const original = initialRequest.find(req => req.productId === invalidItem.productId);
+                    currentRequest.push({
+                        productId: invalidItem.productId,
+                        quantity: original ? original.quantity : 1
+                    });
+                });
+            }
+
+            store.fetchPrepareOrder({ items: currentRequest, addressId: store.data.address?.id, voucherCodes: codes });
+        }
+    }, [store, initialRequest]);
 
     // Remove item
     const handleRemoveItem = useCallback((productId: string) => {
@@ -79,7 +101,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         ];
 
         if (remainingRequest.length > 0) {
-            store.fetchPrepareOrder({ items: remainingRequest, addressId: store.data?.address?.id });
+            store.fetchPrepareOrder({ items: remainingRequest, addressId: store.data?.address?.id, voucherCodes });
         } else {
             store.setData({
                 ...store.data,
@@ -111,6 +133,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
             })),
             addressId: store.data.address.id,
             paymentMethod: selectedPaymentMethod,
+            voucherCodes: voucherCodes,
         };
 
         // Gọi API
@@ -139,8 +162,8 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
 
         isVoucherModalOpen,
         setIsVoucherModalOpen,
-        selectedVoucher,
-        setSelectedVoucher,
+        voucherCodes,
+        handleApplyVouchers,
 
         isPaymentModalOpen,
         setIsPaymentModalOpen,

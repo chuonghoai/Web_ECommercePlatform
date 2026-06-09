@@ -5,22 +5,30 @@ interface OrderSummaryProps {
     subTotal: number;
     shippingFee: number;
     totalAmount: number;
+    discountAmount?: number;
+    shippingDiscountAmount?: number;
+    appliedVouchers?: any[];
     selectedPaymentMethod: EPaymentMethod; // Đổi type sang enum
     onOpenPaymentModal: () => void;
     onOpenVoucherModal: () => void;
     onOrderSubmit: () => void;
     isCheckingOut?: boolean;
+    onRemoveVoucher?: (code: string) => void;
 }
 
 export const OrderSummary: React.FC<OrderSummaryProps> = ({
     subTotal,
     shippingFee,
+    discountAmount,
+    shippingDiscountAmount,
+    appliedVouchers,
     totalAmount,
     selectedPaymentMethod,
     onOpenPaymentModal,
     onOpenVoucherModal,
     onOrderSubmit,
-    isCheckingOut
+    isCheckingOut,
+    onRemoveVoucher
 }) => {
     const getPaymentMethodInfo = (method: EPaymentMethod) => {
         switch (method) {
@@ -68,6 +76,18 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                             <span>Phí vận chuyển</span>
                             <span>{shippingFee.toLocaleString('vi-VN')}₫</span>
                         </div>
+                        {(discountAmount ?? 0) > 0 && (
+                            <div className="flex justify-between items-center text-red-600">
+                                <span>Giảm giá sản phẩm</span>
+                                <span>-{discountAmount!.toLocaleString('vi-VN')}₫</span>
+                            </div>
+                        )}
+                        {(shippingDiscountAmount ?? 0) > 0 && (
+                            <div className="flex justify-between items-center text-red-600">
+                                <span>Giảm phí vận chuyển</span>
+                                <span>-{shippingDiscountAmount!.toLocaleString('vi-VN')}₫</span>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex justify-between items-end pt-1">
@@ -78,13 +98,42 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
 
                     {/* Voucher button: open modal choosing voucher */}
                     <div className="pt-2">
+                        {appliedVouchers && appliedVouchers.length > 0 && (
+                            <div className="mb-4 space-y-2">
+                                <div className="font-caption text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Voucher đã áp dụng</div>
+                                {appliedVouchers.map((v, i) => (
+                                    <div key={i} className="flex flex-col bg-[#FFFBF5] border border-[#E7E5E4] rounded-lg p-3 relative">
+                                        <div className="flex justify-between items-start mb-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="material-symbols-outlined text-[#C2410C] text-sm">local_activity</span>
+                                                <span className="font-subhead text-sm text-[#C2410C] font-semibold">{v.voucherCode}</span>
+                                            </div>
+                                            {onRemoveVoucher && (
+                                                <button 
+                                                    type="button"
+                                                    className="text-text-muted hover:text-[#DC2626] transition-colors"
+                                                    onClick={() => onRemoveVoucher(v.voucherCode)}
+                                                    title="Bỏ chọn voucher này"
+                                                >
+                                                    <span className="material-symbols-outlined text-sm">close</span>
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div className="font-body-sm text-on-surface-variant flex justify-between">
+                                            <span>{String(v.voucherType).includes('FREESHIP') ? 'Giảm phí vận chuyển' : 'Giảm giá sản phẩm'}</span>
+                                            <span className="font-semibold text-[#DC2626]">-{v.discountValue.toLocaleString('vi-VN')}₫</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                         <button
                             type="button"
                             className="w-full font-body-sm text-primary border border-border-medium bg-surface hover:bg-surface-container-low transition-colors py-2 rounded-lg flex justify-center items-center gap-1.5"
                             onClick={onOpenVoucherModal}
                         >
                             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>confirmation_number</span>
-                            Áp dụng voucher
+                            {appliedVouchers && appliedVouchers.length > 0 ? 'Thay đổi voucher' : 'Áp dụng voucher'}
                         </button>
                     </div>
 

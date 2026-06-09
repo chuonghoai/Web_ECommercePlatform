@@ -7,7 +7,7 @@ import type { EPaymentStatus } from "../../../../features/order/enums/paymentSta
  */
 export interface OrderStatusHistory {
     status: EOrderStatus;
-    timestamp: Date;        // Ngày cập nhật
+    timestamp: string;        // Ngày cập nhật
     /**
      * Ghi chú:
      *  - PENDING: Khách hàng đặt hàng
@@ -37,12 +37,18 @@ export interface OrderDetailProductItem {
     amount: number;             // Tổng tiền (= price * quantity)
 }
 
+export interface OrderVoucherItem {
+    voucherCode: string;
+    discountAmount: number;
+    voucherSnapshot: any;
+}
+
 /**
  * Chi tiết đơn hàng cho admin quản lý
  */
 export interface OrderDetail {
     id: string;
-    createdAt: Date;
+    createdAt: string;
     statusHistory: OrderStatusHistory[];    // Lịch sử trạng thái đơn hàng
     orderStatus: EOrderStatus;
 
@@ -56,7 +62,9 @@ export interface OrderDetail {
 
     subTotal: number;           // Tổng tiền sản phẩm
     shippingFee: number;        // Phí vận chuyển
-    discountAmount?: number;    // Số tiền được giảm (Tạm thời không trả về field này do chưa phát triển module voucher)
+    discountAmount?: number;    // Số tiền được giảm (sản phẩm)
+    shippingDiscountAmount?: number; // Số tiền được giảm (vận chuyển)
+    vouchers?: OrderVoucherItem[];
     totalAmount: number;        // Tổng thanh toán (= subTotal + shippingFee - discountAmount)
 
     paymentMethod: EPaymentMethod;
