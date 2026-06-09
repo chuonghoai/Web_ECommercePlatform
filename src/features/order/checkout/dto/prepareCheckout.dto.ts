@@ -6,4 +6,5 @@ export interface PrepareCheckoutRequest {
 export interface PrepareCheckoutPayload {
     items: PrepareCheckoutRequest[];
     addressId?: number;
+    voucherCodes?: string[];
 }

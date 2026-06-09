@@ -55,14 +55,23 @@ type InvalidItem = {
     reason: string;
 };
 
+export interface AppliedVoucher {
+    voucherCode: string;
+    voucherType: string;
+    discountValue: number;
+}
+
 export interface PrepareCheckoutModel {
-    address: Address;   // Địa chỉ giao hàng
+    address: Address | null;   // Địa chỉ giao hàng
 
     items: CheckoutItem[];  // Danh sách product muốn mua
 
     subTotal: number;   // Tổng tiền sản phẩm
     shippingFee: number;    // Phí vận chuyển: Backend dựa vào tọa độ của address, dùng google map để tính giá tiền
-    totalAmount: number;    // = subTotal + shippingFee
+    discountAmount: number; // Số tiền được giảm (sản phẩm)
+    shippingDiscountAmount: number; // Số tiền được giảm (vận chuyển)
+    appliedVouchers: AppliedVoucher[]; // Danh sách voucher được áp dụng
+    totalAmount: number;    // = subTotal + shippingFee - discountAmount - shippingDiscountAmount
 
     invalidItems: InvalidItem[];    // Các sản phẩm không khả dụng
 }

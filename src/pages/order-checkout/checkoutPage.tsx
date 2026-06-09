@@ -31,8 +31,9 @@ function CheckoutPage() {
         setIsAddNewAddressModalOpen,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
-        selectedVoucher,
-        setSelectedVoucher,
+
+        voucherCodes,
+        handleApplyVouchers,
         handleSelectAddress,
         handleRemoveItem,
         handleRetry,
@@ -113,12 +114,16 @@ function CheckoutPage() {
                         <OrderSummary
                             subTotal={data.subTotal}
                             shippingFee={data.shippingFee}
+                            discountAmount={data.discountAmount}
+                            shippingDiscountAmount={data.shippingDiscountAmount}
+                            appliedVouchers={data.appliedVouchers}
                             totalAmount={data.totalAmount}
                             selectedPaymentMethod={selectedPaymentMethod}
                             onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
                             onOpenVoucherModal={() => setIsVoucherModalOpen(true)}
                             onOrderSubmit={handleOrderSubmit}
                             isCheckingOut={isCheckingOut}
+                            onRemoveVoucher={(code) => handleApplyVouchers(voucherCodes.filter(c => c !== code))}
                         />
                     </div>
                 </div>
@@ -132,8 +137,12 @@ function CheckoutPage() {
             <VoucherModal
                 isOpen={isVoucherModalOpen}
                 onClose={() => setIsVoucherModalOpen(false)}
-                selectedVoucher={selectedVoucher}
-                onSelectVoucher={setSelectedVoucher}
+                subTotal={data.subTotal}
+                selectedVouchers={voucherCodes}
+                onApplyVouchers={(codes) => {
+                    handleApplyVouchers(codes);
+                    setIsVoucherModalOpen(false);
+                }}
             />
 
             {/* Modal: Payment method */}

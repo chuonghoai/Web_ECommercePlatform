@@ -20,9 +20,9 @@ export interface CheckoutRequestDto {
 
     addressId: number;
 
-    voucherIds?: string[];
-
     paymentMethod: EPaymentMethod;
+
+    voucherCodes?: string[];
 }
 
 /**

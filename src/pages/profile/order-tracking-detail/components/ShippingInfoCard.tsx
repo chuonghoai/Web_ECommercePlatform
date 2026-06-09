@@ -59,12 +59,44 @@ export const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({ order, onCan
                         <span>Phí vận chuyển</span>
                         <span>{order.shippingFee.toLocaleString("vi-VN")}đ</span>
                     </div>
-                    {order.discountAmount && order.discountAmount > 0 ? (
-                        <div className="flex justify-between text-market-success">
-                            <span>Giảm giá</span>
-                            <span>-{order.discountAmount.toLocaleString("vi-VN")}đ</span>
+                    {order.vouchers && order.vouchers.length > 0 ? (
+                        <div className="flex flex-col gap-2 pt-2 pb-2 border-y border-stone-100 my-1">
+                            <span className="font-semibold text-stone-700 mb-1">Voucher đã áp dụng:</span>
+                            {order.vouchers.map((v, i) => {
+                                const isFreeship = String(v.voucherSnapshot?.voucher_type || '').includes('FREESHIP');
+                                const typeText = isFreeship ? 'Giảm phí vận chuyển' : 'Giảm giá sản phẩm';
+                                return (
+                                    <div key={i} className="flex flex-col bg-market-primary/5 rounded-lg p-2.5">
+                                        <div className="flex justify-between items-center text-market-success text-sm">
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="material-symbols-outlined text-sm">local_activity</span>
+                                                <span className="font-semibold uppercase">{v.voucherCode}</span>
+                                            </div>
+                                            <span className="font-semibold">-{v.discountAmount.toLocaleString("vi-VN")}đ</span>
+                                        </div>
+                                        <div className="text-xs text-stone-500 pl-5 mt-0.5">
+                                            {v.voucherSnapshot?.title || typeText}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    ) : null}
+                    ) : (
+                        <>
+                            {order.discountAmount && order.discountAmount > 0 ? (
+                                <div className="flex justify-between text-market-success">
+                                    <span>Giảm giá</span>
+                                    <span>-{order.discountAmount.toLocaleString("vi-VN")}đ</span>
+                                </div>
+                            ) : null}
+                            {order.shippingDiscountAmount && order.shippingDiscountAmount > 0 ? (
+                                <div className="flex justify-between text-market-success">
+                                    <span>Giảm phí vận chuyển</span>
+                                    <span>-{order.shippingDiscountAmount.toLocaleString("vi-VN")}đ</span>
+                                </div>
+                            ) : null}
+                        </>
+                    )}
                     <div className="flex justify-between items-center mt-3 pt-3 border-t border-stone-100">
                         <span className="font-semibold text-stone-800">Tổng cộng</span>
                         <span className="font-bold text-market-primary text-xl">
