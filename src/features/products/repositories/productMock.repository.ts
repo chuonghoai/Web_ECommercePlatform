@@ -83,9 +83,15 @@ export class ProductMockRepository implements ProductRepository {
     async getAllProducts(
         page: number,
         pageSize: number,
-        filters?: FilterState
+        filters?: FilterState,
+        search?: string
     ): Promise<ApiResponse<ProductItem[]>> {
         let filteredItems = [...this.mockProducts];
+
+        if (search) {
+            const lowerSearch = search.toLowerCase();
+            filteredItems = filteredItems.filter(p => p.name.toLowerCase().includes(lowerSearch));
+        }
 
         if (filters) {
             if (filters.categories && filters.categories.length > 0) {

@@ -17,9 +17,10 @@ export class ProductService {
     async getAllProducts(
         page: number = 1,
         pageSize: number = 50,
-        filters?: FilterState
+        filters?: FilterState,
+        search?: string
     ): Promise<ApiResponse<ProductItem[]>> {
-        return this.productRepository.getAllProducts(page, pageSize, filters);
+        return this.productRepository.getAllProducts(page, pageSize, filters, search);
     }
 
     async getProductById(id: string): Promise<ApiResponse<ProductDetail>> {

@@ -65,6 +65,9 @@ export const useFilterController = () => {
     const handleApply = () => {
         const params = new URLSearchParams();
 
+        const currentSearch = searchParams.get("search");
+        if (currentSearch) params.set("search", currentSearch);
+
         params.set("page", "1");
         params.set("sortBy", localFilters.sortBy);
         if (localFilters.minPrice) params.set("minPrice", localFilters.minPrice);
@@ -75,7 +78,12 @@ export const useFilterController = () => {
     };
 
     const handleReset = () => {
-        setSearchParams({ page: "1", sortBy: EFilterState.NEWEST });
+        const currentSearch = searchParams.get("search");
+        if (currentSearch) {
+            setSearchParams({ page: "1", sortBy: EFilterState.NEWEST, search: currentSearch });
+        } else {
+            setSearchParams({ page: "1", sortBy: EFilterState.NEWEST });
+        }
     };
 
     return {

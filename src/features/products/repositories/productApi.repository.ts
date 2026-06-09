@@ -16,13 +16,15 @@ export class ProductApiRepository implements ProductRepository {
     getAllProducts(
         page: number,
         pageSize: number,
-        filters?: FilterState
+        filters?: FilterState,
+        search?: string
     ): Promise<ApiResponse<ProductItem[]>> {
         return apiClient.get<ApiResponse<ProductItem[]>>("/products", {
             params: {
                 page,
                 pageSize,
-                filters
+                filters,
+                search
             }
         });
     }

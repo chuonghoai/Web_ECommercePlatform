@@ -2,10 +2,15 @@ import { useSearchParams } from "react-router-dom";
 import { EFilterState } from "../filter/filter.type";
 
 export const EmptyProductState = () => {
-    const [, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const handleResetFilters = () => {
-        setSearchParams({ page: "1", sortBy: EFilterState.NEWEST });
+        const currentSearch = searchParams.get("search");
+        if (currentSearch) {
+            setSearchParams({ page: "1", sortBy: EFilterState.NEWEST, search: currentSearch });
+        } else {
+            setSearchParams({ page: "1", sortBy: EFilterState.NEWEST });
+        }
     };
 
     return (
