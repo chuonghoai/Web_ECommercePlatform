@@ -1,8 +1,14 @@
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useProductController } from "./product.controller";
 import { ProductReviews } from "./components/reviews/productReviews";
 
 function ProductPage() {
+    const [reviewRating, setReviewRating] = useState<{ avg: number; total: number } | null>(null);
+
+    const handleReviewsLoaded = useCallback((averageRating: number, totalReview: number) => {
+        setReviewRating({ avg: averageRating, total: totalReview });
+    }, []);
     const {
         product,
         isLoading,
@@ -161,23 +167,27 @@ function ProductPage() {
                             {product.name}
                         </h1>
 
-                        {/* Rating */}
-                        {product.rating !== undefined && (
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="flex items-center gap-0.5">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <svg
-                                            key={star}
-                                            className={`w-4 h-4 ${star <= Math.round(product.rating!) ? 'text-[#D97706] fill-current' : 'text-[#E7E5E4] fill-current'}`}
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                        </svg>
-                                    ))}
+                        {/* Rating — lấy từ review thực tế, fallback về product.rating */}
+                        {(() => {
+                            const displayRating = reviewRating?.avg ?? product.rating;
+                            if (displayRating === undefined) return null;
+                            return (
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="flex items-center gap-0.5">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <svg
+                                                key={star}
+                                                className={`w-4 h-4 ${star <= Math.round(displayRating) ? 'text-[#D97706] fill-current' : 'text-[#E7E5E4] fill-current'}`}
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                            </svg>
+                                        ))}
+                                    </div>
+                                    <span className="text-[13px] text-[#59413a]">{displayRating.toFixed(1)}</span>
                                 </div>
-                                <span className="text-[13px] text-[#59413a]">{product.rating.toFixed(1)}</span>
-                            </div>
-                        )}
+                            );
+                        })()}
 
                         {/* Price */}
                         <div className="flex items-baseline gap-4 mb-6">
@@ -403,7 +413,7 @@ function ProductPage() {
                 </section>
 
                 {/* ── Reviews ── */}
-                <ProductReviews productId={product.id} />
+                <ProductReviews productId={product.id} onReviewsLoaded={handleReviewsLoaded} />
 
             </div>
         </div>

@@ -4,6 +4,8 @@ import { productService } from '../../features/products/services/product.service
 import type { Product, ProductFormData, CreateProductRequest } from '../../features/products/models/product.model';
 import { mediaService } from '../../../features/media/services/media.service';
 import { categoryService } from '../../../features/category/services/category.service';
+import { reviewService } from '../../../features/review/services/review.service';
+import type { Review } from '../../../features/review/models/review.model';
 
 export const useProductController = () => {
     const store = useProductStore();
@@ -60,6 +62,20 @@ export const useProductController = () => {
             return null;
         } catch (error) {
             console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
+            return null;
+        }
+    }, []);
+
+    // === Fetch reviews của sản phẩm ===
+    const fetchProductReviews = useCallback(async (id: string): Promise<Review | null> => {
+        try {
+            const response = await reviewService.getReviewsByProductId(id);
+            if (response.success && response.data) {
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách đánh giá:', error);
             return null;
         }
     }, []);
@@ -152,6 +168,7 @@ export const useProductController = () => {
         ...store,
         fetchProducts,
         fetchProductById,
+        fetchProductReviews,
         fetchCategories,
         handlePageChange,
         handleDeleteProduct,
