@@ -5,6 +5,7 @@ import type { Product } from '../../features/products/models/product.model';
 import { useProductController } from './products.controller';
 import { ProductStatusBadge } from './components/ProductStatusBadge';
 import { ProductSpecsInfo } from './components/ProductSpecsInfo';
+import { reviewService } from '../../../features/review/services/review.service';
 
 const formatVND = (v: number) => Number(v || 0).toLocaleString('vi-VN');
 
@@ -16,6 +17,7 @@ export const ProductDetailPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [currentImage, setCurrentImage] = useState<string>('');
+    const [reviewRating, setReviewRating] = useState<number | null>(null);
 
     useEffect(() => {
         setHeaderOptions({
@@ -35,6 +37,13 @@ export const ProductDetailPage = () => {
                 setCurrentImage(p?.imageUrl || '');
                 setLoading(false); 
             });
+
+            // Fetch review rating thực tế
+            reviewService.getReviewsByProductId(id).then(res => {
+                if (res.success && res.data) {
+                    setReviewRating(res.data.averageRating);
+                }
+            });
         }
     }, [id, fetchProductById]);
 
@@ -43,6 +52,7 @@ export const ProductDetailPage = () => {
 
     const isSale = (product.originalPrice ?? 0) > product.price;
     const showBadge = isSale && product.discountPercentage > 0;
+    const displayRating = reviewRating ?? product.rating;
 
     return (
         <div className="max-w-7xl mx-auto w-full pb-8 space-y-6">
@@ -106,7 +116,10 @@ export const ProductDetailPage = () => {
 
                         <div className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-[16px] text-[#eab308]">star</span>
-                            <span className="text-sm">{product.rating?.toFixed(1) || '0.0'}</span>
+                            <span className="text-sm">{displayRating?.toFixed(1) || '0.0'}</span>
+                            {reviewRating !== null && (
+                                <span className="text-xs text-text-muted">(từ đánh giá thực tế)</span>
+                            )}
                         </div>
 
                         {product.description && (

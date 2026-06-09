@@ -1,11 +1,19 @@
+import { useEffect } from "react";
 import { useReviewController } from "./review.controller";
 
 interface ProductReviewsProps {
     productId: string;
+    onReviewsLoaded?: (averageRating: number, totalReview: number) => void;
 }
 
-export const ProductReviews = ({ productId }: ProductReviewsProps) => {
+export const ProductReviews = ({ productId, onReviewsLoaded }: ProductReviewsProps) => {
     const { reviewData, isLoading } = useReviewController(productId);
+
+    useEffect(() => {
+        if (reviewData && onReviewsLoaded) {
+            onReviewsLoaded(reviewData.averageRating, reviewData.totalReview);
+        }
+    }, [reviewData, onReviewsLoaded]);
 
     // Loading skeleton
     if (isLoading) {
