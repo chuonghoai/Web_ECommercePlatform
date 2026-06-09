@@ -5,7 +5,8 @@ import type { Product } from '../../features/products/models/product.model';
 import { useProductController } from './products.controller';
 import { ProductStatusBadge } from './components/ProductStatusBadge';
 import { ProductSpecsInfo } from './components/ProductSpecsInfo';
-import { reviewService } from '../../../features/review/services/review.service';
+import { ProductReviewList } from './components/ProductReviewList';
+import type { Review } from '../../../features/review/models/review.model';
 
 const formatVND = (v: number) => Number(v || 0).toLocaleString('vi-VN');
 
@@ -13,11 +14,13 @@ export const ProductDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const { setHeaderOptions } = useOutletContext<{ setHeaderOptions: (o: HeaderOptions) => void }>();
     const navigate = useNavigate();
-    const { fetchProductById } = useProductController();
+    const { fetchProductById, fetchProductReviews } = useProductController();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [currentImage, setCurrentImage] = useState<string>('');
-    const [reviewRating, setReviewRating] = useState<number | null>(null);
+    const [productReviews, setProductReviews] = useState<Review | null>(null);
+    const [reviewsLoading, setReviewsLoading] = useState(false);
+    const [reviewsError, setReviewsError] = useState<string | null>(null);
 
     useEffect(() => {
         setHeaderOptions({
@@ -38,21 +41,29 @@ export const ProductDetailPage = () => {
                 setLoading(false); 
             });
 
-            // Fetch review rating thực tế
-            reviewService.getReviewsByProductId(id).then(res => {
-                if (res.success && res.data) {
-                    setReviewRating(res.data.averageRating);
+            // Fetch reviews thực tế
+            setReviewsLoading(true);
+            setReviewsError(null);
+            fetchProductReviews(id).then(res => {
+                if (res) {
+                    setProductReviews(res);
+                } else {
+                    setReviewsError('Không thể tải danh sách đánh giá');
                 }
+            }).catch(() => {
+                setReviewsError('Đã xảy ra lỗi khi tải đánh giá');
+            }).finally(() => {
+                setReviewsLoading(false);
             });
         }
-    }, [id, fetchProductById]);
+    }, [id, fetchProductById, fetchProductReviews]);
 
     if (loading) return <div className="max-w-7xl mx-auto py-16 text-center text-text-muted">Đang tải...</div>;
     if (!product) return <div className="max-w-7xl mx-auto py-16 text-center text-error">Không tìm thấy sản phẩm.</div>;
 
     const isSale = (product.originalPrice ?? 0) > product.price;
     const showBadge = isSale && product.discountPercentage > 0;
-    const displayRating = reviewRating ?? product.rating;
+    const displayRating = productReviews?.averageRating ?? product.rating;
 
     return (
         <div className="max-w-7xl mx-auto w-full pb-8 space-y-6">
@@ -117,8 +128,8 @@ export const ProductDetailPage = () => {
                         <div className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-[16px] text-[#eab308]">star</span>
                             <span className="text-sm">{displayRating?.toFixed(1) || '0.0'}</span>
-                            {reviewRating !== null && (
-                                <span className="text-xs text-text-muted">(từ đánh giá thực tế)</span>
+                            {productReviews !== null && (
+                                <span className="text-xs text-text-muted">(từ {productReviews.totalReview} đánh giá)</span>
                             )}
                         </div>
 
@@ -140,6 +151,13 @@ export const ProductDetailPage = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Danh sách đánh giá */}
+            <ProductReviewList
+                reviews={productReviews?.reviews || []}
+                loading={reviewsLoading}
+                error={reviewsError}
+            />
         </div>
     );
 };
