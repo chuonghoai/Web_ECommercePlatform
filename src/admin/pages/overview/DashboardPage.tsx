@@ -49,12 +49,6 @@ const KPI_CONFIG: {
         icon: 'monitoring',
         format: (v) => `${v.toFixed(1)}%`,
     },
-    {
-        key: 'returningUserRate',
-        label: 'Quay lại mua hàng',
-        icon: 'group',
-        format: (v) => `${v.toFixed(1)}%`,
-    },
 ];
 
 const BarChart = ({ data }: { data: { label: string; revenue: number }[] }) => {

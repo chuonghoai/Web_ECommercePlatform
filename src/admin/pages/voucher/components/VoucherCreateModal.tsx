@@ -43,6 +43,7 @@ export const VoucherCreateModal = ({ isOpen, saving, onClose, onSubmit }: Vouche
         if (!form.start_date) newErrors.start_date = 'Vui lòng chọn ngày bắt đầu';
         if (!form.end_date) newErrors.end_date = 'Vui lòng chọn ngày kết thúc';
         if (form.start_date && form.end_date && form.start_date >= form.end_date) newErrors.end_date = 'Ngày kết thúc phải sau ngày bắt đầu';
+        if (form.end_date && new Date(form.end_date) < new Date()) newErrors.end_date = 'Ngày kết thúc phải ở tương lai';
         if (form.total_limit <= 0) newErrors.total_limit = 'Tổng lượt phải lớn hơn 0';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;

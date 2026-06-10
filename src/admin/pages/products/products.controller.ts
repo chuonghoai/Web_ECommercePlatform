@@ -6,9 +6,11 @@ import { mediaService } from '../../../features/media/services/media.service';
 import { categoryService } from '../../../features/category/services/category.service';
 import { reviewService } from '../../../features/review/services/review.service';
 import type { Review } from '../../../features/review/models/review.model';
+import { useToast } from '../../../components/toast/toast';
 
 export const useProductController = () => {
     const store = useProductStore();
+    const { toast } = useToast();
 
     // === Fetch danh mục (categories) ===
     const fetchCategories = useCallback(async () => {
@@ -149,10 +151,12 @@ export const useProductController = () => {
                 careInstructions: formData.careInstructions,
             };
 
-            // 4. Gọi API tạo/cập nhật
             const success = await productService.saveProduct(productData, editingProductId);
             if (!success) {
-                alert('Không thể lưu sản phẩm. Vui lòng thử lại!');
+                toast('Không thể lưu sản phẩm. Vui lòng thử lại!', 'error');
+            } else {
+                toast('Lưu sản phẩm thành công!', 'success');
+                handlePageChange(1);
             }
             return success;
         } catch (error) {

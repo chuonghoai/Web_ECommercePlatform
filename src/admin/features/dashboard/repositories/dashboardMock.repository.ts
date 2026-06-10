@@ -14,19 +14,16 @@ const KPI_BY_PERIOD: Record<DashboardPeriod, KpiStats> = {
         totalRevenue: { value: 124500000, changePercent: 12.5, trend: 'up' },
         totalOrders: { value: 1248, changePercent: 8.2, trend: 'up' },
         conversionRate: { value: 3.4, changePercent: -1.1, trend: 'down' },
-        returningUserRate: { value: 42.0, changePercent: 5.4, trend: 'up' },
     },
     '7d': {
         totalRevenue: { value: 28600000, changePercent: 5.3, trend: 'up' },
         totalOrders: { value: 287, changePercent: 3.1, trend: 'up' },
         conversionRate: { value: 3.2, changePercent: -0.4, trend: 'down' },
-        returningUserRate: { value: 40.1, changePercent: 1.8, trend: 'up' },
     },
     '1y': {
         totalRevenue: { value: 1542000000, changePercent: 22.3, trend: 'up' },
         totalOrders: { value: 15230, changePercent: 18.0, trend: 'up' },
         conversionRate: { value: 3.9, changePercent: 0.8, trend: 'up' },
-        returningUserRate: { value: 44.2, changePercent: 7.6, trend: 'up' },
     },
 };
 

@@ -72,6 +72,9 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
             if (form.end_date && new Date(form.end_date) <= new Date(voucher.start_date)) {
                 newErrors.end_date = 'Ngày kết thúc phải sau ngày bắt đầu';
             }
+            if (form.end_date && new Date(form.end_date) < new Date()) {
+                newErrors.end_date = 'Ngày kết thúc phải ở tương lai';
+            }
         }
 
         if (isGroup2) {
@@ -81,6 +84,9 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
             if (!form.start_date) newErrors.start_date = 'Vui lòng chọn ngày bắt đầu';
             if (form.start_date && form.end_date && new Date(form.start_date) >= new Date(form.end_date)) {
                 newErrors.start_date = 'Ngày bắt đầu phải trước ngày kết thúc';
+            }
+            if (form.end_date && new Date(form.end_date) < new Date()) {
+                newErrors.end_date = 'Ngày kết thúc phải ở tương lai';
             }
             if (!form.limit_per_user || form.limit_per_user <= 0) {
                 newErrors.limit_per_user = 'Giới hạn/user phải lớn hơn 0';
@@ -99,14 +105,14 @@ export const VoucherEditModal = ({ isOpen, saving, voucher, onClose, onSubmit }:
 
         if (isGroup1) {
             payload.title = form.title;
-            payload.total_limit = form.total_limit;
+            payload.total_limit = Number(form.total_limit);
             payload.end_date = form.end_date ? new Date(form.end_date).toISOString() : undefined;
         }
         if (isGroup2) {
-            payload.discount_value = form.discount_value;
-            payload.max_discount_amount = form.max_discount_amount;
+            payload.discount_value = Number(form.discount_value);
+            payload.max_discount_amount = form.max_discount_amount ? Number(form.max_discount_amount) : null;
             payload.start_date = form.start_date ? new Date(form.start_date).toISOString() : undefined;
-            payload.limit_per_user = form.limit_per_user;
+            payload.limit_per_user = Number(form.limit_per_user);
         }
 
         if (form.status !== voucher.status) {
