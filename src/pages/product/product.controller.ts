@@ -2,9 +2,10 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "../../components/toast/toast";
 import { useProductStore } from "./product.store";
+import { generateSlug } from "../../utils/slug";
 
 export const useProductController = () => {
-    const { id } = useParams<{ id: string }>();
+    const { slug, id } = useParams<{ slug?: string, id: string }>();
     const navigate = useNavigate();
     const { toast } = useToast();
     const store = useProductStore();
@@ -37,6 +38,16 @@ export const useProductController = () => {
 
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [id]);
+
+    // Validate slug for SEO
+    useEffect(() => {
+        if (store.product && store.product.id === id) {
+            const expectedSlug = generateSlug(store.product.name);
+            if (slug !== expectedSlug) {
+                navigate(`/product/${expectedSlug}/${id}`, { replace: true });
+            }
+        }
+    }, [store.product, slug, id, navigate]);
 
     // Control thumbnail slider (list product's images)
     const scrollThumbnails = (direction: "left" | "right") => {

@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useProductController } from "./product.controller";
 import { ProductReviews } from "./components/reviews/productReviews";
 
@@ -49,10 +50,47 @@ function ProductPage() {
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
     const isOutOfStock = product.stock === 0;
 
-    return (
-        <div className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] text-[#1e1b17] selection:bg-[#ffdbd0] selection:text-[#390c00]">
+    const structuredData = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.name,
+        "image": allImages,
+        "description": product.description.split('\n')[0],
+        "sku": product.id,
+        "offers": {
+            "@type": "Offer",
+            "url": window.location.href,
+            "priceCurrency": "VND",
+            "price": product.price,
+            "availability": isOutOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        },
+        ...(reviewRating && reviewRating.total > 0 && {
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": reviewRating.avg,
+                "reviewCount": reviewRating.total
+            }
+        })
+    };
 
-            <div className="max-w-screen-2xl mx-auto px-6 py-6 md:py-8">
+    return (
+        <main className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] text-[#1e1b17] selection:bg-[#ffdbd0] selection:text-[#390c00]">
+            <Helmet>
+                <title>{product.name} | E-Commerce Platform</title>
+                <meta name="description" content={product.description.split('\n')[0]} />
+                <link rel="canonical" href={window.location.href} />
+                <meta property="og:title" content={product.name} />
+                <meta property="og:description" content={product.description.split('\n')[0]} />
+                <meta property="og:image" content={product.imageUrl} />
+                <meta property="og:type" content="product" />
+                <meta property="og:url" content={window.location.href} />
+                <script type="application/ld+json">
+                    {JSON.stringify(structuredData)}
+                </script>
+            </Helmet>
+
+            <article className="max-w-screen-2xl mx-auto px-6 py-6 md:py-8">
 
                 {/* ── Breadcrumbs ── */}
                 <nav aria-label="Breadcrumb" className="mb-6">
@@ -84,6 +122,9 @@ function ProductPage() {
                             <img
                                 src={allImages[activeImgIndex]}
                                 alt={product.name}
+                                loading="eager"
+                                width="800"
+                                height="1000"
                                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                             />
                             {/* Discount badge */}
@@ -128,7 +169,7 @@ function ProductPage() {
                                                     : 'border-transparent opacity-50 hover:opacity-100 cursor-pointer'
                                                 }`}
                                         >
-                                            <img src={img} className="w-full h-full object-cover" alt={`thumbnail ${idx + 1}`} />
+                                            <img src={img} loading="lazy" width="72" height="72" className="w-full h-full object-cover" alt={`${product.name} - ảnh ${idx + 1}`} />
                                         </button>
                                     ))}
                                 </div>
@@ -378,10 +419,10 @@ function ProductPage() {
                         </div>
 
                         {/* Specifications */}
-                        <div className="lg:col-span-4">
-                            <h3 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-6">
+                        <aside className="lg:col-span-4">
+                            <h2 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-6">
                                 Đặc tả kỹ thuật
-                            </h3>
+                            </h2>
                             <div className="border border-[#E7E5E4] bg-white p-6 space-y-0">
                                 {product.materials && product.materials.length > 0 && (
                                     <div className="flex flex-col gap-1 pb-4 border-b border-[#E7E5E4]">
@@ -408,15 +449,15 @@ function ProductPage() {
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </aside>
                     </div>
                 </section>
 
                 {/* ── Reviews ── */}
                 <ProductReviews productId={product.id} onReviewsLoaded={handleReviewsLoaded} />
 
-            </div>
-        </div>
+            </article>
+        </main>
     );
 }
 

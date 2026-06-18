@@ -46,6 +46,7 @@ function AppRoutes() {
                 }>
                     <Route index element={<MarketplacePage />} />
                     <Route path="product/:id" element={<ProductPage />} />
+                    <Route path="product/:slug/:id" element={<ProductPage />} />
 
                     {/* CART */}
                     <Route path="cart" element={

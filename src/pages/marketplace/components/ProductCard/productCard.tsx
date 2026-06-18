@@ -3,6 +3,7 @@ import type { ProductItem } from "../../../../features/products/models/product.m
 import { useCart } from "../../../../features/cart/contexts/CartContext";
 import { useToast } from "../../../../components/toast/toast";
 import { userStorageService } from "../../../../features/user/services/userStorage.service";
+import { generateSlug } from "../../../../utils/slug";
 
 interface ProductCardProps {
     product: ProductItem;
@@ -40,7 +41,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
     return (
         <Link
-            to={`/product/${product.id}`}
+            to={`/product/${generateSlug(product.name)}/${product.id}`}
             className="group bg-white border border-[#E7E5E4] rounded-[8px] overflow-hidden transition-all duration-200 hover:border-[#D6D3D1] flex flex-col h-full">
             <div className="aspect-square w-full overflow-hidden bg-[#F5F5F4] relative">
                 <img
