@@ -1,14 +1,28 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "../../components/toast/toast";
 import { useProductStore } from "./product.store";
-import { generateSlug } from "../../utils/slug";
+import { buildProductUrl, extractProductIdFromSlug } from "../../utils/slug";
 
 export const useProductController = () => {
-    const { slug, id } = useParams<{ slug?: string, id: string }>();
+    // Supports 3 route patterns:
+    // 1. /:productSlug  (new, e.g. /ao-thun-nam-basic-p789)
+    // 2. /product/:id   (legacy)
+    // 3. /product/:slug/:id (legacy)
+    const { productSlug, slug, id } = useParams<{ productSlug?: string; slug?: string; id?: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { toast } = useToast();
     const store = useProductStore();
+
+    // Parse product ID from any of the 3 URL formats
+    const parsedId = useMemo(() => {
+        // Legacy routes: /product/:id or /product/:slug/:id
+        if (id) return id;
+        // New route: /:productSlug (e.g. ao-thun-nam-basic-p789)
+        if (productSlug) return extractProductIdFromSlug(productSlug);
+        return null;
+    }, [id, productSlug]);
 
     // UI States
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -20,14 +34,14 @@ export const useProductController = () => {
 
     // Init pages - load product detail
     useEffect(() => {
-        if (!id) {
+        if (!parsedId) {
             toast("Không tìm thấy mã sản phẩm", "error");
             navigate("/");
             return;
         }
 
         setIsLoading(true);
-        store.loadProduct(id)
+        store.loadProduct(parsedId)
             .catch(() => {
                 toast("Đã xảy ra lỗi khi tải sản phẩm", "error");
                 navigate("/");
@@ -37,17 +51,17 @@ export const useProductController = () => {
             });
 
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [id]);
+    }, [parsedId]);
 
-    // Validate slug for SEO
+    // Validate slug & backward compatibility redirect
     useEffect(() => {
-        if (store.product && store.product.id === id) {
-            const expectedSlug = generateSlug(store.product.name);
-            if (slug !== expectedSlug) {
-                navigate(`/product/${expectedSlug}/${id}`, { replace: true });
+        if (store.product && store.product.id === parsedId) {
+            const expectedUrl = buildProductUrl(store.product);
+            if (location.pathname !== expectedUrl) {
+                navigate(expectedUrl, { replace: true });
             }
         }
-    }, [store.product, slug, id, navigate]);
+    }, [store.product, parsedId, location.pathname, navigate]);
 
     // Control thumbnail slider (list product's images)
     const scrollThumbnails = (direction: "left" | "right") => {

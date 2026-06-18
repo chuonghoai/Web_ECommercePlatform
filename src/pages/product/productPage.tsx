@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useProductController } from "./product.controller";
 import { ProductReviews } from "./components/reviews/productReviews";
+import { buildProductUrl } from "../../utils/slug";
 
 function ProductPage() {
     const [reviewRating, setReviewRating] = useState<{ avg: number; total: number } | null>(null);
@@ -30,6 +31,9 @@ function ProductPage() {
     if (isLoading) {
         return (
             <div className="animate-pulse max-w-screen-2xl mx-auto px-6 py-8">
+                <Helmet>
+                    <title>Đang tải sản phẩm...</title>
+                </Helmet>
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-24">
                     <div className="w-full md:w-[55%] aspect-4/5 md:h-175 bg-[#F5F5F4]" />
                     <div className="w-full md:w-[45%] space-y-6 pt-4">
@@ -49,6 +53,7 @@ function ProductPage() {
     const allImages = [product.imageUrl, ...(product.images || [])];
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
     const isOutOfStock = product.stock === 0;
+    const canonicalUrl = `${window.location.origin}${buildProductUrl(product)}`;
 
     const structuredData = {
         "@context": "https://schema.org/",
@@ -59,7 +64,7 @@ function ProductPage() {
         "sku": product.id,
         "offers": {
             "@type": "Offer",
-            "url": window.location.href,
+            "url": canonicalUrl,
             "priceCurrency": "VND",
             "price": product.price,
             "availability": isOutOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
@@ -77,14 +82,14 @@ function ProductPage() {
     return (
         <main className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] text-[#1e1b17] selection:bg-[#ffdbd0] selection:text-[#390c00]">
             <Helmet>
-                <title>{product.name} | E-Commerce Platform</title>
+                <title>{product.name}</title>
                 <meta name="description" content={product.description.split('\n')[0]} />
-                <link rel="canonical" href={window.location.href} />
+                <link rel="canonical" href={canonicalUrl} />
                 <meta property="og:title" content={product.name} />
                 <meta property="og:description" content={product.description.split('\n')[0]} />
                 <meta property="og:image" content={product.imageUrl} />
                 <meta property="og:type" content="product" />
-                <meta property="og:url" content={window.location.href} />
+                <meta property="og:url" content={canonicalUrl} />
                 <script type="application/ld+json">
                     {JSON.stringify(structuredData)}
                 </script>
