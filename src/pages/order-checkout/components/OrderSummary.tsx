@@ -93,7 +93,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     <div className="flex justify-between items-end pt-1">
                         <span className="text-[16px] font-semibold text-[#1C1917]">Tổng cộng</span>
                         <div className="text-right">
-                            <span className="font-['Lora',serif] text-[28px] text-market-primary font-bold leading-none">{totalAmount.toLocaleString('vi-VN')} ₫</span>
+                            <span className="font-['Lora',serif] text-[24px] sm:text-[28px] text-market-primary font-bold leading-none">{totalAmount.toLocaleString('vi-VN')} ₫</span>
                             <p className="text-[13px] text-[#A8A29E] mt-1 font-medium italic">(Đã bao gồm VAT)</p>
                         </div>
                     </div>

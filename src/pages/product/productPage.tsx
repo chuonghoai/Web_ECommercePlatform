@@ -214,7 +214,7 @@ function ProductPage() {
                         </div>
 
                         {/* Product name */}
-                        <h1 className="font-['Lora',serif] text-[40px] md:text-[48px] font-bold leading-[1.15] tracking-[0.01em] text-[#1e1b17] mb-4">
+                        <h1 className="font-['Lora',serif] text-[28px] md:text-[40px] font-bold leading-[1.2] md:leading-[1.15] tracking-[0.01em] text-[#1C1917] mb-4">
                             {product.name}
                         </h1>
 
@@ -241,12 +241,12 @@ function ProductPage() {
                         })()}
 
                         {/* Price */}
-                        <div className="flex items-baseline gap-4 mb-6">
-                            <span className="font-['Lora',serif] text-[32px] font-semibold text-[#1e1b17] tracking-tight">
+                        <div className="flex items-baseline gap-3 mb-6">
+                            <span className="font-['Lora',serif] text-[26px] md:text-[32px] font-semibold text-[#1C1917] tracking-tight">
                                 {Number(product.price).toLocaleString('vi-VN')} ₫
                             </span>
                             {isSale && (
-                                <span className="text-[18px] text-[#A8A29E] line-through font-light">
+                                <span className="text-[16px] md:text-[18px] text-[#A8A29E] line-through font-light">
                                     {Number(product.originalPrice).toLocaleString('vi-VN')} ₫
                                 </span>
                             )}
@@ -372,8 +372,8 @@ function ProductPage() {
                         )}
 
                         {/* ── Meet the Maker ── */}
-                        <div className="border-t border-[#E7E5E4] mt-10 pt-8">
-                            <h2 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-5">
+                        <div className="border-t border-[#E7E5E4] mt-8 md:mt-10 pt-6 md:pt-8">
+                            <h2 className="font-['Lora',serif] text-[20px] md:text-[22px] font-semibold text-[#1C1917] mb-4 md:mb-5">
                                 Gặp gỡ nghệ nhân
                             </h2>
                             <div className="flex items-start gap-4 group cursor-pointer">
@@ -417,7 +417,7 @@ function ProductPage() {
 
                         {/* Description / Story */}
                         <div className="lg:col-span-8">
-                            <h2 className="font-['Lora',serif] text-[32px] font-semibold text-[#1e1b17] mb-8">
+                            <h2 className="font-['Lora',serif] text-[24px] md:text-[32px] font-semibold text-[#1C1917] mb-6 md:mb-8">
                                 Câu chuyện tác phẩm
                             </h2>
                             <div className="prose prose-stone max-w-none text-[17px] leading-[1.8] text-[#57534E]">
@@ -429,8 +429,8 @@ function ProductPage() {
                         </div>
 
                         {/* Specifications */}
-                        <aside className="lg:col-span-4">
-                            <h2 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-6">
+                        <aside className="lg:col-span-4 mt-8 lg:mt-0">
+                            <h2 className="font-['Lora',serif] text-[20px] md:text-[22px] font-semibold text-[#1C1917] mb-5 md:mb-6">
                                 Đặc tả kỹ thuật
                             </h2>
                             <div className="border border-[#E7E5E4] bg-white p-6 space-y-0">

@@ -23,17 +23,16 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                     return (
                         <div
                             key={item.product.id}
-                            className={`flex flex-col sm:flex-row gap-5 pb-6 ${idx !== items.length - 1 ? 'border-b border-[#E7E5E4]' : ''}`}
+                            className={`flex flex-row gap-4 sm:gap-5 pb-6 ${idx !== items.length - 1 ? 'border-b border-[#E7E5E4]' : ''}`}
                         >
                             {/* Product image */}
-                            <div className={`w-full sm:w-[120px] aspect-[4/5] shrink-0 bg-[#F5F5F4] rounded-lg overflow-hidden border border-[#E7E5E4] transition-opacity ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
+                            <div className={`w-[80px] sm:w-[120px] aspect-[4/5] shrink-0 bg-[#F5F5F4] rounded-[6px] overflow-hidden border border-[#E7E5E4] transition-opacity ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
                                 <img alt={item.product.name} className="w-full h-full object-cover" src={item.product.imageUrl} />
                             </div>
 
-                            {/* Product details */}
-                            <div className="grow flex flex-col justify-between">
+                            <div className="grow flex flex-col justify-between py-1">
                                 <div>
-                                    <h3 className={`font-['Lora',serif] text-[18px] font-semibold ${isInvalid ? 'line-through text-[#A8A29E]' : 'text-[#1C1917]'}`}>
+                                    <h3 className={`font-['Lora',serif] text-[16px] sm:text-[18px] font-semibold leading-snug ${isInvalid ? 'line-through text-[#A8A29E]' : 'text-[#1C1917]'}`}>
                                         {item.product.name}
                                     </h3>
 
@@ -46,19 +45,19 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                     ) : null}
                                 </div>
 
-                                <div className="flex items-center justify-end mt-4 sm:mt-0">
-                                    <div className="text-right">
+                                <div className="flex items-center justify-between sm:justify-end mt-3 sm:mt-0">
+                                    <div className="text-left sm:text-right">
                                         {isInvalid ? (
-                                            <p className="text-[14px] font-semibold text-market-error">{invalidInfo.reason}</p>
+                                            <p className="text-[13px] sm:text-[14px] font-semibold text-market-error">{invalidInfo.reason}</p>
                                         ) : (
                                             <>
                                                 {item.product.originalPrice > item.product.price && (
-                                                    <p className="text-[13px] text-[#A8A29E] line-through">{item.product.originalPrice.toLocaleString('vi-VN')} ₫</p>
+                                                    <p className="text-[12px] sm:text-[13px] text-[#A8A29E] line-through">{item.product.originalPrice.toLocaleString('vi-VN')} ₫</p>
                                                 )}
-                                                <p className="text-[15px] font-semibold text-[#1C1917]">
-                                                    {item.product.price.toLocaleString('vi-VN')} ₫ <span className="text-[#57534E] font-medium">x {item.quantity}</span>
+                                                <p className="text-[14px] sm:text-[15px] font-semibold text-[#1C1917]">
+                                                    {item.product.price.toLocaleString('vi-VN')} ₫ <span className="text-[#57534E] font-medium ml-1">x {item.quantity}</span>
                                                 </p>
-                                                <p className="text-[16px] font-bold text-market-primary mt-1.5">
+                                                <p className="text-[15px] sm:text-[16px] font-bold text-market-primary mt-0.5 sm:mt-1.5">
                                                     {(item.product.price * item.quantity).toLocaleString('vi-VN')} ₫
                                                 </p>
                                             </>

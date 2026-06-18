@@ -17,8 +17,8 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddre
     if (!address) {
         return (
             <section className="w-full">
-                <div className="flex justify-between items-center border-b border-[#E7E5E4] pb-3 mb-6">
-                    <h2 className="font-['Lora',serif] text-[24px] font-semibold text-[#1C1917]">Thông tin giao hàng</h2>
+                <div className="flex justify-between items-center border-b border-[#E7E5E4] pb-3 mb-5 md:mb-6">
+                    <h2 className="font-['Lora',serif] text-[20px] md:text-[24px] font-semibold text-[#1C1917]">Thông tin giao hàng</h2>
                 </div>
                 <div className="bg-white border border-dashed border-[#D6D3D1] rounded-xl p-10 flex flex-col items-center justify-center text-center space-y-4">
                     <div className="w-16 h-16 bg-[#F5F5F4] rounded-full flex items-center justify-center mb-2">
@@ -28,8 +28,8 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddre
                         </svg>
                     </div>
                     <div>
-                        <p className="font-['Lora',serif] text-[#1C1917] font-semibold text-[20px]">Bạn chưa có địa chỉ giao hàng</p>
-                        <p className="text-[14px] text-[#57534E] mt-1.5">Vui lòng thêm địa chỉ để tiếp tục thanh toán đơn hàng</p>
+                        <p className="font-['Lora',serif] text-[#1C1917] font-semibold text-[18px] md:text-[20px]">Bạn chưa có địa chỉ giao hàng</p>
+                        <p className="text-[13px] md:text-[14px] text-[#57534E] mt-1.5">Vui lòng thêm địa chỉ để tiếp tục thanh toán đơn hàng</p>
                     </div>
                     <button
                         type="button"
@@ -48,8 +48,8 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({ address, onOpenAddre
 
     return (
         <section className="w-full">
-            <div className="flex justify-between items-center border-b border-[#E7E5E4] pb-3 mb-6">
-                <h2 className="font-['Lora',serif] text-[24px] font-semibold text-[#1C1917]">Thông tin giao hàng</h2>
+            <div className="flex justify-between items-center border-b border-[#E7E5E4] pb-3 mb-5 md:mb-6">
+                <h2 className="font-['Lora',serif] text-[20px] md:text-[24px] font-semibold text-[#1C1917]">Thông tin giao hàng</h2>
 
                 <button
                     type="button"
