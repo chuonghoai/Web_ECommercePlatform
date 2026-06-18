@@ -12,7 +12,10 @@ import { ShippingForm } from './components/ShippingForm/ShippingForm';
 function CheckoutPage() {
     const location = useLocation();
     const routerNavigate = useNavigate();
-    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[];
+    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[] | undefined;
+    
+    const searchParams = new URLSearchParams(location.search);
+    const tempId = searchParams.get('temp');
 
     const {
         data,
@@ -38,9 +41,9 @@ function CheckoutPage() {
         handleRemoveItem,
         handleRetry,
         handleOrderSubmit
-    } = useCheckoutController(checkoutItems || []);
+    } = useCheckoutController({ initialRequest: checkoutItems, tempId });
 
-    if (!checkoutItems || checkoutItems.length === 0) {
+    if ((!checkoutItems || checkoutItems.length === 0) && !tempId) {
         return <Navigate to="/cart" replace />;
     }
 
