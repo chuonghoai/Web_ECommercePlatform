@@ -76,3 +76,16 @@ export interface PrepareCheckoutModel {
 
     invalidItems: InvalidItem[];    // Các sản phẩm không khả dụng
 }
+
+export interface DraftOrderModel {
+    prepareTempId: string;
+    createdAt: string;
+    updatedAt: string;
+    expiredAt: string;
+    numberOfItems: number;
+    totalQuantity: number;
+    estimatedTotalPrice: number;
+    firstProductThumbnail: string | null;
+    productNamesSummary: string | null;
+    status: string;
+}

@@ -2,7 +2,7 @@ import { apiClient } from "../../../../core/api/apiClient";
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutPayload } from "../dto/prepareCheckout.dto";
-import type { PrepareCheckoutModel } from "../models/checkout.model";
+import type { PrepareCheckoutModel, DraftOrderModel } from "../models/checkout.model";
 import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 import type { CheckoutRepository } from "./checkout.repository";
 
@@ -41,5 +41,13 @@ export class CheckoutApiRepository implements CheckoutRepository {
      */
     async getOrderResult(orderId: string): Promise<ApiResponse<CheckoutResultDto>> {
         return apiClient.get<ApiResponse<CheckoutResultDto>>(`/checkout/orders/${orderId}/payment-status`);
+    }
+
+    /**
+     * GET /orders/temp/prepare
+     * @returns DraftOrderModel[]
+     */
+    async getDraftOrders(): Promise<ApiResponse<DraftOrderModel[]>> {
+        return apiClient.get<ApiResponse<DraftOrderModel[]>>("/orders/temp/prepare");
     }
 }
