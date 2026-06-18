@@ -63,38 +63,40 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
     const paymentInfo = getPaymentMethodInfo(selectedPaymentMethod);
 
     return (
-        <aside className="w-full lg:w-1/3">
-            <div className="lg:sticky lg:top-6 space-y-6">
-                <h2 className="font-headline text-2xl text-text-ink border-b border-subtle pb-2 hidden lg:block">Tóm tắt đơn hàng</h2>
-                <div className="bg-surface-card card-border rounded-lg p-6 space-y-4">
-                    <div className="space-y-2 font-body-sm border-b border-subtle pb-4">
-                        <div className="flex justify-between items-center text-on-surface-variant">
+        <aside className="w-full lg:w-[380px] shrink-0">
+            <div className="lg:sticky lg:top-24 space-y-6">
+                <h2 className="font-['Lora',serif] text-[24px] font-semibold text-[#1C1917] border-b border-[#E7E5E4] pb-3 hidden lg:block">Tóm tắt đơn hàng</h2>
+                <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 shadow-sm space-y-5">
+                    <div className="space-y-3 text-[15px] border-b border-[#E7E5E4] pb-5">
+                        <div className="flex justify-between items-center text-[#57534E]">
                             <span>Tạm tính</span>
-                            <span>{subTotal.toLocaleString('vi-VN')}₫</span>
+                            <span className="font-medium text-[#1C1917]">{subTotal.toLocaleString('vi-VN')} ₫</span>
                         </div>
-                        <div className="flex justify-between items-center text-on-surface-variant">
+                        <div className="flex justify-between items-center text-[#57534E]">
                             <span>Phí vận chuyển</span>
-                            <span>{shippingFee.toLocaleString('vi-VN')}₫</span>
+                            <span className="font-medium text-[#1C1917]">{shippingFee.toLocaleString('vi-VN')} ₫</span>
                         </div>
                         {(discountAmount ?? 0) > 0 && (
-                            <div className="flex justify-between items-center text-red-600">
+                            <div className="flex justify-between items-center text-[#16A34A]">
                                 <span>Giảm giá sản phẩm</span>
-                                <span>-{discountAmount!.toLocaleString('vi-VN')}₫</span>
+                                <span className="font-medium">-{discountAmount!.toLocaleString('vi-VN')} ₫</span>
                             </div>
                         )}
                         {(shippingDiscountAmount ?? 0) > 0 && (
-                            <div className="flex justify-between items-center text-red-600">
+                            <div className="flex justify-between items-center text-[#16A34A]">
                                 <span>Giảm phí vận chuyển</span>
-                                <span>-{shippingDiscountAmount!.toLocaleString('vi-VN')}₫</span>
+                                <span className="font-medium">-{shippingDiscountAmount!.toLocaleString('vi-VN')} ₫</span>
                             </div>
                         )}
                     </div>
 
                     <div className="flex justify-between items-end pt-1">
-                        <span className="font-subhead text-text-ink">Tổng cộng</span>
-                        <span className="font-display text-2xl text-primary-container font-bold">{totalAmount.toLocaleString('vi-VN')}₫</span>
+                        <span className="text-[16px] font-semibold text-[#1C1917]">Tổng cộng</span>
+                        <div className="text-right">
+                            <span className="font-['Lora',serif] text-[24px] sm:text-[28px] text-market-primary font-bold leading-none">{totalAmount.toLocaleString('vi-VN')} ₫</span>
+                            <p className="text-[13px] text-[#A8A29E] mt-1 font-medium italic">(Đã bao gồm VAT)</p>
+                        </div>
                     </div>
-                    <p className="font-caption text-text-muted text-right italic">(Đã bao gồm VAT)</p>
 
                     {/* Voucher button: open modal choosing voucher */}
                     <div className="pt-2">
@@ -129,42 +131,46 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                         )}
                         <button
                             type="button"
-                            className="w-full font-body-sm text-primary border border-border-medium bg-surface hover:bg-surface-container-low transition-colors py-2 rounded-lg flex justify-center items-center gap-1.5"
+                            className="w-full text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary bg-white hover:bg-market-background transition-colors py-2.5 rounded-[4px] flex justify-center items-center gap-2"
                             onClick={onOpenVoucherModal}
                         >
-                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>confirmation_number</span>
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                            </svg>
                             {appliedVouchers && appliedVouchers.length > 0 ? 'Thay đổi voucher' : 'Áp dụng voucher'}
                         </button>
                     </div>
 
                     {/* Payment method button: open modal choosing payment method */}
-                    <div className="bg-surface-container-low p-3 rounded-lg border border-border-medium flex justify-between items-center gap-2">
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <div className="bg-[#FDF6EC] p-4 rounded-[8px] border border-[#FDBA74] flex justify-between items-center gap-3">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
                             {paymentInfo.icon}
-                            <span className="font-body-sm text-text-ink truncate" title={paymentInfo.text}>
+                            <span className="text-[14px] font-medium text-[#1C1917] truncate" title={paymentInfo.text}>
                                 {paymentInfo.text}
                             </span>
                         </div>
                         <button
                             type="button"
-                            className="font-caption text-primary-container hover:underline shrink-0 ml-1 whitespace-nowrap"
+                            className="text-[13px] font-semibold text-market-primary hover:text-[#9A3412] hover:underline shrink-0 ml-1 whitespace-nowrap transition-colors"
                             onClick={onOpenPaymentModal}
                         >
                             Thay đổi
                         </button>
                     </div>
 
-                    <div className="pt-2 space-y-3">
+                    <div className="pt-4">
                         <button
                             disabled={isCheckingOut}
-                            className="w-full btn-primary py-2 font-body font-semibold tracking-wide flex justify-center items-center gap-2"
+                            className="w-full bg-market-primary text-white py-3.5 rounded-[4px] font-semibold text-[16px] tracking-wide flex justify-center items-center gap-2 hover:bg-[#9A3412] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                             onClick={onOrderSubmit}
                         >
                             {isCheckingOut ? (
-                                <span className="font-body-sm animate-pulse">Đang xử lý...</span>
+                                <span className="animate-pulse">Đang xử lý...</span>
                             ) : (
                                 <>
-                                    <span className="material-symbols-outlined">check_circle</span>
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
                                     Đặt hàng
                                 </>
                             )}
@@ -172,9 +178,11 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 font-caption text-text-muted mt-4">
-                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>verified</span>
-                    <span>Đổi trả miễn phí trong 30 ngày</span>
+                <div className="flex items-center justify-center gap-2 text-[13px] text-[#57534E] mt-4 font-medium">
+                    <svg className="w-4 h-4 text-[#16A34A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>Giao dịch an toàn & Đổi trả trong 30 ngày</span>
                 </div>
             </div>
         </aside>
