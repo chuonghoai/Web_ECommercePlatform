@@ -14,8 +14,8 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
 }) => {
     return (
         <section className="w-full space-y-6">
-            <h2 className="font-headline text-2xl text-text-ink border-b border-subtle pb-2">Giỏ hàng của bạn</h2>
-            <div className="bg-surface-card card-border rounded-lg p-6 space-y-6">
+            <h2 className="font-['Lora',serif] text-[24px] font-semibold text-[#1C1917] border-b border-[#E7E5E4] pb-3">Giỏ hàng của bạn</h2>
+            <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 shadow-sm space-y-6">
                 {items.map((item, idx) => {
                     const invalidInfo = invalidItems?.find(invalid => invalid.productId === item.product.id);
                     const isInvalid = !!invalidInfo;
@@ -23,42 +23,44 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                     return (
                         <div
                             key={item.product.id}
-                            className={`flex flex-col sm:flex-row gap-4 pb-4 ${idx !== items.length - 1 ? 'border-b border-subtle' : ''}`}
+                            className={`flex flex-col sm:flex-row gap-5 pb-6 ${idx !== items.length - 1 ? 'border-b border-[#E7E5E4]' : ''}`}
                         >
                             {/* Product image */}
-                            <div className={`w-full sm:w-32 h-32 shrink-0 bg-surface-container rounded-lg overflow-hidden transition-opacity ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
+                            <div className={`w-full sm:w-[120px] aspect-[4/5] shrink-0 bg-[#F5F5F4] rounded-lg overflow-hidden border border-[#E7E5E4] transition-opacity ${isInvalid ? 'opacity-50 grayscale' : ''}`}>
                                 <img alt={item.product.name} className="w-full h-full object-cover" src={item.product.imageUrl} />
                             </div>
 
                             {/* Product details */}
                             <div className="grow flex flex-col justify-between">
                                 <div>
-                                    <h3 className={`font-subhead text-lg ${isInvalid ? 'line-through text-text-muted font-normal' : 'text-text-ink'}`}>
+                                    <h3 className={`font-['Lora',serif] text-[18px] font-semibold ${isInvalid ? 'line-through text-[#A8A29E]' : 'text-[#1C1917]'}`}>
                                         {item.product.name}
                                     </h3>
 
                                     {!isInvalid && item.product.discountPercentage > 0 ? (
-                                        <p className="font-caption text-primary mt-1">Giảm {item.product.discountPercentage}%</p>
+                                        <p className="text-[13px] font-medium text-market-primary mt-1">Giảm {item.product.discountPercentage}%</p>
                                     ) : !isInvalid && item.product.discountPercentage === 0 && item.product.price < item.product.originalPrice ? (
-                                        <p className="font-caption text-primary mt-1">
-                                            Giảm {(item.product.originalPrice - item.product.price).toLocaleString('vi-VN')}₫
+                                        <p className="text-[13px] font-medium text-market-primary mt-1">
+                                            Giảm {(item.product.originalPrice - item.product.price).toLocaleString('vi-VN')} ₫
                                         </p>
                                     ) : null}
                                 </div>
 
-                                <div className="flex items-center justify-end mt-2 sm:mt-0">
+                                <div className="flex items-center justify-end mt-4 sm:mt-0">
                                     <div className="text-right">
                                         {isInvalid ? (
-                                            <p className="font-body font-medium text-error">{invalidInfo.reason}</p>
+                                            <p className="text-[14px] font-semibold text-market-error">{invalidInfo.reason}</p>
                                         ) : (
                                             <>
                                                 {item.product.originalPrice > item.product.price && (
-                                                    <p className="font-caption text-text-muted line-through">{item.product.originalPrice.toLocaleString('vi-VN')}₫</p>
+                                                    <p className="text-[13px] text-[#A8A29E] line-through">{item.product.originalPrice.toLocaleString('vi-VN')} ₫</p>
                                                 )}
-                                                <p className="font-body font-semibold text-text-ink">
-                                                    {item.product.price.toLocaleString('vi-VN')}₫ <span className="text-text-muted font-normal">x {item.quantity}</span>
+                                                <p className="text-[15px] font-semibold text-[#1C1917]">
+                                                    {item.product.price.toLocaleString('vi-VN')} ₫ <span className="text-[#57534E] font-medium">x {item.quantity}</span>
                                                 </p>
-                                                <p className="font-body-sm font-semibold text-primary-container mt-1">Thành tiền: {(item.product.price * item.quantity).toLocaleString('vi-VN')}₫</p>
+                                                <p className="text-[16px] font-bold text-market-primary mt-1.5">
+                                                    {(item.product.price * item.quantity).toLocaleString('vi-VN')} ₫
+                                                </p>
                                             </>
                                         )}
                                     </div>
@@ -71,10 +73,12 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                     <button
                                         type="button"
                                         aria-label="Remove item"
-                                        className="transition-colors flex items-center gap-1 rounded-lg font-caption py-1.5 px-3 text-text-muted hover:text-error"
+                                        className="transition-colors flex items-center gap-1 rounded-[4px] text-[13px] font-medium py-1.5 px-3 text-[#A8A29E] hover:text-market-error hover:bg-[#FEF2F2]"
                                         onClick={() => onRemove(item.product.id)}
                                     >
-                                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
                                         <span>Xóa</span>
                                     </button>
                                 </div>
