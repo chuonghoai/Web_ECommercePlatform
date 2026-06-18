@@ -62,6 +62,7 @@ export interface AppliedVoucher {
 }
 
 export interface PrepareCheckoutModel {
+    prepareTempId: string;
     address: Address | null;   // Địa chỉ giao hàng
 
     items: CheckoutItem[];  // Danh sách product muốn mua

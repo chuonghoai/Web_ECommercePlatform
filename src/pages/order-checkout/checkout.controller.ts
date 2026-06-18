@@ -8,7 +8,7 @@ import type { CheckoutRequestDto } from "../../features/order/checkout/dto/check
 import { useCart } from "../../features/cart/contexts/CartContext";
 import { cartService } from "../../features/cart/services/cart.service";
 
-export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) => {
+export const useCheckoutController = ({ initialRequest, tempId }: { initialRequest?: PrepareCheckoutRequest[], tempId?: string | null }) => {
     const store = useCheckoutStore();
     const hasFetched = useRef(false);
     const { toast } = useToast();
@@ -25,39 +25,63 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
 
     // Init data
     useEffect(() => {
-        if (initialRequest && initialRequest.length > 0 && !hasFetched.current) {
-            store.fetchPrepareOrder({ items: initialRequest });
-            hasFetched.current = true;
+        if (!hasFetched.current) {
+            if (tempId) {
+                store.fetchPrepareOrder({ prepareTempId: tempId });
+                hasFetched.current = true;
+            } else if (initialRequest && initialRequest.length > 0) {
+                store.fetchPrepareOrder({ items: initialRequest });
+                hasFetched.current = true;
+            }
         }
-    }, [store.fetchPrepareOrder, initialRequest]);
+    }, [store.fetchPrepareOrder, initialRequest, tempId]);
+
+    // Handle updating url after prepare response
+    useEffect(() => {
+        if (store.data?.prepareTempId && !tempId) {
+            navigate(`/order/checkout?temp=${store.data.prepareTempId}`, { replace: true });
+        }
+    }, [store.data?.prepareTempId, tempId, navigate]);
 
     // ReInit data
     const handleRetry = useCallback(() => {
-        if (initialRequest && initialRequest.length > 0) {
+        const tempIdToUse = store.data?.prepareTempId || tempId;
+        if (tempIdToUse) {
+            store.fetchPrepareOrder({ prepareTempId: tempIdToUse, addressId: store.data?.address?.id, voucherCodes });
+        } else if (initialRequest && initialRequest.length > 0) {
             store.fetchPrepareOrder({ items: initialRequest, addressId: store.data?.address?.id, voucherCodes });
         }
-    }, [initialRequest, store, voucherCodes]);
+    }, [initialRequest, tempId, store, voucherCodes]);
+
+    const getItemsFromStore = () => {
+        if (!store.data) return [];
+        const currentRequest: PrepareCheckoutRequest[] = store.data.items.map(item => ({
+            productId: item.product.id,
+            quantity: item.quantity
+        }));
+
+        if (store.data.invalidItems && store.data.invalidItems.length > 0) {
+            store.data.invalidItems.forEach(invalidItem => {
+                const original = initialRequest?.find(req => req.productId === invalidItem.productId);
+                currentRequest.push({
+                    productId: invalidItem.productId,
+                    quantity: original ? original.quantity : 1
+                });
+            });
+        }
+        return currentRequest;
+    };
 
     const handleSelectAddress = (address: any) => {
         if (store.data) {
             store.setData({ ...store.data, address });
-
-            const currentRequest: PrepareCheckoutRequest[] = store.data.items.map(item => ({
-                productId: item.product.id,
-                quantity: item.quantity
-            }));
-
-            if (store.data.invalidItems && store.data.invalidItems.length > 0) {
-                store.data.invalidItems.forEach(invalidItem => {
-                    const original = initialRequest.find(req => req.productId === invalidItem.productId);
-                    currentRequest.push({
-                        productId: invalidItem.productId,
-                        quantity: original ? original.quantity : 1
-                    });
-                });
+            const tempIdToUse = store.data.prepareTempId || tempId;
+            
+            if (tempIdToUse) {
+                store.fetchPrepareOrder({ prepareTempId: tempIdToUse, addressId: address.id, voucherCodes });
+            } else {
+                store.fetchPrepareOrder({ items: getItemsFromStore(), addressId: address.id, voucherCodes });
             }
-
-            store.fetchPrepareOrder({ items: currentRequest, addressId: address.id, voucherCodes });
         }
         setIsAddressModalOpen(false);
     };
@@ -66,42 +90,36 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
     const handleApplyVouchers = useCallback((codes: string[]) => {
         setVoucherCodes(codes);
         if (store.data) {
-            const currentRequest: PrepareCheckoutRequest[] = store.data.items.map(item => ({
-                productId: item.product.id,
-                quantity: item.quantity
-            }));
-
-            if (store.data.invalidItems && store.data.invalidItems.length > 0) {
-                store.data.invalidItems.forEach(invalidItem => {
-                    const original = initialRequest.find(req => req.productId === invalidItem.productId);
-                    currentRequest.push({
-                        productId: invalidItem.productId,
-                        quantity: original ? original.quantity : 1
-                    });
-                });
+            const tempIdToUse = store.data.prepareTempId || tempId;
+            if (tempIdToUse) {
+                store.fetchPrepareOrder({ prepareTempId: tempIdToUse, addressId: store.data.address?.id, voucherCodes: codes });
+            } else {
+                store.fetchPrepareOrder({ items: getItemsFromStore(), addressId: store.data.address?.id, voucherCodes: codes });
             }
-
-            store.fetchPrepareOrder({ items: currentRequest, addressId: store.data.address?.id, voucherCodes: codes });
         }
-    }, [store, initialRequest]);
+    }, [store, tempId, initialRequest]);
 
     // Remove item
     const handleRemoveItem = useCallback((productId: string) => {
         if (!store.data) return;
         const updatedItems = store.data.items.filter(item => item.product.id !== productId);
-
         const updatedInvalidItems = store.data.invalidItems?.filter(invalid => invalid.productId !== productId) || [];
 
         const remainingRequest: PrepareCheckoutRequest[] = [
             ...updatedItems.map(item => ({ productId: item.product.id, quantity: item.quantity })),
             ...updatedInvalidItems.map(invalid => {
-                const original = initialRequest.find(req => req.productId === invalid.productId);
+                const original = initialRequest?.find(req => req.productId === invalid.productId);
                 return { productId: invalid.productId, quantity: original ? original.quantity : 1 };
             })
         ];
 
         if (remainingRequest.length > 0) {
-            store.fetchPrepareOrder({ items: remainingRequest, addressId: store.data?.address?.id, voucherCodes });
+            const tempIdToUse = store.data.prepareTempId || tempId;
+            if (tempIdToUse) {
+                store.fetchPrepareOrder({ prepareTempId: tempIdToUse, items: remainingRequest, addressId: store.data?.address?.id, voucherCodes });
+            } else {
+                store.fetchPrepareOrder({ items: remainingRequest, addressId: store.data?.address?.id, voucherCodes });
+            }
         } else {
             store.setData({
                 ...store.data,
@@ -111,7 +129,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
                 totalAmount: 0
             });
         }
-    }, [store, initialRequest]);
+    }, [store, tempId, initialRequest, voucherCodes]);
 
     // Submit order
     const handleOrderSubmit = useCallback(async () => {
@@ -151,7 +169,7 @@ export const useCheckoutController = (initialRequest: PrepareCheckoutRequest[]) 
         } else if (store.error) {
             toast(store.error || "Có lỗi xảy ra, vui lòng thử lại", "error");
         }
-    }, [store, selectedPaymentMethod, navigate, toast, loadCart]);
+    }, [store, selectedPaymentMethod, navigate, toast, voucherCodes, loadCart]);
 
     return {
         data: store.data,
