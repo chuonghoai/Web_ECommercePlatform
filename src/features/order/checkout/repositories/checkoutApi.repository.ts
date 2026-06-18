@@ -13,7 +13,7 @@ export class CheckoutApiRepository implements CheckoutRepository {
      * @returns PrepareCheckoutModel
      */
     async prepareOrder(request: PrepareCheckoutPayload): Promise<ApiResponse<PrepareCheckoutModel>> {
-        return apiClient.post<ApiResponse<PrepareCheckoutModel>>("/orders/prepare", request);
+        return apiClient.post<ApiResponse<PrepareCheckoutModel>>("/orders/prepare-cart", request);
     }
 
     /**
