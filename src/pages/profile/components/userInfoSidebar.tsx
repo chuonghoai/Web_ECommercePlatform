@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import type { User } from "../../../features/user/models/user.model";
+import { authService } from "../../../features/auth/services/auth.service";
+import { useToast } from "../../../components/toast/toast";
 
 interface UserInfoSidebarProps {
     user: User | null;
@@ -25,6 +27,7 @@ export const UserInfoSidebar = ({
     user,
     onChangePasswordClick,
 }: UserInfoSidebarProps) => {
+    const { toast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -81,7 +84,11 @@ export const UserInfoSidebar = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
             ),
-            action: () => {},
+            action: () => {
+                authService.logout(),
+                toast("Đăng xuất thành công", "info");
+                navigate("/login");
+            },
             isDestructive: true,
         },
     ];
@@ -122,16 +129,14 @@ export const UserInfoSidebar = ({
                     <button
                         key={item.id}
                         onClick={() => navigate(item.path)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left ${
-                            isActive(item.path)
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left ${isActive(item.path)
                                 ? "bg-market-primary/8 text-market-primary"
                                 : "text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-                        }`}
+                            }`}
                     >
                         <span
-                            className={`shrink-0 ${
-                                isActive(item.path) ? "text-market-primary" : "text-stone-500"
-                            }`}
+                            className={`shrink-0 ${isActive(item.path) ? "text-market-primary" : "text-stone-500"
+                                }`}
                         >
                             {item.icon}
                         </span>
@@ -149,16 +154,14 @@ export const UserInfoSidebar = ({
                     <button
                         key={item.id}
                         onClick={item.action}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left ${
-                            item.isDestructive
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left ${item.isDestructive
                                 ? "text-red-500 hover:bg-red-50 hover:text-red-600"
                                 : "text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-                        }`}
+                            }`}
                     >
                         <span
-                            className={`shrink-0 ${
-                                item.isDestructive ? "text-red-400" : "text-stone-500"
-                            }`}
+                            className={`shrink-0 ${item.isDestructive ? "text-red-400" : "text-stone-500"
+                                }`}
                         >
                             {item.icon}
                         </span>

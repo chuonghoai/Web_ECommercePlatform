@@ -87,17 +87,17 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-white border-b border-[#E7E5E4] sticky top-0 z-50">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
+    <header className="bg-white border-b border-border-subtle sticky top-0 z-50">
+      <div className="max-w-400 mx-auto px-4 md:px-8 h-18 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" className="font-['Lora',serif] text-[24px] font-bold text-[#1C1917] flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link to="/" className="font-['Lora',serif] text-[24px] font-bold text-text-ink flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 rounded-full bg-market-secondary flex items-center justify-center text-white text-[14px] italic shadow-none">MN</div>
           MarketNest
         </Link>
 
         {/* Search Bar */}
-        <div className="hidden md:flex flex-1 max-w-[480px] mx-8 relative">
+        <div className="hidden md:flex flex-1 max-w-120 mx-8 relative">
           <input
             type="text"
             placeholder="Tìm kiếm tác phẩm thủ công, nghệ nhân..."
@@ -116,7 +116,7 @@ export const Header = () => {
                 navigate(`/?${params.toString()}`);
               }
             }}
-            className="w-full bg-market-background border-[1.5px] border-[#D6D3D1] rounded-[4px] h-[42px] px-4 pr-12 text-[15px] font-['Open_Sans',sans-serif] outline-none focus:border-market-primary focus:ring-[3px] focus:ring-market-primary/15 transition-all text-[#1C1917] placeholder:text-[#A8A29E]"
+            className="w-full bg-market-background border-[1.5px] border-border-medium rounded-sm h-10.5 px-4 pr-12 text-[15px] font-['Open_Sans',sans-serif] outline-none focus:border-market-primary focus:ring-[3px] focus:ring-market-primary/15 transition-all text-text-ink placeholder:text-[#A8A29E]"
           />
           <button 
             onClick={() => {
@@ -145,7 +145,7 @@ export const Header = () => {
             <Link to="/categories" className="hover:text-market-primary transition-colors">Danh mục</Link>
           </nav>
 
-          <div className="flex items-center gap-5 border-l border-[#E7E5E4] pl-6">
+          <div className="flex items-center gap-5 border-l border-border-subtle pl-6">
             {/* Cart button */}
             <Link
               to="/cart"
@@ -164,7 +164,7 @@ export const Header = () => {
               </svg>
 
               {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-market-primary text-white text-[10px] font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-2 bg-market-primary text-white text-[10px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center">
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}
@@ -177,43 +177,45 @@ export const Header = () => {
                   <img
                     src={user.avatarUrl}
                     alt={user.fullName}
-                    className="w-9 h-9 rounded-full object-cover border-[1.5px] border-[#D6D3D1] group-hover:border-market-primary transition-colors"
+                    className="w-9 h-9 rounded-full object-cover border-[1.5px] border-border-medium group-hover:border-market-primary transition-colors"
                   />
                 ) : (
                   <div className="w-9 h-9 rounded-full bg-market-secondary flex items-center justify-center text-white font-bold text-[14px]">
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="text-[14px] font-semibold text-[#1C1917] group-hover:text-market-primary transition-colors">
-                  {user.fullName}
-                </span>
+                <button onClick={handleNavigateProfile}>
+                  <span className="text-[14px] font-semibold text-text-ink group-hover:text-market-primary transition-colors cursor-pointer">
+                    {user.fullName}
+                  </span>
+                </button>
 
-                <div className="absolute top-full right-0 mt-1 w-[200px] bg-white border border-[#D6D3D1] rounded-[4px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-100 shadow-[0_8px_24px_rgba(28,25,23,0.1)]">
+                <div className="absolute top-full right-0 mt-1 w-50 bg-white border border-border-medium rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-100 shadow-[0_8px_24px_rgba(28,25,23,0.1)]">
                   <div className="flex flex-col py-1">
                     {/* Button profile */}
-                    <button onClick={handleNavigateProfile} className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors">
+                    <button onClick={handleNavigateProfile} className="cursor-pointer flex items-center h-12 px-4 text-[14px] font-medium text-text-ink hover:bg-market-background transition-colors">
                       Thông tin cá nhân
                     </button>
 
                     {/* Button order */}
-                    <button onClick={handleNavigateOrder} className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors border-t border-[#E7E5E4]">
+                    <button onClick={handleNavigateOrder} className="cursor-pointer flex items-center h-12 px-4 text-[14px] font-medium text-text-ink hover:bg-market-background transition-colors border-t border-border-subtle">
                       Đơn hàng
                     </button>
 
                     {/* Button setting */}
-                    <Link to="/settings" className="flex items-center h-[48px] px-4 text-[14px] font-medium text-[#1C1917] hover:bg-market-background transition-colors border-t border-[#E7E5E4]">
+                    <Link to="/settings" className="cursor-pointer flex items-center h-12 px-4 text-[14px] font-medium text-text-ink hover:bg-market-background transition-colors border-t border-border-subtle">
                       Cài đặt
                     </Link>
 
                     {/* Button logout */}
-                    <button onClick={handleLogout} className="flex items-center w-full h-[48px] px-4 text-[14px] font-semibold text-market-error hover:bg-market-background transition-colors border-t border-[#E7E5E4] text-left">
+                    <button onClick={handleLogout} className="cursor-pointer flex items-center w-full h-12 px-4 text-[14px] font-semibold text-market-error hover:bg-market-background transition-colors border-t border-border-subtle text-left">
                       Đăng xuất
                     </button>
                   </div>
                 </div>
               </div>
             ) : (
-              <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-[4px] hover:bg-market-background transition-colors">
+              <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-sm hover:bg-market-background transition-colors">
                 Đăng nhập
               </Link>
             )}

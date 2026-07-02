@@ -297,4 +297,16 @@ export class UserMockRepository implements UserRepository {
             longitude: Number(data[0].lon),
         }
     }
+
+    async changePassword(currentPassword: string, newPassword: string, confirmPassword: string): Promise<ApiResponse<null>> {
+        if (currentPassword != '111')
+            throw new ApiException('Mật khẩu cũ không chính xác', 400)
+        if (newPassword !== confirmPassword)
+            throw new ApiException('Mật khẩu mới và mật khẩu xác nhận không khớp', 400)
+        return {
+            success: true,
+            message: 'Đổi mật khẩu thành công',
+            data: null
+        }
+    }
 }
