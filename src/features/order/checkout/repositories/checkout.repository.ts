@@ -1,7 +1,7 @@
 import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutPayload } from "../dto/prepareCheckout.dto";
-import type { PrepareCheckoutModel } from "../models/checkout.model";
+import type { PrepareCheckoutModel, DraftOrderModel } from "../models/checkout.model";
 import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 
 export interface CheckoutRepository {
@@ -10,4 +10,6 @@ export interface CheckoutRepository {
     checkoutOrder(request: CheckoutRequestDto): Promise<ApiResponse<CheckoutResponseDto>>;
 
     getOrderResult(orderId: string): Promise<ApiResponse<CheckoutResultDto>>;
+
+    getDraftOrders(): Promise<ApiResponse<DraftOrderModel[]>>;
 }

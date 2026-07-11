@@ -129,4 +129,12 @@ export class UserApiRepository implements UserRepository {
             longitude: Number(data[0].lon),
         }
     }
+
+    async changePassword(currentPassword: string, newPassword: string, confirmPassword: string): Promise<ApiResponse<null>> {
+        return apiClient.post<ApiResponse<null>>("/users/me/change-password", {
+            currentPassword,
+            newPassword,
+            confirmPassword
+        })
+    }
 }

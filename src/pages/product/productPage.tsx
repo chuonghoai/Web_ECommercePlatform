@@ -1,7 +1,9 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useProductController } from "./product.controller";
 import { ProductReviews } from "./components/reviews/productReviews";
+import { buildProductUrl } from "../../utils/slug";
 
 function ProductPage() {
     const [reviewRating, setReviewRating] = useState<{ avg: number; total: number } | null>(null);
@@ -29,6 +31,9 @@ function ProductPage() {
     if (isLoading) {
         return (
             <div className="animate-pulse max-w-screen-2xl mx-auto px-6 py-8">
+                <Helmet>
+                    <title>Đang tải sản phẩm...</title>
+                </Helmet>
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-24">
                     <div className="w-full md:w-[55%] aspect-4/5 md:h-175 bg-[#F5F5F4]" />
                     <div className="w-full md:w-[45%] space-y-6 pt-4">
@@ -48,29 +53,72 @@ function ProductPage() {
     const allImages = [product.imageUrl, ...(product.images || [])];
     const isSale = product.originalPrice !== undefined && product.originalPrice > product.price;
     const isOutOfStock = product.stock === 0;
+    const canonicalUrl = `${window.location.origin}${buildProductUrl(product)}`;
+
+    const structuredData = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.name,
+        "image": allImages,
+        "description": product.description.split('\n')[0],
+        "sku": product.id,
+        "offers": {
+            "@type": "Offer",
+            "url": canonicalUrl,
+            "priceCurrency": "VND",
+            "price": product.price,
+            "availability": isOutOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        },
+        ...(reviewRating && reviewRating.total > 0 && {
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": reviewRating.avg,
+                "reviewCount": reviewRating.total
+            }
+        })
+    };
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] text-[#1e1b17] selection:bg-[#ffdbd0] selection:text-[#390c00]">
+        <main className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] text-[#1e1b17] selection:bg-[#ffdbd0] selection:text-[#390c00]">
+            <Helmet>
+                <title>{product.name}</title>
+                <meta name="description" content={product.description.split('\n')[0]} />
+                <link rel="canonical" href={canonicalUrl} />
+                <meta property="og:title" content={product.name} />
+                <meta property="og:description" content={product.description.split('\n')[0]} />
+                <meta property="og:image" content={product.imageUrl} />
+                <meta property="og:type" content="product" />
+                <meta property="og:url" content={canonicalUrl} />
+                <script type="application/ld+json">
+                    {JSON.stringify(structuredData)}
+                </script>
+            </Helmet>
 
-            <div className="max-w-screen-2xl mx-auto px-6 py-6 md:py-8">
+            <article className="max-w-screen-2xl mx-auto px-6 py-6 md:py-8">
 
                 {/* ── Breadcrumbs ── */}
-                <nav aria-label="Breadcrumb" className="mb-6">
-                    <ol className="flex items-center flex-wrap gap-1.5 text-[12px] text-on-surface-variant">
+                <nav aria-label="Breadcrumb" className="mb-6 md:mb-8">
+                    <ol className="flex items-center flex-wrap gap-2 text-[13px] text-[#78716C] font-medium tracking-wide">
                         <li>
-                            <Link to="/" className="hover:text-[#9b2f00] transition-colors">Trang chủ</Link>
+                            <Link to="/" className="hover:text-market-primary transition-colors flex items-center gap-1">
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                                Trang chủ
+                            </Link>
                         </li>
-                        <li><span className="text-[#8d7168]">›</span></li>
+                        <li><span className="text-[#D6D3D1]">/</span></li>
                         <li>
                             <Link
                                 to={`/?categories=${product.categoryId}`}
-                                className="hover:text-primary transition-colors"
+                                className="hover:text-market-primary transition-colors"
                             >
                                 {product.categoryName}
                             </Link>
                         </li>
-                        <li><span className="text-[#8d7168]">›</span></li>
-                        <li className="text-[#1e1b17] font-medium">{product.name}</li>
+                        <li><span className="text-[#D6D3D1]">/</span></li>
+                        <li className="text-[#1C1917] font-semibold">{product.name}</li>
                     </ol>
                 </nav>
 
@@ -80,22 +128,25 @@ function ProductPage() {
                     {/* Left – Images */}
                     <div className="w-full md:w-[55%]">
                         {/* Main image */}
-                        <div className="relative w-full aspect-4/5 md:aspect-auto md:h-175 border border-border-subtle bg-[#FAF2EB] overflow-hidden group">
+                        <div className="relative w-full aspect-4/5 md:aspect-auto md:h-175 border border-[#E7E5E4] bg-[#FAF2EB] rounded-[8px] overflow-hidden group shadow-sm">
                             <img
                                 src={allImages[activeImgIndex]}
                                 alt={product.name}
+                                loading="eager"
+                                width="800"
+                                height="1000"
                                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                             />
                             {/* Discount badge */}
                             {isSale && product.discountPercentage && (
-                                <div className="absolute top-4 left-4 bg-primary-container text-white text-[11px] font-bold px-3 py-1 uppercase tracking-widest">
+                                <div className="absolute top-4 left-4 bg-[#DC2626] text-white text-[12px] font-bold px-3 py-1.5 rounded-[4px] uppercase tracking-widest shadow-sm">
                                     -{product.discountPercentage}%
                                 </div>
                             )}
                             {/* Out of stock overlay */}
                             {isOutOfStock && (
-                                <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-                                    <span className="bg-white border border-border-subtle text-on-surface-variant text-[13px] font-semibold px-5 py-2 uppercase tracking-widest">
+                                <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[2px]">
+                                    <span className="bg-white border border-[#E7E5E4] text-[#78716C] text-[13px] font-semibold px-6 py-2.5 rounded-[4px] uppercase tracking-widest shadow-sm">
                                         Hết hàng
                                     </span>
                                 </div>
@@ -128,7 +179,7 @@ function ProductPage() {
                                                     : 'border-transparent opacity-50 hover:opacity-100 cursor-pointer'
                                                 }`}
                                         >
-                                            <img src={img} className="w-full h-full object-cover" alt={`thumbnail ${idx + 1}`} />
+                                            <img src={img} loading="lazy" width="72" height="72" className="w-full h-full object-cover" alt={`${product.name} - ảnh ${idx + 1}`} />
                                         </button>
                                     ))}
                                 </div>
@@ -163,7 +214,7 @@ function ProductPage() {
                         </div>
 
                         {/* Product name */}
-                        <h1 className="font-['Lora',serif] text-[40px] md:text-[48px] font-bold leading-[1.15] tracking-[0.01em] text-[#1e1b17] mb-4">
+                        <h1 className="font-['Lora',serif] text-[28px] md:text-[40px] font-bold leading-[1.2] md:leading-[1.15] tracking-[0.01em] text-[#1C1917] mb-4">
                             {product.name}
                         </h1>
 
@@ -190,12 +241,12 @@ function ProductPage() {
                         })()}
 
                         {/* Price */}
-                        <div className="flex items-baseline gap-4 mb-6">
-                            <span className="font-['Lora',serif] text-[32px] font-semibold text-[#1e1b17] tracking-tight">
+                        <div className="flex items-baseline gap-3 mb-6">
+                            <span className="font-['Lora',serif] text-[26px] md:text-[32px] font-semibold text-[#1C1917] tracking-tight">
                                 {Number(product.price).toLocaleString('vi-VN')} ₫
                             </span>
                             {isSale && (
-                                <span className="text-[18px] text-[#A8A29E] line-through font-light">
+                                <span className="text-[16px] md:text-[18px] text-[#A8A29E] line-through font-light">
                                     {Number(product.originalPrice).toLocaleString('vi-VN')} ₫
                                 </span>
                             )}
@@ -321,8 +372,8 @@ function ProductPage() {
                         )}
 
                         {/* ── Meet the Maker ── */}
-                        <div className="border-t border-[#E7E5E4] mt-10 pt-8">
-                            <h2 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-5">
+                        <div className="border-t border-[#E7E5E4] mt-8 md:mt-10 pt-6 md:pt-8">
+                            <h2 className="font-['Lora',serif] text-[20px] md:text-[22px] font-semibold text-[#1C1917] mb-4 md:mb-5">
                                 Gặp gỡ nghệ nhân
                             </h2>
                             <div className="flex items-start gap-4 group cursor-pointer">
@@ -366,7 +417,7 @@ function ProductPage() {
 
                         {/* Description / Story */}
                         <div className="lg:col-span-8">
-                            <h2 className="font-['Lora',serif] text-[32px] font-semibold text-[#1e1b17] mb-8">
+                            <h2 className="font-['Lora',serif] text-[24px] md:text-[32px] font-semibold text-[#1C1917] mb-6 md:mb-8">
                                 Câu chuyện tác phẩm
                             </h2>
                             <div className="prose prose-stone max-w-none text-[17px] leading-[1.8] text-[#57534E]">
@@ -378,10 +429,10 @@ function ProductPage() {
                         </div>
 
                         {/* Specifications */}
-                        <div className="lg:col-span-4">
-                            <h3 className="font-['Lora',serif] text-[22px] font-semibold text-[#1e1b17] mb-6">
+                        <aside className="lg:col-span-4 mt-8 lg:mt-0">
+                            <h2 className="font-['Lora',serif] text-[20px] md:text-[22px] font-semibold text-[#1C1917] mb-5 md:mb-6">
                                 Đặc tả kỹ thuật
-                            </h3>
+                            </h2>
                             <div className="border border-[#E7E5E4] bg-white p-6 space-y-0">
                                 {product.materials && product.materials.length > 0 && (
                                     <div className="flex flex-col gap-1 pb-4 border-b border-[#E7E5E4]">
@@ -408,15 +459,15 @@ function ProductPage() {
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </aside>
                     </div>
                 </section>
 
                 {/* ── Reviews ── */}
                 <ProductReviews productId={product.id} onReviewsLoaded={handleReviewsLoaded} />
 
-            </div>
-        </div>
+            </article>
+        </main>
     );
 }
 

@@ -12,7 +12,10 @@ import { ShippingForm } from './components/ShippingForm/ShippingForm';
 function CheckoutPage() {
     const location = useLocation();
     const routerNavigate = useNavigate();
-    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[];
+    const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[] | undefined;
+    
+    const searchParams = new URLSearchParams(location.search);
+    const tempId = searchParams.get('temp');
 
     const {
         data,
@@ -38,9 +41,9 @@ function CheckoutPage() {
         handleRemoveItem,
         handleRetry,
         handleOrderSubmit
-    } = useCheckoutController(checkoutItems || []);
+    } = useCheckoutController({ initialRequest: checkoutItems, tempId });
 
-    if (!checkoutItems || checkoutItems.length === 0) {
+    if ((!checkoutItems || checkoutItems.length === 0) && !tempId) {
         return <Navigate to="/cart" replace />;
     }
 
@@ -77,21 +80,25 @@ function CheckoutPage() {
     if (!data) return null;
 
     return (
-        <div className="font-body text-body min-h-screen flex flex-col">
-            <header className="w-full bg-background dark:bg-surface border-b border-subtle dark:border-outline-variant py-4 px-6">
-                <div className="max-w-full mx-auto flex justify-between items-center">
-                    <div className="font-display text-2xl md:text-3xl text-primary font-bold tracking-tight">
-                        Artisan Market
+        <div className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] flex flex-col">
+            <header className="w-full bg-white border-b border-[#E7E5E4] h-[72px] flex items-center px-4 md:px-8">
+                <div className="max-w-[1280px] w-full mx-auto flex justify-between items-center">
+                    <div className="font-['Lora',serif] text-[20px] sm:text-[24px] font-bold text-[#1C1917] flex items-center gap-2">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-market-secondary flex items-center justify-center text-white text-[12px] sm:text-[14px] italic shadow-none">MN</div>
+                        <span className="hidden sm:inline">MarketNest</span>
+                        <span className="text-[#A8A29E] font-normal text-[18px] sm:text-[20px] ml-2">| Thanh toán an toàn</span>
                     </div>
-                    <div className="font-caption text-sm text-text-muted flex items-center gap-2">
-                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>lock</span>
-                        Thanh toán an toàn
+                    <div className="text-[14px] text-[#57534E] flex items-center gap-2 font-medium">
+                        <svg className="w-5 h-5 text-market-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <span className="hidden sm:inline">Giao dịch được mã hóa</span>
                     </div>
                 </div>
             </header>
 
-            <main className="grow py-8 md:py-12 px-6">
-                <div className="max-w-full mx-auto">
+            <main className="grow w-full max-w-[1280px] mx-auto px-4 md:px-8 py-8 md:py-12">
+                <div className="w-full">
                     <div className="flex flex-col lg:flex-row gap-8">
 
                         <div className="w-full lg:w-2/3 space-y-8">
@@ -129,8 +136,8 @@ function CheckoutPage() {
                 </div>
             </main>
 
-            <footer className="w-full bg-surface-container border-t border-subtle py-4 px-6 mt-auto text-center">
-                <p className="font-caption text-text-muted">© 2024 Artisan Market. Giao dịch được mã hóa an toàn.</p>
+            <footer className="w-full border-t border-[#E7E5E4] py-8 px-6 mt-auto text-center bg-market-background">
+                <p className="text-[14px] text-[#A8A29E] font-medium">© 2026 MarketNest. Tôn vinh nghệ thuật thủ công.</p>
             </footer>
 
             {/* Modal: Choosing voucher */}

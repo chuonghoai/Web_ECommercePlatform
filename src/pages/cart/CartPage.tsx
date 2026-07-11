@@ -3,6 +3,7 @@ import { useCartController } from './cart.controller';
 import { CartEmptyState } from './components/CartEmptyState';
 import { CartItemCard } from './components/CartItemCard';
 import { CartSummary } from './components/CartSummary';
+import { DraftOrdersList } from './components/DraftOrdersList';
 
 const CartPage: React.FC = () => {
   const controller = useCartController();
@@ -60,6 +61,9 @@ const CartPage: React.FC = () => {
               </div>
 
             </div>
+
+            {/* Draft Orders */}
+            <DraftOrdersList drafts={controller.draftOrders} />
           </div>
 
           {/* Summary */}

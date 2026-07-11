@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { WishlistItem } from "../../../features/user/models/wishlist.model";
+import { buildProductUrl } from "../../../utils/slug";
 
 interface WishlistTabProps {
     items: WishlistItem[];
@@ -70,7 +71,7 @@ export const WishlistTab = ({
                     return (
                         <Link
                             key={item.id}
-                            to={`/product/${item.id}`}
+                            to={buildProductUrl(item)}
                             className="group bg-white border border-border-subtle rounded-xl overflow-hidden hover:border-market-primary hover:shadow-[0_6px_20px_rgba(28,25,23,0.1)] transition-all"
                         >
                             <div className="relative h-45 overflow-hidden bg-[#F5F5F4]">

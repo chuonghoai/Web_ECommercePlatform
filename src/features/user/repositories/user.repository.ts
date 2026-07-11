@@ -21,4 +21,6 @@ export interface UserRepository {
     getWards(districtId: number): Promise<WardModel[]>;
 
     getLocationFromAddress(address: string): Promise<{ latitude: number, longitude: number }>;
+
+    changePassword(currentPassword: string, newPassword: string, confirmPassword: string): Promise<ApiResponse<null>>;
 }

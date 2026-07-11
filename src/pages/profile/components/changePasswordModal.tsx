@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { userService } from "../../../features/user/services/user.service";
+import { useToast } from "../../../components/toast/toast";
 
 interface ChangePasswordModalProps {
     isOpen: boolean;
@@ -6,6 +8,7 @@ interface ChangePasswordModalProps {
 }
 
 export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
+    const { toast } = useToast();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,8 +38,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
             return;
         }
         setIsSaving(true);
-        await new Promise((r) => setTimeout(r, 800));
-        setIsSaving(false);
+        try {
+            await userService.changePassword(currentPassword, newPassword, confirmPassword);
+            toast("Đổi mật khẩu thành công", "success");
+        } catch (err: any) {
+            setError(err.data?.message || err.response?.data?.message || err.message || "Có lỗi xảy ra");
+            return;
+        } finally {
+            setIsSaving(false);
+        }
         handleClose();
     };
 

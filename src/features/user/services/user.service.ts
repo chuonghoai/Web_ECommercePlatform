@@ -63,6 +63,10 @@ export class UserService {
     async getLocationFromAddress(address: string): Promise<{ latitude: number; longitude: number; }> {
         return this.userRepository.getLocationFromAddress(address);
     }
+
+    async changePassword(currentPassword: string, newPassword: string, confirmPassword: string): Promise<ApiResponse<null>> {
+        return this.userRepository.changePassword(currentPassword, newPassword, confirmPassword);
+    }
 }
 
 export const userService = new UserService(USE_MOCK ? new UserMockRepository() : undefined);

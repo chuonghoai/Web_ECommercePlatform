@@ -62,6 +62,7 @@ export interface AppliedVoucher {
 }
 
 export interface PrepareCheckoutModel {
+    prepareTempId: string;
     address: Address | null;   // Địa chỉ giao hàng
 
     items: CheckoutItem[];  // Danh sách product muốn mua
@@ -74,4 +75,17 @@ export interface PrepareCheckoutModel {
     totalAmount: number;    // = subTotal + shippingFee - discountAmount - shippingDiscountAmount
 
     invalidItems: InvalidItem[];    // Các sản phẩm không khả dụng
+}
+
+export interface DraftOrderModel {
+    prepareTempId: string;
+    createdAt: string;
+    updatedAt: string;
+    expiredAt: string;
+    numberOfItems: number;
+    totalQuantity: number;
+    estimatedTotalPrice: number;
+    firstProductThumbnail: string | null;
+    productNamesSummary: string | null;
+    status: string;
 }
