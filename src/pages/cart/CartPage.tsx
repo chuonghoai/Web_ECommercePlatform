@@ -21,13 +21,11 @@ const CartPage: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-12 items-start">
 
-          {/* Items */}
-          <div className="flex-1 w-full">
-            {/* Background wrapper */}
-            <div className="bg-white border border-[#E7E5E4] rounded-xl p-6 sm:p-10 shadow-sm">
-              
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col gap-8">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 lg:p-8 border border-[#E7E5E4] order-2 lg:order-1">
               {/* Select All Checkbox */}
-              <div className="flex items-center pb-6 border-b border-[#E7E5E4] mb-8">
+              <div className="flex items-center pb-4 sm:pb-6 border-b border-[#E7E5E4] mb-4 sm:mb-6">
                 <input
                   type="checkbox"
                   id="selectAll"
@@ -41,7 +39,7 @@ const CartPage: React.FC = () => {
               </div>
 
               {/* Item List */}
-              <div className="space-y-10">
+              <div className="space-y-6 sm:space-y-10">
                 {controller.items.map((item, index) => (
                   <div key={item.product.id}>
                     <CartItemCard
@@ -54,7 +52,7 @@ const CartPage: React.FC = () => {
                       formatMoney={controller.formatMoney}
                     />
                     {index < controller.items.length - 1 && (
-                      <div className="w-full border-t border-dashed border-[#D6D3D1] mt-10"></div>
+                      <div className="w-full border-t border-dashed border-[#D6D3D1] mt-6 sm:mt-10"></div>
                     )}
                   </div>
                 ))}
@@ -63,7 +61,9 @@ const CartPage: React.FC = () => {
             </div>
 
             {/* Draft Orders */}
-            <DraftOrdersList drafts={controller.draftOrders} />
+            <div className="order-1 lg:order-2">
+              <DraftOrdersList drafts={controller.draftOrders} />
+            </div>
           </div>
 
           {/* Summary */}
