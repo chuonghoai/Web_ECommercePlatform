@@ -17,7 +17,13 @@ export const Header = () => {
 
   const currentSearchParam = new URLSearchParams(location.search).get("search") || "";
   const [searchTerm, setSearchTerm] = useState(currentSearchParam);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const handleClickOutside = () => setIsMobileMenuOpen(false);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
   // Cập nhật state nếu URL bị thay đổi từ bên ngoài (như xoá filter)
   useEffect(() => {
     setSearchTerm(currentSearchParam);
@@ -93,11 +99,11 @@ export const Header = () => {
         {/* Logo */}
         <Link to="/" className="font-['Lora',serif] text-[24px] font-bold text-text-ink flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 rounded-full bg-market-secondary flex items-center justify-center text-white text-[14px] italic shadow-none">MN</div>
-          MarketNest
+          <span className="hidden md:inline">MarketNest</span>
         </Link>
 
         {/* Search Bar */}
-        <div className="hidden md:flex flex-1 max-w-120 mx-8 relative">
+        <div className="flex-1 max-w-120 mx-3 md:mx-8 relative">
           <input
             type="text"
             placeholder="Tìm kiếm tác phẩm thủ công, nghệ nhân..."
@@ -139,13 +145,13 @@ export const Header = () => {
         </div>
 
         {/* Navigation & Actions */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <nav className="hidden lg:flex gap-6 text-[15px] font-semibold text-[#57534E]">
             <Link to="/" className="hover:text-market-primary transition-colors">Khám phá</Link>
             <Link to="/categories" className="hover:text-market-primary transition-colors">Danh mục</Link>
           </nav>
 
-          <div className="flex items-center gap-5 border-l border-border-subtle pl-6">
+          <div className="flex items-center gap-3 md:gap-5 md:border-l border-border-subtle md:pl-6">
             {/* Cart button */}
             <Link
               to="/cart"
@@ -157,7 +163,7 @@ export const Header = () => {
                   navigate("/login");
                 }
               }}
-              className="relative text-[#57534E] hover:text-market-primary transition-colors"
+              className={`relative text-[#57534E] hover:text-market-primary transition-colors ${!user ? 'hidden md:block' : ''}`}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -172,7 +178,15 @@ export const Header = () => {
 
             {/* User info || login button */}
             {user ? (
-              <div className="relative group flex items-center gap-3 cursor-pointer py-2">
+              <div 
+                className="relative group flex items-center gap-3 cursor-pointer py-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (window.innerWidth < 768) {
+                    setIsMobileMenuOpen(!isMobileMenuOpen);
+                  }
+                }}
+              >
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
@@ -184,13 +198,13 @@ export const Header = () => {
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <button onClick={handleNavigateProfile}>
+                <button onClick={handleNavigateProfile} className="hidden md:block">
                   <span className="text-[14px] font-semibold text-text-ink group-hover:text-market-primary transition-colors cursor-pointer">
                     {user.fullName}
                   </span>
                 </button>
 
-                <div className="absolute top-full right-0 mt-1 w-50 bg-white border border-border-medium rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-100 shadow-[0_8px_24px_rgba(28,25,23,0.1)]">
+                <div className={`absolute top-full right-0 mt-1 w-50 bg-white border border-border-medium rounded-sm transition-all duration-200 z-50 shadow-[0_8px_24px_rgba(28,25,23,0.1)] ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible'}`}>
                   <div className="flex flex-col py-1">
                     {/* Button profile */}
                     <button onClick={handleNavigateProfile} className="cursor-pointer flex items-center h-12 px-4 text-[14px] font-medium text-text-ink hover:bg-market-background transition-colors">
@@ -215,7 +229,7 @@ export const Header = () => {
                 </div>
               </div>
             ) : (
-              <Link to="/login" className="text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-4 py-1.5 rounded-sm hover:bg-market-background transition-colors">
+              <Link to="/login" className="text-[13px] md:text-[14px] font-semibold text-market-primary border-[1.5px] border-market-primary px-3 py-1.5 md:px-4 rounded-sm hover:bg-market-background transition-colors whitespace-nowrap">
                 Đăng nhập
               </Link>
             )}
