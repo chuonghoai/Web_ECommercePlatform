@@ -8,7 +8,7 @@ export const ProfileHeroSection = ({ user }: ProfileHeroSectionProps) => {
     const avatarInitial = user?.fullName?.charAt(0)?.toUpperCase() ?? "U";
 
     return (
-        <div className="relative w-full overflow-hidden bg-linear-to-br from-stone-100 via-stone-50 to-white border-b border-stone-200">
+        <div className="relative w-full overflow-hidden bg-linear-to-br from-stone-100 via-stone-50 to-white border-b border-stone-200 hidden md:block">
             <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-market-primary/5 pointer-events-none" />
             <div className="absolute -bottom-8 left-1/3 w-48 h-48 rounded-full bg-market-secondary/5 pointer-events-none" />
 
@@ -41,8 +41,8 @@ export const ProfileHeroSection = ({ user }: ProfileHeroSectionProps) => {
                                     {user.role === "ADMIN"
                                         ? "Quản trị viên"
                                         : user.role === "STAFF"
-                                        ? "Nhân viên"
-                                        : "Khách hàng"}
+                                            ? "Nhân viên"
+                                            : "Khách hàng"}
                                 </span>
                             )}
                             <span className="inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200">
