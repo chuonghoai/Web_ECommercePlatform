@@ -62,7 +62,7 @@ const BarChart = ({ data }: { data: { label: string; revenue: number }[] }) => {
     }, [maxRevenue]);
 
     return (
-        <div className="relative w-full h-[280px] flex gap-2">
+        <div className="relative w-full h-55 md:h-70 flex gap-2">
             <div className="flex flex-col justify-between font-body text-xs font-semibold text-text-muted pb-8 w-10 shrink-0 text-right">
                 {yLabels.map((l) => (
                     <span key={l}>{l}</span>
@@ -93,7 +93,7 @@ const BarChart = ({ data }: { data: { label: string; revenue: number }[] }) => {
                                         style={{ height: '100%' }}
                                     >
                                         <div
-                                            className="w-full max-w-[40px] rounded-t-md bg-primary-container transition-all duration-500 ease-out group-hover:bg-primary cursor-pointer"
+                                            className="w-full max-w-10 rounded-t-md bg-primary-container transition-all duration-500 ease-out group-hover:bg-primary cursor-pointer"
                                             style={{ height: `${heightPct}%`, minHeight: '4px' }}
                                             title={`${d.label}: ${new Intl.NumberFormat('vi-VN').format(d.revenue)}đ`}
                                             role="img"
@@ -122,19 +122,14 @@ const BarChart = ({ data }: { data: { label: string; revenue: number }[] }) => {
 };
 
 const KpiSkeleton = () => (
-    <div className="bg-surface-card border border-border-subtle rounded-xl p-6 animate-pulse">
+    <div className="bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 animate-pulse">
         <div className="h-3 bg-surface-container rounded w-24 mb-4" />
         <div className="h-8 bg-surface-container rounded w-32 mb-6" />
         <div className="h-3 bg-surface-container rounded w-20" />
     </div>
 );
 
-const ChartSkeleton = () => (
-    <div className="bg-surface-card border border-border-subtle rounded-xl p-6 animate-pulse">
-        <div className="h-4 bg-surface-container rounded w-32 mb-8" />
-        <div className="h-[280px] bg-surface-container rounded" />
-    </div>
-);
+
 
 const formatTableProductName = (item: ProductPerformanceItem) =>
     item.name.length > 28 ? `${item.name.slice(0, 28)}…` : item.name;
@@ -165,7 +160,7 @@ export const DashboardPage = () => {
             showSearch: true,
             rightActions: (
                 <button
-                    className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-[2px]"
+                    className="btn-primary font-body text-sm font-semibold px-4 py-2 hover:-translate-y-0.5"
                     aria-label="Xuất báo cáo"
                 >
                     Xuất báo cáo
@@ -179,10 +174,10 @@ export const DashboardPage = () => {
     }, [period, fetchAll]);
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 w-full pb-8">
-            <div className="flex justify-between items-end">
+        <div className="max-w-7xl mx-auto space-y-5 md:space-y-8 w-full pb-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-0">
                 <div>
-                    <h2 className="font-headline text-4xl font-semibold text-text-ink" style={{ textWrap: 'balance' } as React.CSSProperties}>
+                    <h2 className="font-headline text-2xl md:text-4xl font-semibold text-text-ink" style={{ textWrap: 'balance' } as React.CSSProperties}>
                         Tổng quan
                     </h2>
                     <p className="font-body text-lg text-text-muted mt-2">
@@ -220,7 +215,7 @@ export const DashboardPage = () => {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {loading || !kpi
                     ? Array.from({ length: 4 }).map((_, i) => <KpiSkeleton key={i} />)
                     : KPI_CONFIG.map(({ key, label, icon, format }) => {
@@ -232,29 +227,31 @@ export const DashboardPage = () => {
                         return (
                             <div
                                 key={key}
-                                className="bg-surface-card border border-border-subtle rounded-xl p-6 border-t-4 border-t-primary-container hover:-translate-y-[2px] hover:border-border-medium transition-all duration-200 relative overflow-hidden group"
+                                className="bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 border-t-4 border-t-primary-container hover:-translate-y-0.5 hover:border-border-medium transition-all duration-200 relative overflow-hidden group flex flex-col justify-between"
                             >
-                                <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity" aria-hidden="true">
-                                    <span className="material-symbols-outlined text-[48px]">{icon}</span>
+                                <div className="absolute top-0 right-0 p-4 md:p-6 opacity-10 group-hover:opacity-20 transition-opacity" aria-hidden="true">
+                                    <span className="material-symbols-outlined text-[32px] md:text-[48px]">{icon}</span>
                                 </div>
-                                <p className="font-body text-xs font-semibold text-text-muted tracking-widest uppercase">{label}</p>
-                                <h3 className="font-headline text-3xl font-semibold text-text-ink mt-2" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                                    {format(metric.value)}
-                                </h3>
+                                <div>
+                                    <p className="font-body text-[10px] md:text-xs font-semibold text-text-muted tracking-widest uppercase truncate">{label}</p>
+                                    <h3 className="font-headline text-xl md:text-3xl font-semibold text-text-ink mt-2 truncate" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                                        {format(metric.value)}
+                                    </h3>
+                                </div>
                                 <div className="flex items-center gap-1 mt-4">
-                                    <span className={`material-symbols-outlined text-[16px] ${trendColor}`} aria-hidden="true">{trendIcon}</span>
-                                    <span className={`font-body text-xs font-semibold ${trendColor}`}>
+                                    <span className={`material-symbols-outlined text-[14px] md:text-[16px] ${trendColor}`} aria-hidden="true">{trendIcon}</span>
+                                    <span className={`font-body text-[10px] md:text-xs font-semibold ${trendColor}`}>
                                         {Math.abs(metric.changePercent).toFixed(1)}%
                                     </span>
-                                    <span className="font-body text-sm text-text-muted ml-2">so với kỳ trước</span>
+                                    <span className="font-body text-[10px] md:text-sm text-text-muted ml-1 md:ml-2 hidden sm:inline">so với kỳ trước</span>
                                 </div>
                             </div>
                         );
                     })}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 bg-surface-card border border-border-subtle rounded-xl p-6 hover:-translate-y-[2px] transition-transform duration-200">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6">
+                <div className="lg:col-span-2 bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 hover:-translate-y-0.5 transition-transform duration-200">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="font-body text-sm font-semibold text-text-ink tracking-widest uppercase">
                             Doanh thu — {periodLabel}
@@ -267,13 +264,13 @@ export const DashboardPage = () => {
                         </button>
                     </div>
                     {loading
-                        ? <div className="h-[280px] bg-surface-container animate-pulse rounded" />
+                        ? <div className="h-55 md:h-70 bg-surface-container animate-pulse rounded" />
                         : <BarChart data={revenueChart} />
                     }
                 </div>
 
-                <div className="flex flex-col gap-6">
-                    <div className="bg-surface-card border border-border-subtle rounded-xl p-6 flex-1 hover:-translate-y-[2px] transition-transform duration-200">
+                <div className="flex flex-col gap-5 md:gap-6">
+                    <div className="bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 flex-1 hover:-translate-y-0.5 transition-transform duration-200">
                         <h3 className="font-body text-sm font-semibold text-text-ink tracking-widest uppercase mb-4">
                             Top danh mục
                         </h3>
@@ -302,7 +299,7 @@ export const DashboardPage = () => {
                         }
                     </div>
 
-                    <div className="bg-surface-card border border-border-subtle rounded-xl p-6 flex-1 hover:-translate-y-[2px] transition-transform duration-200">
+                    <div className="bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 flex-1 hover:-translate-y-0.5 transition-transform duration-200">
                         <h3 className="font-body text-sm font-semibold text-text-ink tracking-widest uppercase mb-4">
                             Đang trending
                         </h3>
@@ -343,7 +340,7 @@ export const DashboardPage = () => {
                 </div>
             </div>
 
-            <div className="bg-surface-card border border-border-subtle rounded-xl p-6 hover:-translate-y-[2px] transition-transform duration-200">
+            <div className="bg-surface-card border border-border-subtle rounded-xl p-6 hover:-translate-y-0.5 transition-transform duration-200">
                 <div className="flex justify-between items-center mb-8">
                     <h3 className="font-body text-sm font-semibold text-text-ink tracking-widest uppercase">
                         Hiệu suất sản phẩm
@@ -365,7 +362,8 @@ export const DashboardPage = () => {
                         </div>
                     )
                     : (
-                        <div className="w-full overflow-x-auto">
+                        <>
+                        <div className="hidden md:block w-full overflow-x-auto">
                             <table className="w-full text-left border-collapse" aria-label="Bảng hiệu suất sản phẩm">
                                 <thead>
                                     <tr>
@@ -423,7 +421,7 @@ export const DashboardPage = () => {
                                                 <td className="py-4 text-right">
                                                     <div className="flex items-center justify-end gap-2">
                                                         <button
-                                                            className="btn-secondary font-body text-xs font-semibold px-3 py-1.5 hover:-translate-y-[2px] focus-visible:ring-2 focus-visible:ring-primary-container focus-visible:outline-none"
+                                                            className="btn-secondary font-body text-xs font-semibold px-3 py-1.5 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-primary-container focus-visible:outline-none"
                                                             aria-label={`Xem chi tiết ${item.name}`}
                                                         >
                                                             Chi tiết
@@ -442,6 +440,51 @@ export const DashboardPage = () => {
                                 </tbody>
                             </table>
                         </div>
+                        
+                        <div className="md:hidden flex flex-col gap-4">
+                            {productPerformance.map((item) => {
+                                const status = STOCK_STATUS_MAP[item.stockStatus];
+                                return (
+                                    <div key={item.productId} className="flex flex-col border border-border-subtle rounded-xl p-4 bg-surface gap-4">
+                                        <div className="flex gap-4 items-start">
+                                            <div className="w-16 h-16 bg-surface-card border border-border-subtle rounded-md overflow-hidden shrink-0">
+                                                <img
+                                                    alt={item.name}
+                                                    className="w-full h-full object-cover"
+                                                    src={item.imageUrl}
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="font-headline text-sm font-semibold text-text-ink truncate">{item.name}</h4>
+                                                <p className="font-body text-xs text-text-muted mt-1">{item.categoryName}</p>
+                                                <p className="font-body text-sm font-semibold text-text-ink mt-1">{item.totalSales.toLocaleString('vi-VN')} đã bán</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-between items-center pt-4 border-t border-border-subtle">
+                                            <span className={`inline-flex items-center px-3 py-1 rounded-full font-body text-[10px] font-semibold tracking-wider uppercase border ${status.className}`}>
+                                                {status.label}
+                                            </span>
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    className="btn-secondary font-body text-xs font-semibold px-4 py-2 hover:-translate-y-0.5"
+                                                    aria-label={`Xem chi tiết ${item.name}`}
+                                                >
+                                                    Chi tiết
+                                                </button>
+                                                <button
+                                                    className="text-text-muted hover:text-text-ink p-2 border border-border-subtle rounded-md flex items-center justify-center"
+                                                    aria-label={`Chỉnh sửa ${item.name}`}
+                                                >
+                                                    <span className="material-symbols-outlined text-[20px]" aria-hidden="true">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        </>
                     )
                 }
             </div>

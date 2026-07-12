@@ -7,6 +7,7 @@ import { authService } from "../../../features/auth/services/auth.service";
 export const Sidebar = () => {
     const [user, setUser] = useState<User | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const menuRef = useRef<HTMLDivElement>(null);
@@ -56,8 +57,25 @@ export const Sidebar = () => {
     ];
 
     return (
-        <nav className="bg-background-page text-primary flex flex-col h-full py-6 px-4 fixed left-0 top-0 w-64 border-r-[1.5px] border-border-subtle transition-all duration-200 ease-in-out z-50">
-            <div className="mb-8 px-2 flex items-center gap-2">
+        <>
+            <button
+                className="md:hidden fixed top-4 left-4 z-45 w-11 h-11 flex items-center justify-center focus:outline-none bg-transparent border-none"
+                onClick={() => setIsMobileOpen(true)}
+                aria-label="Mở menu"
+            >
+                <span className="material-symbols-outlined text-text-ink text-[28px] drop-shadow-md">menu</span>
+            </button>
+
+            {isMobileOpen && (
+                <div
+                    className="md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
+                    onClick={() => setIsMobileOpen(false)}
+                    aria-hidden="true"
+                />
+            )}
+
+            <nav className={`bg-background-page text-primary flex flex-col h-full py-6 px-4 fixed left-0 top-0 w-[70vw] max-w-70 md:max-w-none md:w-64 border-r-[1.5px] border-border-subtle transition-transform duration-300 ease-in-out z-50 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+                <div className="mb-8 px-2 flex items-center gap-2">
                 <h1 className="font-headline text-2xl italic text-text-ink font-bold">MarketNest</h1>
             </div>
             <p className="font-body text-xs text-text-muted mb-2 px-2 uppercase tracking-widest font-semibold">Artisan Dashboard</p>
@@ -68,6 +86,7 @@ export const Sidebar = () => {
                         <li key={item.path}>
                             <Link
                                 to={item.path}
+                                onClick={() => setIsMobileOpen(false)}
                                 className={`flex items-center gap-4 px-4 py-2 rounded-lg hover:-translate-y-0.5 transition-transform duration-200 ${isActive ? 'text-primary-container bg-surface-container font-bold' : 'text-text-muted hover:text-text-ink'}`}
                             >
                                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{item.icon}</span>
@@ -139,5 +158,6 @@ export const Sidebar = () => {
                 </button>
             </div>
         </nav>
+        </>
     );
 };

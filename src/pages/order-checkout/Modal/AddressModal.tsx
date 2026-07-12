@@ -72,7 +72,7 @@ export const AddressModal: React.FC<AddressModalProps> = ({
                             Chưa có địa chỉ nào được lưu.
                         </div>
                     ) : (
-                        addresses.map((addr) => {
+                        addresses.filter(addr => addr !== null).map((addr) => {
                             const isSelected = selectedAddressId === addr.id;
 
                             return (

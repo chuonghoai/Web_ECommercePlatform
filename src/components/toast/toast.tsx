@@ -22,7 +22,7 @@ export const useToast = () => {
     return context;
 };
 
-const ToastItem = ({ type, message, onRemove }: ToastMessage & { onRemove: () => void }) => {
+const ToastItem = ({ type, message, onRemove: _onRemove }: ToastMessage & { onRemove: () => void }) => {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {

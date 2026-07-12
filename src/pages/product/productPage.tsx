@@ -321,51 +321,54 @@ function ProductPage() {
                             </div>
                         ) : (
                             <div className="flex flex-col gap-3">
-                                <div className="flex gap-3 items-stretch h-[52px]">
+                                <div className="flex flex-col md:flex-row gap-3 md:items-stretch md:h-13">
                                     {/* Quantity */}
-                                    <div className="flex items-center border border-[#D6D3D1] bg-white h-full w-[120px] shrink-0 overflow-hidden">
-                                        <button onClick={handleDecreaseQuantity} aria-label="Giảm số lượng" className="flex-1 h-full text-[#78716C] hover:bg-[#FAF2EB] hover:text-[#1C1917] transition-colors text-lg font-light">−</button>
-                                        <input type="number" readOnly value={quantity} className="w-10 text-center bg-transparent font-medium text-[#1C1917] outline-none text-[15px]" />
-                                        <button onClick={handleIncreaseQuantity} aria-label="Tăng số lượng" className="flex-1 h-full text-[#78716C] hover:bg-[#FAF2EB] hover:text-[#1C1917] transition-colors text-lg font-light">+</button>
+                                    <div className="flex items-center border border-border-medium bg-white h-13 md:h-full w-30 shrink-0 overflow-hidden">
+                                        <button onClick={handleDecreaseQuantity} aria-label="Giảm số lượng" className="flex-1 h-full text-[#78716C] hover:bg-[#FAF2EB] hover:text-text-ink transition-colors text-lg font-light">−</button>
+                                        <input type="number" readOnly value={quantity} className="w-10 text-center bg-transparent font-medium text-text-ink outline-none text-[15px]" />
+                                        <button onClick={handleIncreaseQuantity} aria-label="Tăng số lượng" className="flex-1 h-full text-[#78716C] hover:bg-[#FAF2EB] hover:text-text-ink transition-colors text-lg font-light">+</button>
                                     </div>
 
-                                    {/* Add to cart */}
-                                    <button
-                                        onClick={handleAddToCart}
-                                        disabled={isAddingToCart}
-                                        className="flex-1 bg-[#c2410c] text-white h-full font-semibold text-[15px] flex items-center justify-center gap-2.5 hover:bg-[#9b2f00] focus:outline-none focus:ring-2 focus:ring-[#9b2f00] focus:ring-offset-2 focus:ring-offset-[#FFFBF5] transition-colors duration-200 disabled:opacity-75 disabled:cursor-not-allowed"
-                                    >
-                                        {isAddingToCart ? (
-                                            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                            </svg>
-                                        ) : (
-                                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                            </svg>
-                                        )}
-                                        {isAddingToCart ? "Đang chuẩn bị..." : "Thêm vào giỏ"}
-                                    </button>
+                                    {/* Actions Wrapper */}
+                                    <div className="flex flex-1 gap-3 items-stretch h-13 md:h-full">
+                                        {/* Add to cart */}
+                                        <button
+                                            onClick={handleAddToCart}
+                                            disabled={isAddingToCart}
+                                            className="flex-1 bg-primary-container text-white h-full font-semibold text-[15px] flex items-center justify-center gap-2.5 hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#FFFBF5] transition-colors duration-200 disabled:opacity-75 disabled:cursor-not-allowed"
+                                        >
+                                            {isAddingToCart ? (
+                                                <svg className="w-5 h-11 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                </svg>
+                                            ) : (
+                                                <svg className="w-5 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                </svg>
+                                            )}
+                                            {isAddingToCart ? "Đang chuẩn bị..." : "Thêm vào giỏ"}
+                                        </button>
 
-                                    {/* Favorite */}
-                                    <button
-                                        onClick={handleToggleFavorite}
-                                        disabled={isTogglingFavorite}
-                                        className={`w-[52px] border flex items-center justify-center transition-all duration-200
-                                            ${product.isFavorite
-                                                ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#EF4444]'
-                                                : 'bg-white border-[#D6D3D1] text-[#A8A29E] hover:border-[#1C1917] hover:text-[#1C1917]'
-                                            } disabled:opacity-50 disabled:cursor-wait`}
-                                        aria-label={product.isFavorite ? "Bỏ yêu thích" : "Yêu thích"}
-                                    >
-                                        <svg className={`w-5 h-5 transition-transform duration-200 ${product.isFavorite ? 'fill-current scale-110' : 'fill-none scale-100'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                        </svg>
-                                    </button>
+                                        {/* Favorite */}
+                                        <button
+                                            onClick={handleToggleFavorite}
+                                            disabled={isTogglingFavorite}
+                                            className={`w-13 border flex items-center justify-center transition-all duration-200
+                                                ${product.isFavorite
+                                                    ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#EF4444]'
+                                                    : 'bg-white border-border-medium text-[#A8A29E] hover:border-text-ink hover:text-text-ink'
+                                                } disabled:opacity-50 disabled:cursor-wait`}
+                                            aria-label={product.isFavorite ? "Bỏ yêu thích" : "Yêu thích"}
+                                        >
+                                            <svg className={`w-5 h-5 transition-transform duration-200 ${product.isFavorite ? 'fill-current scale-110' : 'fill-none scale-100'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <p className="text-[12px] text-[#59413a] text-center tracking-wide">
+                                <p className="text-[12px] text-on-surface-variant text-center tracking-wide">
                                     Giao hàng toàn quốc · Đóng gói thân thiện môi trường
                                 </p>
                             </div>

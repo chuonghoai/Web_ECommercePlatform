@@ -56,12 +56,6 @@ export class ReviewMockRepository implements ReviewRepository {
         ],
     }
 
-    private EmplyReviews: Review = {
-        totalReview: 0,
-        averageRating: 0,
-        reviews: [],
-    }
-
     async getReviewsByProductId(productId: string): Promise<ApiResponse<Review>> {
         return {
             success: true,

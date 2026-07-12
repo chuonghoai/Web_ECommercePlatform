@@ -65,16 +65,21 @@ export class AuthMockRepository implements AuthRepository {
             return {
                 success: true,
                 message: `Mã OTP thay đổi mật khẩu đã được gửi đến email ${email} của bạn`,
-                data: null,
+                data: undefined as void,
             };
         }
         else if (purpose == OtpPurpose.REGISTER) {
             return {
                 success: true,
                 message: `Mã OTP đăng ký tài khoản đã được gửi đến email ${email} của bạn`,
-                data: null,
+                data: undefined as void,
             };
         }
+        return {
+            success: false,
+            message: "Mục đích gửi OTP không hợp lệ",
+            data: undefined as void,
+        };
     }
 
     async logout(): Promise<ApiResponse<null>> {
@@ -100,7 +105,7 @@ export class AuthMockRepository implements AuthRepository {
         return {
             success: true,
             message: "Đặt lại mật khẩu thành công",
-            data: null,
+            data: undefined as void,
         };
     }
 }

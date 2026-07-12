@@ -30,7 +30,7 @@ export const OrderTrackingList: React.FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="border-b border-stone-100 bg-white sticky top-0 z-10">
+            <div className="border-b border-stone-100 bg-white sticky top-18 z-10">
                 <div className="flex overflow-x-auto hide-scrollbar">
                     {controller.tabs.map((tab) => {
                         const isActive = controller.activeTab === tab.key;

@@ -74,6 +74,16 @@ function LoginPage() {
           <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white relative">
             <div className="w-full max-w-[360px] mx-auto relative z-10">
 
+              {/* Mobile Back to Home */}
+              <div className="block md:hidden mb-6 text-left">
+                <Link to="/" className="inline-block hover:opacity-80 transition-opacity">
+                  <h2 className="font-['Lora',serif] text-[26px] font-semibold text-[#1C1917] mb-2 tracking-[-0.24px]">
+                    MarketNest
+                  </h2>
+                </Link>
+                <div className="w-10 h-0.5 bg-market-primary mb-8"></div>
+              </div>
+
               <div className="mb-8 text-center md:text-left">
                 <h2 className="font-['Lora',serif] text-[36px] font-semibold text-[#1C1917] mb-2">
                   Đăng nhập

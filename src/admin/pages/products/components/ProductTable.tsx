@@ -13,7 +13,7 @@ export const ProductTable = ({ products, loading, onEdit, onDelete, onViewDetail
     return (
         <div className="w-full overflow-x-auto">
             <table className="w-full text-left border-collapse">
-                <thead>
+                <thead className="hidden md:table-header-group">
                     <tr>
                         <th className="font-body text-xs font-semibold text-text-muted uppercase pb-3 pt-4 px-6 border-b-[1.5px] border-border-medium">Sản phẩm</th>
                         <th className="font-body text-xs font-semibold text-text-muted uppercase pb-3 pt-4 px-6 border-b-[1.5px] border-border-medium">Giá</th>

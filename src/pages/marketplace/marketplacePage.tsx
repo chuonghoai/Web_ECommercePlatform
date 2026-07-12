@@ -1,9 +1,22 @@
+import { useState, useEffect } from "react";
 import { useMarketplaceController } from "./marketplace.controller";
 import { ProductCard } from "./components/ProductCard/productCard";
 import { MarketplaceFilter } from "./components/filter/marketplaceFilter";
 import { EmptyProductState } from "./components/EmptyProducts/emptyProductState";
 
 function MarketplacePage() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Close sidebar on escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isSidebarOpen) {
+                setIsSidebarOpen(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isSidebarOpen]);
     const {
         products,
         isLoading,
@@ -16,27 +29,65 @@ function MarketplacePage() {
     return (
         <div className="pb-12">
             {/* Header section */}
-            <div className="mb-8">
-                <h1 className="font-['Lora',serif] text-[36px] font-semibold text-[#1C1917] mb-2 leading-tight">
-                    Khám phá Marketplace
-                </h1>
-                <p className="text-[#57534E] text-[15px] max-w-[600px]">
-                    Nơi tập hợp những tác phẩm thủ công tinh xảo nhất từ cộng đồng nghệ nhân của chúng tôi.
-                </p>
+            <div className="mb-6 flex flex-col md:mb-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="font-['Lora',serif] text-[28px] md:text-[36px] font-semibold text-text-ink mb-2 leading-tight">
+                            Khám phá Marketplace
+                        </h1>
+                        <p className="text-[#57534E] text-[14px] md:text-[15px] max-w-150 hidden md:block">
+                            Nơi tập hợp những tác phẩm thủ công tinh xảo nhất từ cộng đồng nghệ nhân của chúng tôi.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Mobile Filter Toggle */}
+                <div className="mt-4 md:hidden flex items-center gap-5">
+                    <button onClick={() => setIsSidebarOpen(true)} className="flex items-center gap-2 text-[14px] font-medium text-text-ink border border-border-medium px-3 py-1.5 rounded bg-white">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        Bộ lọc
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <p className="text-[#57534E] text-[14px]">
+                        <span className="font-semibold text-text-ink">{pagination?.totalItems || 0}</span> tác phẩm
+                    </p>
+                </div>
             </div>
+
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/40 z-40 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
 
             {/* Layout */}
             <div className="flex flex-col md:flex-row gap-8">
 
                 {/* Filter sidebar */}
-                <aside className="w-full md:w-[280px] shrink-0">
-                    <MarketplaceFilter />
+                <aside className={`fixed inset-y-0 left-0 z-50 w-[70%] max-w-[280px] bg-white shadow-xl transform transition-transform duration-300 md:relative md:transform-none md:w-[280px] md:shadow-none md:z-auto ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 overflow-y-auto`}>
+                    <div className="p-4 md:p-0">
+                        <div className="flex justify-between items-center mb-4 md:hidden">
+                            <h2 className="font-semibold text-[18px]">Bộ lọc</h2>
+                            <button onClick={() => setIsSidebarOpen(false)} className="text-[#57534E]">
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <MarketplaceFilter />
+                    </div>
                 </aside>
 
                 {/* Grid products */}
                 <div className="flex-1 flex flex-col min-h-full">
                     {!isLoading && !error && pagination && (
-                        <div className="mb-6 flex justify-between items-center text-[14px] text-[#57534E]">
+                        <div className="mb-6 hidden md:flex justify-between items-center text-[14px] text-[#57534E]">
                             <p>
                                 <span className="font-semibold text-[#1C1917]">{pagination.totalItems}</span> tác phẩm
                             </p>
@@ -44,7 +95,7 @@ function MarketplacePage() {
                     )}
 
                     {isLoading ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-6">
                             {[...Array(10)].map((_, index) => (
                                 <div key={index} className="bg-white border border-[#E7E5E4] rounded-[8px] h-[360px] animate-pulse">
                                     <div className="bg-[#F5F5F4] h-[240px]"></div>
@@ -78,7 +129,7 @@ function MarketplacePage() {
                     ) : products.length === 0 ? (
                         <EmptyProductState />
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-6">
                             {products.map((item) => (
                                 <ProductCard key={item.id} product={item} />
                             ))}

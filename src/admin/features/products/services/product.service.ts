@@ -1,5 +1,5 @@
 import type { ApiResponse } from '../../../../core/api/apiResponse';
-import type { Product, GetProductsQuery, CreateProductRequest, UpdateProductRequest } from '../models/product.model';
+import type { Product, GetProductsQuery, CreateProductRequest } from '../models/product.model';
 import type { IProductRepository } from '../repositories/product.repository';
 import { ProductApiRepository } from '../repositories/productApi.repository';
 import { ProductMockRepository } from '../repositories/productMock.repository';

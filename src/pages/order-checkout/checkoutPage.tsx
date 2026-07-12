@@ -13,7 +13,7 @@ function CheckoutPage() {
     const location = useLocation();
     const routerNavigate = useNavigate();
     const checkoutItems = location.state?.checkoutItems as PrepareCheckoutRequest[] | undefined;
-    
+
     const searchParams = new URLSearchParams(location.search);
     const tempId = searchParams.get('temp');
 
@@ -21,7 +21,7 @@ function CheckoutPage() {
         data,
         loading,
         error,
-        
+
         isCheckingOut,
 
         isVoucherModalOpen,
@@ -60,13 +60,13 @@ function CheckoutPage() {
             <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
                 <p className="font-body text-error font-semibold text-lg">{error}</p>
                 <div className="flex items-center gap-4">
-                    <button 
+                    <button
                         onClick={handleRetry}
                         className="px-6 py-2 bg-primary text-white rounded-lg font-body hover:bg-primary-dark transition-colors"
                     >
                         Thử lại
                     </button>
-                    <button 
+                    <button
                         onClick={() => routerNavigate('/cart')}
                         className="px-6 py-2 border border-border-medium rounded-lg font-body text-text-ink hover:bg-surface transition-colors"
                     >
@@ -81,9 +81,9 @@ function CheckoutPage() {
 
     return (
         <div className="min-h-screen bg-[#FFFBF5] font-['Open_Sans',sans-serif] flex flex-col">
-            <header className="w-full bg-white border-b border-[#E7E5E4] h-[72px] flex items-center px-4 md:px-8">
-                <div className="max-w-[1280px] w-full mx-auto flex justify-between items-center">
-                    <div className="font-['Lora',serif] text-[20px] sm:text-[24px] font-bold text-[#1C1917] flex items-center gap-2">
+            <header className="w-full bg-white border-b border-border-subtle h-18 items-center px-4 md:px-8 hidden md:block">
+                <div className="max-w-7xl w-full mx-auto flex justify-between items-center">
+                    <div className="font-['Lora',serif] text-[20px] sm:text-[24px] font-bold text-text-ink flex items-center gap-2">
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-market-secondary flex items-center justify-center text-white text-[12px] sm:text-[14px] italic shadow-none">MN</div>
                         <span className="hidden sm:inline">MarketNest</span>
                         <span className="text-[#A8A29E] font-normal text-[18px] sm:text-[20px] ml-2">| Thanh toán an toàn</span>
@@ -97,7 +97,7 @@ function CheckoutPage() {
                 </div>
             </header>
 
-            <main className="grow w-full max-w-[1280px] mx-auto px-4 md:px-8 py-8 md:py-12">
+            <main className="grow w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
                 <div className="w-full">
                     <div className="flex flex-col lg:flex-row gap-8">
 

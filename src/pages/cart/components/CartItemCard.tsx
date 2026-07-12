@@ -28,10 +28,10 @@ export const CartItemCard: React.FC<Props> = ({
   const storyText = product.description || "Crafted with care.";
   
   return (
-    <div className="flex flex-col sm:flex-row gap-6 group">
+    <div className="flex gap-3 sm:gap-6 group">
       
       {/* Item Checkbox */}
-      <div className="flex items-center pt-2 sm:pt-4">
+      <div className="flex items-center pt-2 sm:pt-4 shrink-0">
         <input
           type="checkbox"
           checked={isSelected}
@@ -41,7 +41,7 @@ export const CartItemCard: React.FC<Props> = ({
       </div>
 
       {/* Product Image */}
-      <div className="sm:w-[160px] shrink-0">
+      <div className="w-24 sm:w-[160px] shrink-0">
         <div className="aspect-[4/5] bg-[#E7E5E4] rounded-lg overflow-hidden border border-[#E7E5E4]">
           <img 
             src={product.imageUrl} 
@@ -52,29 +52,33 @@ export const CartItemCard: React.FC<Props> = ({
       </div>
 
       {/* Info & Actions */}
-      <div className="flex-1 flex flex-col justify-between">
+      <div className="flex-1 flex flex-col justify-between min-w-0">
         <div>
-          <div className="flex justify-between items-start gap-4">
-            <div>
-              <h3 className="text-xl font-serif text-gray-900 mb-1 leading-tight">{product.name}</h3>
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-1 sm:gap-4">
+            <div className="min-w-0 flex-1 w-full">
+              <h3 className="text-base sm:text-xl font-serif text-gray-900 mb-1 leading-tight line-clamp-2 sm:line-clamp-none">{product.name}</h3>
               
-              {/* Maker Identity */}
-              <div className="flex items-center gap-2 mt-3 mb-4">
-                <img src={avatarUrl} alt={makerName} className="w-5 h-5 rounded-full object-cover border border-[#E7E5E4]" />
-                <span className="text-sm text-gray-800 font-medium">{makerName}</span>
+              <div className="text-left sm:text-right shrink-0 mt-1 sm:hidden">
+                <p className="text-[15px] font-medium text-market-primary">{formatMoney(product.price)}</p>
               </div>
 
-              <p className="text-sm text-gray-500 italic font-serif mt-2">"{storyText}"</p>
+              {/* Maker Identity */}
+              <div className="flex items-center gap-2 mt-2 sm:mt-3 mb-2 sm:mb-4">
+                <img src={avatarUrl} alt={makerName} className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover border border-[#E7E5E4] shrink-0" />
+                <span className="text-xs sm:text-sm text-gray-800 font-medium truncate">{makerName}</span>
+              </div>
+
+              <p className="text-xs sm:text-sm text-gray-500 italic font-serif mt-1 sm:mt-2 line-clamp-1 sm:line-clamp-2">"{storyText}"</p>
             </div>
 
-            <div className="text-right">
+            <div className="text-right shrink-0 hidden sm:block">
               <p className="text-lg font-medium text-gray-900">{formatMoney(product.price)}</p>
             </div>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="mt-6 sm:mt-auto pt-4 flex items-center justify-between border-t border-[#D6D3D1] border-dashed sm:border-none sm:pt-0">
+        <div className="mt-4 sm:mt-auto pt-3 sm:pt-4 flex flex-wrap sm:flex-nowrap items-center justify-between border-t border-[#D6D3D1] border-dashed sm:border-none gap-3 sm:gap-4">
           <QuantitySelector 
             quantity={quantity}
             disabled={isLoading}
@@ -85,10 +89,10 @@ export const CartItemCard: React.FC<Props> = ({
           <button 
             disabled={isLoading}
             onClick={() => onRemove(product.id)}
-            className="text-sm text-gray-500 hover:text-[#C2410C] underline decoration-transparent hover:decoration-[#C2410C] underline-offset-4 disabled:opacity-40 transition-all focus:outline-none"
-            aria-label="Remove item"
+            className="text-xs sm:text-sm text-gray-500 hover:text-[#C2410C] underline decoration-transparent hover:decoration-[#C2410C] underline-offset-4 disabled:opacity-40 transition-all focus:outline-none"
+            aria-label="Xóa khỏi giỏ hàng"
           >
-            Remove
+            Xóa khỏi giỏ hàng
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@ export const useProductController = () => {
     // 1. /:productSlug  (new, e.g. /ao-thun-nam-basic-p789)
     // 2. /product/:id   (legacy)
     // 3. /product/:slug/:id (legacy)
-    const { productSlug, slug, id } = useParams<{ productSlug?: string; slug?: string; id?: string }>();
+    const { productSlug, id } = useParams<{ productSlug?: string; slug?: string; id?: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const { toast } = useToast();
