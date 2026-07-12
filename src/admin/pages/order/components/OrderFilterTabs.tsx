@@ -21,14 +21,17 @@ export const OrderFilterTabs = ({
     ];
 
     return (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div 
+            className="flex flex-nowrap md:flex-wrap overflow-x-auto overflow-y-hidden whitespace-nowrap gap-2 mb-6 [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
             {TABS.map((tab) => {
                 const isActive = activeTab === tab.value;
                 return (
                     <button
                         key={tab.value}
                         onClick={() => onTabChange(tab.value as TabValue)}
-                        className={`cursor-pointer flex items-center gap-1.5 h-8 px-3.5 rounded-sm font-body text-[14px] transition-colors ${
+                        className={`cursor-pointer shrink-0 flex items-center gap-1.5 h-8 px-3.5 rounded-sm font-body text-[14px] transition-colors ${
                             isActive
                                 ? 'bg-market-primary text-[#FFFFFF] border border-market-primary'
                                 : 'bg-transparent text-[#57534E] border border-border-medium hover:bg-[#FDF6EC]'

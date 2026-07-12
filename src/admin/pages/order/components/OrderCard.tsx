@@ -10,45 +10,47 @@ export const OrderCard = ({ order }: { order: OrderItem }) => {
     return (
         <Link
             to={`/admin/orders/${order.id}`}
-            className="group cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-5 hover:border-border-medium hover:-translate-y-1 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out flex flex-col md:flex-row gap-6"
+            className="group cursor-pointer bg-[#FFFFFF] border border-border-subtle rounded-lg p-4 md:p-5 hover:border-border-medium hover:-translate-y-1 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out flex flex-col md:flex-row gap-4 md:gap-6"
         >
-            <div className="w-24 h-24 shrink-0 rounded-sm border border-border-subtle overflow-hidden bg-[#FFFBF5]">
-                <img src={order.firstProductImageUrl} alt="Sản phẩm" className="w-full h-full object-cover" />
-            </div>
+            <div className="flex flex-row gap-3 md:gap-6 flex-1 min-w-0">
+                <div className="w-18 h-18 md:w-24 md:h-24 shrink-0 rounded-sm border border-border-subtle overflow-hidden bg-[#FFFBF5]">
+                    <img src={order.firstProductImageUrl} alt="Sản phẩm" className="w-full h-full object-cover" />
+                </div>
 
-            <div className="flex-1 flex flex-col justify-between">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="cursor-text font-mono text-[14px] text-text-ink font-semibold" onClick={(e) => e.stopPropagation()}>
-                            {order.id}
-                        </span>
-                        <span
-                            className={`px-2.5 py-0.5 rounded-sm font-body text-[11px] font-bold uppercase tracking-wider ${STATUS_CONFIG[order.orderStatus].color}`}
-                        >
-                            {STATUS_CONFIG[order.orderStatus].label}
-                        </span>
-                    </div>
-                    <h3 className="cursor-text font-headline text-[20px] font-semibold text-text-ink leading-tight mb-3">
-                        {order.buyerName}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4">
-                        <div className="flex items-center gap-2 text-[#57534E]">
-                            <Phone size={14} className="shrink-0" />
-                            <span className="cursor-text font-body text-[14px]">{order.buyerPhone}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-[#57534E]">
-                            <MapPin size={14} className="shrink-0" />
-                            <span className="cursor-text font-body text-[14px] truncate" title={order.buyerAddress}>
-                                {order.buyerAddress}
+                <div className="flex-1 flex flex-col justify-between min-w-0">
+                    <div>
+                        <div className="flex items-start justify-between gap-2 mb-1 md:mb-2">
+                            <span className="cursor-text font-mono text-[14px] text-text-ink font-semibold truncate min-w-0" onClick={(e) => e.stopPropagation()}>
+                                {order.id}
+                            </span>
+                            <span
+                                className={`shrink-0 px-2.5 py-0.5 rounded-sm font-body text-[11px] font-bold uppercase tracking-wider ${STATUS_CONFIG[order.orderStatus].color}`}
+                            >
+                                {STATUS_CONFIG[order.orderStatus].label}
                             </span>
                         </div>
-                        <div className="flex items-center gap-2 text-[#57534E]">
-                            <Package size={14} className="shrink-0" />
-                            <span className="cursor-text font-body text-[14px]">{order.totalProductQuantity} sản phẩm</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-[#57534E]">
-                            <Calendar size={14} className="shrink-0" />
-                            <span className="cursor-text font-body text-[14px]">{formatDate(order.createdAt)}</span>
+                        <h3 className="cursor-text font-headline text-[16px] md:text-[20px] font-semibold text-text-ink leading-tight mb-2 md:mb-3 truncate">
+                            {order.buyerName}
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-1.5 md:gap-y-2 gap-x-4">
+                            <div className="flex items-center gap-2 text-[#57534E]">
+                                <Phone size={14} className="shrink-0" />
+                                <span className="cursor-text font-body text-[14px]">{order.buyerPhone}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[#57534E]">
+                                <MapPin size={14} className="shrink-0" />
+                                <span className="cursor-text font-body text-[14px] truncate" title={order.buyerAddress}>
+                                    {order.buyerAddress}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[#57534E]">
+                                <Package size={14} className="shrink-0" />
+                                <span className="cursor-text font-body text-[14px]">{order.totalProductQuantity} sản phẩm</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[#57534E]">
+                                <Calendar size={14} className="shrink-0" />
+                                <span className="cursor-text font-body text-[14px]">{formatDate(order.createdAt)}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
