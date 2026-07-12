@@ -2,7 +2,7 @@ import type { ApiResponse } from "../../../../core/api/apiResponse";
 import type { CheckoutRequestDto, CheckoutResponseDto } from "../dto/checkoutRequest.dto";
 import type { PrepareCheckoutPayload } from "../dto/prepareCheckout.dto";
 import { EPaymentMethod } from "../../enums/paymentMethod.enum";
-import type { PrepareCheckoutModel } from "../models/checkout.model";
+import type { PrepareCheckoutModel, DraftOrderModel } from "../models/checkout.model";
 import type { CheckoutRepository } from "./checkout.repository";
 import type { CheckoutResultDto } from "../models/checkoutResult.dto";
 import { EPaymentStatus } from "../../enums/paymentStatus.enum";
@@ -59,12 +59,11 @@ export class CheckoutMockRepository implements CheckoutRepository {
                 shippingFee: 30000,
                 totalAmount: 290000 + 30000,
 
-                invalidItems: [
-                    // {
-                    //     productId: "1",
-                    //     reason: "Hết hàng"
-                    // }
-                ],
+                invalidItems: [],
+                prepareTempId: "mock-temp-id",
+                discountAmount: 0,
+                shippingDiscountAmount: 0,
+                appliedVouchers: [],
             },
         };
 
@@ -92,6 +91,14 @@ export class CheckoutMockRepository implements CheckoutRepository {
                 paymentMethod: EPaymentMethod.COD,
                 paymentStatus: EPaymentStatus.PENDING
             }
+        });
+    }
+
+    async getDraftOrders(): Promise<ApiResponse<DraftOrderModel[]>> {
+        return Promise.resolve({
+            success: true,
+            message: "Success",
+            data: []
         });
     }
 }

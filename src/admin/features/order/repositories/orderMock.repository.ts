@@ -120,42 +120,42 @@ export class OrderMockRepository implements OrderRepository {
         const orderInfo = mockOrder.find(o => o.id === orderId) || mockOrder[0];
 
         const mockStatusHistory: OrderStatusHistory[] = [
-            { status: EOrderStatus.PENDING, timestamp: new Date(orderInfo.createdAt.getTime()), note: "Khách hàng đặt hàng" }
+            { status: EOrderStatus.PENDING, timestamp: new Date(orderInfo.createdAt.getTime()).toISOString(), note: "Khách hàng đặt hàng" }
         ];
 
         if (orderInfo.orderStatus === EOrderStatus.PREPARING ||
             orderInfo.orderStatus === EOrderStatus.SHIPPING ||
             orderInfo.orderStatus === EOrderStatus.DELIVERED ||
             orderInfo.orderStatus === EOrderStatus.SUCCESS) {
-            mockStatusHistory.push({ status: EOrderStatus.PREPARING, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60), note: "Shop đã xác nhận đơn" });
+            mockStatusHistory.push({ status: EOrderStatus.PREPARING, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60).toISOString(), note: "Shop đã xác nhận đơn" });
         }
 
         if (orderInfo.orderStatus === EOrderStatus.SHIPPING ||
             orderInfo.orderStatus === EOrderStatus.DELIVERED ||
             orderInfo.orderStatus === EOrderStatus.SUCCESS) {
-            mockStatusHistory.push({ status: EOrderStatus.SHIPPING, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 24), note: "Đã giao cho ĐVVC" });
+            mockStatusHistory.push({ status: EOrderStatus.SHIPPING, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 24).toISOString(), note: "Đã giao cho ĐVVC" });
         }
 
         if (orderInfo.orderStatus === EOrderStatus.DELIVERED ||
             orderInfo.orderStatus === EOrderStatus.SUCCESS) {
-            mockStatusHistory.push({ status: EOrderStatus.DELIVERED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 48), note: "Giao hàng thành công" });
+            mockStatusHistory.push({ status: EOrderStatus.DELIVERED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 48).toISOString(), note: "Giao hàng thành công" });
         }
 
         if (orderInfo.orderStatus === EOrderStatus.SUCCESS) {
-            mockStatusHistory.push({ status: EOrderStatus.SUCCESS, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 72), note: "Hoàn tất đơn hàng" });
+            mockStatusHistory.push({ status: EOrderStatus.SUCCESS, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 72).toISOString(), note: "Hoàn tất đơn hàng" });
         }
 
         if (orderInfo.orderStatus === EOrderStatus.CANCELLED) {
-            mockStatusHistory.push({ status: EOrderStatus.CANCELLED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 30), note: "Đơn hàng đã bị hủy" });
+            mockStatusHistory.push({ status: EOrderStatus.CANCELLED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 30).toISOString(), note: "Đơn hàng đã bị hủy" });
         }
 
         if (orderInfo.orderStatus === EOrderStatus.RETURNED) {
-            mockStatusHistory.push({ status: EOrderStatus.RETURNED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 24 * 3), note: "Khách hàng đã yêu cầu hoàn trả" });
+            mockStatusHistory.push({ status: EOrderStatus.RETURNED, timestamp: new Date(orderInfo.createdAt.getTime() + 1000 * 60 * 60 * 24 * 3).toISOString(), note: "Khách hàng đã yêu cầu hoàn trả" });
         }
 
         const mockDetail: OrderDetail = {
             id: orderInfo.id,
-            createdAt: orderInfo.createdAt,
+            createdAt: orderInfo.createdAt.toISOString(),
             statusHistory: mockStatusHistory,
             orderStatus: orderInfo.orderStatus,
             buyerName: orderInfo.buyerName,

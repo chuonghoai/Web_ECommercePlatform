@@ -98,8 +98,8 @@ const OrderDetailPage: React.FC = () => {
                         </div>
                         <div className="p-4 pl-3">
                             <div className="relative border-l border-gray-200 ml-2 space-y-4">
-                                {store.orderDetail.statusHistory.map((history, index) => {
-                                    const isLast = index === store.orderDetail.statusHistory.length - 1;
+                                {store.orderDetail?.statusHistory?.map((history, index) => {
+                                    const isLast = index === (store.orderDetail?.statusHistory?.length || 1) - 1;
                                     let colorClass = 'bg-gray-400';
                                     let textClass = isLast ? 'text-gray-900 font-bold' : 'text-gray-600 font-medium';
 
@@ -129,9 +129,9 @@ const OrderDetailPage: React.FC = () => {
                                             <div>
                                                 <h3 className={`text-xs ${textClass}`}>{history.note || history.status}</h3>
                                                 <p className="text-[10px] text-gray-500 font-mono mt-0.5">{formatDate(history.timestamp)}</p>
-                                                {isLast && store.orderDetail.cancelReason && (history.status === EOrderStatus.CANCELLED || history.status === EOrderStatus.RETURNED) && (
+                                                {isLast && store.orderDetail?.cancelReason && (history.status === EOrderStatus.CANCELLED || history.status === EOrderStatus.RETURNED) && (
                                                     <p className="text-xs text-gray-700 mt-1.5 bg-gray-50 p-2 rounded-sm border border-gray-200">
-                                                        <span className="font-semibold text-gray-900">Lý do: </span>{store.orderDetail.cancelReason}
+                                                        <span className="font-semibold text-gray-900">Lý do: </span>{store.orderDetail?.cancelReason}
                                                     </p>
                                                 )}
                                             </div>

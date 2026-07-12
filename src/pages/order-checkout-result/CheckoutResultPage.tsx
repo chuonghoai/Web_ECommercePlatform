@@ -43,7 +43,7 @@ const CheckoutResultPage: React.FC = () => {
     let bgIconClass = "bg-yellow-100";
     let animationClass = "animate-pulse";
 
-    if (result.status.paymentStatus === EPaymentStatus.PAID) {
+    if (result.paymentStatus === EPaymentStatus.PAID) {
         title = "Thanh toán thành công!";
         message = "Giao dịch thanh toán đã hoàn tất.";
         subMessage = "Đơn hàng của bạn sẽ sớm được xử lý và giao đến bạn.";
@@ -51,7 +51,7 @@ const CheckoutResultPage: React.FC = () => {
         iconColorClass = "text-green-500";
         bgIconClass = "bg-green-100";
         animationClass = "animate-[pulse_1.5s_ease-in-out_infinite]";
-    } else if (result.status.paymentMethod === EPaymentMethod.COD && result.status.paymentStatus === EPaymentStatus.PENDING) {
+    } else if (result.paymentMethod === EPaymentMethod.COD && result.paymentStatus === EPaymentStatus.PENDING) {
         title = "Đặt hàng thành công!";
         message = "Đơn hàng đã được đặt.";
         subMessage = "Bạn sẽ thanh toán bằng tiền mặt khi nhận được hàng.";
@@ -59,7 +59,7 @@ const CheckoutResultPage: React.FC = () => {
         iconColorClass = "text-blue-500";
         bgIconClass = "bg-blue-100";
         animationClass = "animate-bounce";
-    } else if (result.status.paymentStatus === EPaymentStatus.FAILED) {
+    } else if (result.paymentStatus === EPaymentStatus.FAILED) {
         title = "Thanh toán thất bại";
         message = "Đã có lỗi xảy ra hoặc giao dịch bị từ chối.";
         subMessage = "Vui lòng kiểm tra lại phương thức thanh toán hoặc thử lại sau.";

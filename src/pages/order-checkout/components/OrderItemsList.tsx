@@ -36,11 +36,11 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                         {item.product.name}
                                     </h3>
 
-                                    {!isInvalid && item.product.discountPercentage > 0 ? (
+                                    {!isInvalid && (item.product.discountPercentage || 0) > 0 ? (
                                         <p className="text-[13px] font-medium text-market-primary mt-1">Giảm {item.product.discountPercentage}%</p>
-                                    ) : !isInvalid && item.product.discountPercentage === 0 && item.product.price < item.product.originalPrice ? (
+                                    ) : !isInvalid && (item.product.discountPercentage || 0) === 0 && item.product.price < (item.product.originalPrice || 0) ? (
                                         <p className="text-[13px] font-medium text-market-primary mt-1">
-                                            Giảm {(item.product.originalPrice - item.product.price).toLocaleString('vi-VN')} ₫
+                                            Giảm {((item.product.originalPrice || 0) - item.product.price).toLocaleString('vi-VN')} ₫
                                         </p>
                                     ) : null}
                                 </div>
@@ -51,8 +51,8 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
                                             <p className="text-[13px] sm:text-[14px] font-semibold text-market-error">{invalidInfo.reason}</p>
                                         ) : (
                                             <>
-                                                {item.product.originalPrice > item.product.price && (
-                                                    <p className="text-[12px] sm:text-[13px] text-[#A8A29E] line-through">{item.product.originalPrice.toLocaleString('vi-VN')} ₫</p>
+                                                {(item.product.originalPrice || 0) > item.product.price && (
+                                                    <p className="text-[12px] sm:text-[13px] text-[#A8A29E] line-through">{(item.product.originalPrice || 0).toLocaleString('vi-VN')} ₫</p>
                                                 )}
                                                 <p className="text-[14px] sm:text-[15px] font-semibold text-[#1C1917]">
                                                     {item.product.price.toLocaleString('vi-VN')} ₫ <span className="text-[#57534E] font-medium ml-1">x {item.quantity}</span>

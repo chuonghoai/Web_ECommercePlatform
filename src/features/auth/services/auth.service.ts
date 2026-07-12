@@ -38,7 +38,7 @@ export class AuthService {
         return result;
     }
 
-    async logout(): Promise<ApiResponse<void>> {
+    async logout(): Promise<ApiResponse<null>> {
         userStorageService.removeUser();
         const result = this.authRepository.logout();
         return result;

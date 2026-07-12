@@ -129,12 +129,7 @@ const KpiSkeleton = () => (
     </div>
 );
 
-const ChartSkeleton = () => (
-    <div className="bg-surface-card border border-border-subtle rounded-xl p-4 md:p-6 animate-pulse">
-        <div className="h-4 bg-surface-container rounded w-32 mb-8" />
-        <div className="h-55 md:h-70 bg-surface-container rounded" />
-    </div>
-);
+
 
 const formatTableProductName = (item: ProductPerformanceItem) =>
     item.name.length > 28 ? `${item.name.slice(0, 28)}…` : item.name;

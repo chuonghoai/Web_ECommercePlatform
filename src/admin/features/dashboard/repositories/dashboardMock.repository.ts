@@ -131,7 +131,7 @@ export class DashboardMockRepository implements DashboardRepository {
         };
     }
 
-    async getTopCategories(period: DashboardPeriod, limit: number = 5): Promise<ApiResponse<CategoryStat[]>> {
+    async getTopCategories(_period: DashboardPeriod, limit: number = 5): Promise<ApiResponse<CategoryStat[]>> {
         return {
             success: true,
             message: 'Lấy top danh mục thành công (Mock)',
