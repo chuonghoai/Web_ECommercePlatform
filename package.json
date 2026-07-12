@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lan": "vite --mode lan",
     "build": "tsc -b && vite build",
+    "build:lan": "tsc -b && vite build --mode lan",
+    "build:preview": "tsc -b && vite build --mode preview",
     "lint": "eslint .",
     "preview": "vite preview"
   },
