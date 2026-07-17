@@ -87,9 +87,11 @@ export class CheckoutMockRepository implements CheckoutRepository {
             success: true,
             message: "Success",
             data: {
-                orderId,
-                paymentMethod: EPaymentMethod.COD,
-                paymentStatus: EPaymentStatus.PENDING
+                status: {
+                    orderId,
+                    paymentMethod: EPaymentMethod.COD,
+                    paymentStatus: EPaymentStatus.PENDING
+                }
             }
         });
     }
